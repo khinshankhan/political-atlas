@@ -6,5 +6,6 @@
 
 Talha Rahman: I like dinosaurs
 
-Brian Cheung: I like code
+Khinshan Khan: Emoji are fun :slightly_smiling_face:
 
+Brian Cheung: I like code
