@@ -20,8 +20,22 @@ except Exception as e:
 
 
 def ensure_scrape_tables():
-    print("db!")
-    print(connection.total_changes)
+    try:
+        c = connection.cursor()
+        create_scrape_table = """CREATE TABLE IF NOT EXISTS scraped (
+                                   id integer PRIMARY KEY,
+                                   politician text NOT NULL,
+                                   title text NOT NULL,
+                                   speech_link text NOT NULL,
+                                   video_link text NOT NULL,
+                                   audio_link text NOT NULL,
+                                   date text NOT NULL,
+                                   description text NOT NULL,
+                                   transcript text NOT NULL
+                                 );"""
+        c.execute(create_scrape_table)
+    except Exception as e:
+        print(e)
 
 
 def cleanup():
