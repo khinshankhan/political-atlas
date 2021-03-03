@@ -16,6 +16,8 @@ for speech in listsoup.findAll(attrs={'class':'views-field-title'})[:3]:
     speechhtml = requests.get(baselink + speechlink).text
     speechsoup = bs4.BeautifulSoup(speechhtml, features='html.parser')
 
+    print('Politician:', speechsoup.find(attrs={'class': 'president-name'}).text)
+
     print('Video Link:', speechsoup.find(attrs={'class': 'download-trigger full-video'}).get('href'))
     print('Audio Link:', speechsoup.find(attrs={'class': 'download-trigger audio'}).get('href'))
 
