@@ -22,5 +22,6 @@ for speech in listsoup.findAll(attrs={'class':'views-field-title'})[:3]:
     print('Audio Link:', speechsoup.find(attrs={'class': 'download-trigger audio'}).get('href'))
 
     print('Date:', speechsoup.find(attrs={'class': 'episode-date'}).text)
+    print('Description:', speechsoup.find(attrs={'class': 'about-sidebar--intro'}).text)
 
     print()
