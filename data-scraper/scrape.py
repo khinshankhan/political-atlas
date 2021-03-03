@@ -7,7 +7,7 @@ listlink = 'https://millercenter.org/the-presidency/presidential-speeches'
 listhtml = requests.get(listlink).text
 listsoup = bs4.BeautifulSoup(listhtml, features='html.parser')
 
-for speech in listsoup.findAll(attrs={'class':'views-field-title'})[:3]:
+for speech in listsoup.findAll(attrs={'class':'views-field-title'})[:1]:
     print('Title:', speech.text)
 
     speechlink = speech.find('a').get('href')
@@ -23,5 +23,11 @@ for speech in listsoup.findAll(attrs={'class':'views-field-title'})[:3]:
 
     print('Date:', speechsoup.find(attrs={'class': 'episode-date'}).text)
     print('Description:', speechsoup.find(attrs={'class': 'about-sidebar--intro'}).text)
+
+    print('Transcript')
+    sentences = speechsoup.find(attrs={'class': 'transcript-inner'}).findAll('p')
+    for sentence in sentences:
+        print(sentence.text)
+        print()
 
     print()
