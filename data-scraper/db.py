@@ -23,6 +23,7 @@ def db_query(query):
     try:
         c = connection.cursor()
         c.execute(query)
+        connection.commit()
     except Exception as e:
         print(e)
 
@@ -40,6 +41,24 @@ def ensure_scrape_tables():
                                transcript text NOT NULL
                              );"""
     db_query(create_scraped_table)
+    print("data scrape tables ensured")
+
+
+def add_scrape(*details):
+    """
+    Adds data as a row into scraped table.
+    Takes in:
+    politician, title, speech_link, video_link,
+    audio_link, date, description, transcript.
+    """
+    add_query = """INSERT INTO
+                   scraped(politician, title, speech_link, video_link,
+                           audio_link, date, description, transcript)
+                   VALUES ('{0}', '{1}', '{2}', '{3}',
+                           '{4}', '{5}', '{6}', '{7}')
+                   ;""".format(*details)
+    db_query(add_query)
+
 
 def cleanup():
     if connection:
