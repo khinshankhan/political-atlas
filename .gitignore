@@ -1,3 +1,15 @@
+# General env
+.env
+*~
+*.tmp
+*.bak
+.DS_Store
+
+# IDE
+.idea
+.vscode/
+~*
+
 # Python
 
 # Byte-compiled / optimized / DLL files
