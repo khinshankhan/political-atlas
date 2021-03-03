@@ -4,6 +4,9 @@ import bs4
 def get_text_from_class(soup, classname):
     return soup.find(attrs={'class': classname}).text
 
+def get_href_from_class(soup, classname):
+    return soup.find(attrs={'class': classname}).get('href')
+
 baselink = 'http://millercenter.org'
 
 listlink = 'https://millercenter.org/the-presidency/presidential-speeches'
@@ -23,10 +26,10 @@ for speech in listsoup.findAll(attrs={'class':'views-field-title'})[:1]:
     politician = get_text_from_class(speechsoup, 'president-name')
     print('Politician:', politician)
 
-    videolink = speechsoup.find(attrs={'class': 'download-trigger full-video'}).get('href')
+    videolink = get_href_from_class(speechsoup, 'download-trigger full-video')
     print('Video Link:', videolink)
 
-    audiolink = speechsoup.find(attrs={'class': 'download-trigger audio'}).get('href')
+    audiolink = get_href_from_class(speechsoup, 'download-trigger audio')
     print('Audio Link:', audiolink)
 
     date = get_text_from_class(speechsoup, 'episode-date')
