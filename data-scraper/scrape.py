@@ -8,7 +8,8 @@ listhtml = requests.get(listlink).text
 listsoup = bs4.BeautifulSoup(listhtml, features='html.parser')
 
 for speech in listsoup.findAll(attrs={'class':'views-field-title'})[:1]:
-    print('Title:', speech.text)
+    title = speech.text
+    print('Title:', title)
 
     speechlink = speech.find('a').get('href')
     print('Speech Link:', speechlink)
@@ -16,18 +17,24 @@ for speech in listsoup.findAll(attrs={'class':'views-field-title'})[:1]:
     speechhtml = requests.get(baselink + speechlink).text
     speechsoup = bs4.BeautifulSoup(speechhtml, features='html.parser')
 
-    print('Politician:', speechsoup.find(attrs={'class': 'president-name'}).text)
+    politician = speechsoup.find(attrs={'class': 'president-name'}).text
+    print('Politician:', politician)
 
-    print('Video Link:', speechsoup.find(attrs={'class': 'download-trigger full-video'}).get('href'))
-    print('Audio Link:', speechsoup.find(attrs={'class': 'download-trigger audio'}).get('href'))
+    videolink = speechsoup.find(attrs={'class': 'download-trigger full-video'}).get('href')
+    print('Video Link:', videolink)
 
-    print('Date:', speechsoup.find(attrs={'class': 'episode-date'}).text)
-    print('Description:', speechsoup.find(attrs={'class': 'about-sidebar--intro'}).text)
+    audiolink = speechsoup.find(attrs={'class': 'download-trigger audio'}).get('href')
+    print('Audio Link:', audiolink)
 
-    print('Transcript')
+    date = speechsoup.find(attrs={'class': 'episode-date'}).text
+    print('Date:', date)
+
+    description = speechsoup.find(attrs={'class': 'about-sidebar--intro'}).text
+    print('Description:', description)
+
     sentences = speechsoup.find(attrs={'class': 'transcript-inner'}).findAll('p')
-    for sentence in sentences:
-        print(sentence.text)
-        print()
+    transcript = ' '.join(sentence.text for sentence in sentences).replace('\n', '')
+    print('Transcript')
+    print(transcript)
 
     print()
