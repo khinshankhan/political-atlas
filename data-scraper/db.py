@@ -19,24 +19,27 @@ except Exception as e:
     sys.exit()
 
 
-def ensure_scrape_tables():
+def db_query(query):
     try:
         c = connection.cursor()
-        create_scrape_table = """CREATE TABLE IF NOT EXISTS scraped (
-                                   id integer PRIMARY KEY,
-                                   politician text NOT NULL,
-                                   title text NOT NULL,
-                                   speech_link text NOT NULL,
-                                   video_link text NOT NULL,
-                                   audio_link text NOT NULL,
-                                   date text NOT NULL,
-                                   description text NOT NULL,
-                                   transcript text NOT NULL
-                                 );"""
-        c.execute(create_scrape_table)
+        c.execute(query)
     except Exception as e:
         print(e)
 
+
+def ensure_scrape_tables():
+    create_scraped_table = """CREATE TABLE IF NOT EXISTS scraped (
+                               id integer PRIMARY KEY,
+                               politician text NOT NULL,
+                               title text NOT NULL,
+                               speech_link text NOT NULL,
+                               video_link text NOT NULL,
+                               audio_link text NOT NULL,
+                               date text NOT NULL,
+                               description text NOT NULL,
+                               transcript text NOT NULL
+                             );"""
+    db_query(create_scraped_table)
 
 def cleanup():
     if connection:
