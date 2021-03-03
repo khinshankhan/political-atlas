@@ -2,10 +2,12 @@ import requests
 import bs4
 
 def get_text_from_class(soup, classname):
-    return soup.find(attrs={'class': classname}).text
+    soup = soup.find(attrs={'class': classname})
+    return soup.text if soup else '-'
 
 def get_href_from_class(soup, classname):
-    return soup.find(attrs={'class': classname}).get('href')
+    soup = soup.find(attrs={'class': classname})
+    return soup.get('href') if soup else '-'
 
 def millerscrape():
     speeches = []
@@ -16,7 +18,7 @@ def millerscrape():
     listhtml = requests.get(listlink).text
     listsoup = bs4.BeautifulSoup(listhtml, features='html.parser')
 
-    for speech in listsoup.findAll(attrs={'class':'views-field-title'})[:3]:
+    for speech in listsoup.findAll(attrs={'class':'views-field-title'}):
         title = speech.text
 
         speechlink = speech.find('a').get('href')
@@ -32,7 +34,7 @@ def millerscrape():
 
         date = get_text_from_class(speechsoup, 'episode-date')
 
-        description = get_text_from_class(speechsoup, 'about-sidebar--intro')
+        description = get_text_from_class(speechsoup, 'about-sidebar--intro').replace('\n', '')
 
         sentences = speechsoup.find(attrs={'class': 'transcript-inner'}).findAll('p')
         transcript = ' '.join(sentence.text for sentence in sentences).replace('\n', '')
@@ -52,4 +54,8 @@ def millerscrape():
 
     return speeches
 
-print(millerscrape())
+if __name__ == '__main__':
+    for speech in millerscrape():
+        print(speech['title'])
+        print(speech['description'])
+        print()
