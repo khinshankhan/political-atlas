@@ -28,6 +28,15 @@ def run(query):
         print(e)
 
 
+def run_with_named_placeholders(query, named_placeholders):
+    try:
+        c = connection.cursor()
+        c.execute(query, named_placeholders)
+        connection.commit()
+    except Exception as e:
+        print(e)
+
+
 def ensure_scrape_tables():
     create_scraped_table = """CREATE TABLE IF NOT EXISTS scraped (
                                id integer PRIMARY KEY,
@@ -44,7 +53,7 @@ def ensure_scrape_tables():
     print("data scrape tables ensured")
 
 
-def add_scrape(*details):
+def add_scrape(details):
     """
     Adds data as a row into scraped table.
     Takes in:
@@ -54,10 +63,17 @@ def add_scrape(*details):
     add_query = """INSERT INTO
                    scraped(politician, title, speech_link, video_link,
                            audio_link, date, description, transcript)
-                   VALUES ('{0}', '{1}', '{2}', '{3}',
-                           '{4}', '{5}', '{6}', '{7}')
-                   ;""".format(*details)
-    run(add_query)
+                   VALUES (
+                           :politician,
+                           :title,
+                           :speech_link,
+                           :video_link,
+                           :audio_link,
+                           :date,
+                           :description,
+                           :transcript
+                   );"""
+    run_with_named_placeholders(add_query, details)
 
 
 def cleanup():
