@@ -19,7 +19,7 @@ except Exception as e:
     sys.exit()
 
 
-def db_query(query):
+def run(query):
     try:
         c = connection.cursor()
         c.execute(query)
@@ -40,7 +40,7 @@ def ensure_scrape_tables():
                                description text NOT NULL,
                                transcript text NOT NULL
                              );"""
-    db_query(create_scraped_table)
+    run(create_scraped_table)
     print("data scrape tables ensured")
 
 
@@ -57,7 +57,7 @@ def add_scrape(*details):
                    VALUES ('{0}', '{1}', '{2}', '{3}',
                            '{4}', '{5}', '{6}', '{7}')
                    ;""".format(*details)
-    db_query(add_query)
+    run(add_query)
 
 
 def cleanup():
