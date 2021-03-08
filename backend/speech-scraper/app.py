@@ -11,15 +11,10 @@ if __name__ == "__main__":
     try:
         db.ensure_scrape_tables()
         for speech in scrape.millerscrape():
-            db.add_scrape(
-                speech['politician'],
-                speech['title'],
-                speech['speech-link'],
-                speech['video-link'],
-                speech['audio-link'],
-                speech['date'],
-                speech['description'],
-                speech['transcript']
-            )
+            # TODO: fix in actual scrape generation
+            speech['speech_link'] = speech['speech-link']
+            speech['video_link'] = speech['video-link']
+            speech['audio_link'] = speech['audio-link']
+            db.add_scrape(speech)
     finally:
         db.cleanup()
