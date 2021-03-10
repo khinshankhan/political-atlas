@@ -12,50 +12,64 @@ def get_href_from_class(soup, classname):
 def millerscrape():
     speeches = []
 
-    baselink = 'http://millercenter.org'
+    baselink = 'https://millercenter.org'
+    nextbase = 'https://millercenter.org/the-presidency/presidential-speeches'
+    listlink = nextbase
+    nextpage = True
 
-    listlink = 'https://millercenter.org/the-presidency/presidential-speeches'
-    listhtml = requests.get(listlink).text
-    listsoup = bs4.BeautifulSoup(listhtml, features='html.parser')
+    while nextpage:
 
-    for speech in listsoup.findAll(attrs={'class':'views-field-title'}):
-        title = speech.text
+        listhtml = requests.get(listlink).text
+        listsoup = bs4.BeautifulSoup(listhtml, features='html.parser')
 
-        speechlink = speech.find('a').get('href')
+        # get next page if it exists
+        nextpage = listsoup.find(attrs={'class':'pager__item'})
+        if nextpage:
+            listlink = nextbase + nextpage.find('a').get('href')
 
-        speechhtml = requests.get(baselink + speechlink).text
-        speechsoup = bs4.BeautifulSoup(speechhtml, features='html.parser')
+        for speech in listsoup.findAll(attrs={'class':'views-row'}):
+            # if speech is missing video/audio skip it
+            if len(speech.find(attrs={'class':'speech-icons-column'}).findAll('span')) < 3:
+                continue
 
-        politician = get_text_from_class(speechsoup, 'president-name')
+            title = get_text_from_class(speech, 'views-field-title')
 
-        videolink = get_href_from_class(speechsoup, 'download-trigger full-video')
+            speechlink = baselink + speech.find('a').get('href')
 
-        audiolink = get_href_from_class(speechsoup, 'download-trigger audio')
+            speechhtml = requests.get(speechlink).text
+            speechsoup = bs4.BeautifulSoup(speechhtml, features='html.parser')
 
-        date = get_text_from_class(speechsoup, 'episode-date')
+            politician = get_text_from_class(speechsoup, 'president-name')
 
-        description = get_text_from_class(speechsoup, 'about-sidebar--intro').replace('\n', '')
+            videolink = get_href_from_class(speechsoup, 'download-trigger full-video')
 
-        sentences = speechsoup.find(attrs={'class': 'transcript-inner'}).findAll('p')
-        transcript = ' '.join(sentence.text for sentence in sentences).replace('\n', '')
+            audiolink = get_href_from_class(speechsoup, 'download-trigger audio')
 
-        dump = {
-            'politician': politician,
-            'title': title,
-            'speech-link': speechlink,
-            'video-link': videolink,
-            'audio-link': audiolink,
-            'date': date,
-            'description': description,
-            'transcript': transcript
-        }
+            date = get_text_from_class(speechsoup, 'episode-date')
 
-        speeches.append(dump)
+            description = get_text_from_class(speechsoup, 'about-sidebar--intro').replace('\n', '')
+
+            sentences = speechsoup.find(attrs={'class': 'transcript-inner'}).findAll('p')
+            transcript = ' '.join(sentence.text for sentence in sentences).replace('\n', '')
+
+            dump = {
+                'politician': politician,
+                'title': title,
+                'speech_link': speechlink,
+                'video_link': videolink,
+                'audio_link': audiolink,
+                'date': date,
+                'description': description,
+                'transcript': transcript
+            }
+
+            speeches.append(dump)
 
     return speeches
 
 if __name__ == '__main__':
-    for speech in millerscrape():
+    dump = millerscrape()
+    for speech in dump:
         print(speech['title'])
         print(speech['description'])
         print()
