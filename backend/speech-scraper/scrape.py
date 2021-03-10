@@ -55,7 +55,8 @@ def millerscrape():
     return speeches
 
 if __name__ == '__main__':
-    for speech in millerscrape():
+    dump = millerscrape()
+    for speech in dump:
         print(speech['title'])
         print(speech['description'])
         print()
