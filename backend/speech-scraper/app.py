@@ -4,8 +4,15 @@ app.py
 Heart of data scraper.
 This will initialize any relevant tables and fill them with speech data.
 """
+from pathlib import Path
 import scrape
-import db
+import sys
+
+# HACK: sys path shouldn't be hacked together
+# TODO: refactor whole project to use setup.py
+path = str(Path(Path(__file__).parent.absolute()).parent.absolute())
+sys.path.insert(0, path)
+from di import db
 
 if __name__ == "__main__":
     try:
