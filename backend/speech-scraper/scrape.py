@@ -18,6 +18,12 @@ def millerscrape():
     listhtml = requests.get(listlink).text
     listsoup = bs4.BeautifulSoup(listhtml, features='html.parser')
 
+    # get next page if it exists
+    nextpage = listsoup.find(attrs={'class':'pager__item'})
+    if nextpage:
+        listlink = listlink + nextpage.find('a').get('href')
+    print(listlink)
+
     for speech in listsoup.findAll(attrs={'class':'views-row'}):
         title = get_text_from_class(speech, 'views-field-title')
 
