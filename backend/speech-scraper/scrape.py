@@ -14,7 +14,7 @@ def millerscrape():
 
     baselink = 'https://millercenter.org'
 
-    listlink = 'https://millercenter.org/the-presidency/presidential-speeches'
+    listlink = 'https://millercenter.org/the-presidency/presidential-speeches?field_speech_date_value%5Bmin%5D=&field_speech_date_value%5Bmax%5D=&field_full_node_value=&page=36'
     listhtml = requests.get(listlink).text
     listsoup = bs4.BeautifulSoup(listhtml, features='html.parser')
 
@@ -25,6 +25,10 @@ def millerscrape():
     print(listlink)
 
     for speech in listsoup.findAll(attrs={'class':'views-row'}):
+        # if speech is missing video/audio skip it
+        if len(speech.find(attrs={'class':'speech-icons-column'}).findAll('span')) < 3:
+            continue
+
         title = get_text_from_class(speech, 'views-field-title')
 
         speechlink = baselink + speech.find('a').get('href')
