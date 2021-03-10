@@ -55,9 +55,9 @@ def millerscrape():
             dump = {
                 'politician': politician,
                 'title': title,
-                'speech-link': speechlink,
-                'video-link': videolink,
-                'audio-link': audiolink,
+                'speech_link': speechlink,
+                'video_link': videolink,
+                'audio_link': audiolink,
                 'date': date,
                 'description': description,
                 'transcript': transcript
