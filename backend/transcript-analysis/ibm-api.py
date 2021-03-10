@@ -40,14 +40,17 @@ def tone_of_document(text):
     document_tone = "Document Tone\n"
     for elements in text_to_analyze(text)["document_tone"]["tones"]:
         document_tone += "Tone Name: " + str(elements["tone_name"]) + "\n"
-        document_tone += "Score: " + \
-            str(elements["score"]) + "Percent: " + \
-            str("{0:.0%}".format(elements["score"])) + "\n"
-
-        if(elements["score"] > 0.75):
-            document_tone += "Accurate? : Yes\n"
+        if not element["tones"]:
+            document_tone += "High confidence? : Not Enough Data\n"
         else:
-            document_tone += "Accurate? : No\n"
+            document_tone += "Score: " + \
+                str(elements["score"]) + "Percent: " + \
+                str("{0:.0%}".format(elements["score"])) + "\n"
+
+            if(elements["score"] > 0.75):
+                document_tone += "High confidence? : Yes\n"
+            else:
+                document_tone += "High confidence? : No\n"
     return document_tone
 
 # prints the tone score for each setence in the document
@@ -62,7 +65,7 @@ def tone_of_sentences(text):
         sentence_tone += f"Sentence Number: {index}\n"
         sentence_tone += "Sentence: " + elements["text"] + "\n"
         if not elements["tones"]:
-            sentence_tone += "Accurate? : Not Enough Data\n"
+            sentence_tone += "High confidence? : Not Enough Data\n"
         else:
             for tones in elements["tones"]:
                 sentence_tone += "Tone Name: " + tones["tone_name"] + "\n"
@@ -70,9 +73,9 @@ def tone_of_sentences(text):
                     str(tones["score"]) + " Percent: " + \
                     str("{0:.0%}".format(tones["score"])) + "\n"
                 if(tones["score"] > 0.75):
-                    sentence_tone += "Accurate? : Yes\n"
+                    sentence_tone += "High confidence? : Yes\n"
                 else:
-                    sentence_tone += "Accurate? : No\n"
+                    sentence_tone += "High confidence? : No\n"
         sentence_tone += "\n"
     return sentence_tone
 
