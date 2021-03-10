@@ -12,14 +12,14 @@ def get_href_from_class(soup, classname):
 def millerscrape():
     speeches = []
 
-    baselink = 'http://millercenter.org'
+    baselink = 'https://millercenter.org'
 
     listlink = 'https://millercenter.org/the-presidency/presidential-speeches'
     listhtml = requests.get(listlink).text
     listsoup = bs4.BeautifulSoup(listhtml, features='html.parser')
 
-    for speech in listsoup.findAll(attrs={'class':'views-field-title'}):
-        title = speech.text
+    for speech in listsoup.findAll(attrs={'class':'views-row'}):
+        title = get_text_from_class(speech, 'views-field-title')
 
         speechlink = speech.find('a').get('href')
 
