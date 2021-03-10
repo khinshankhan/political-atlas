@@ -27,9 +27,9 @@ def millerscrape():
     for speech in listsoup.findAll(attrs={'class':'views-row'}):
         title = get_text_from_class(speech, 'views-field-title')
 
-        speechlink = speech.find('a').get('href')
+        speechlink = baselink + speech.find('a').get('href')
 
-        speechhtml = requests.get(baselink + speechlink).text
+        speechhtml = requests.get(speechlink).text
         speechsoup = bs4.BeautifulSoup(speechhtml, features='html.parser')
 
         politician = get_text_from_class(speechsoup, 'president-name')
