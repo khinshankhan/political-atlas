@@ -7,10 +7,15 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 sys.path.append("../speech-scraper")
 import scrape
 
+with open('config.json') as f:
+    json_string = json.load(f)
+
+ibmkey = json_string['API_Key']
+
 # Api Access
 # Using latest version 2017-09-21
 authenticator = IAMAuthenticator(
-    'cfWZ9e9Dqi0mjjj6AfVqHo6reWDVCVZF9is5_pwEPMLv')
+    ibmkey)
 tone_analyzer = ToneAnalyzerV3(
     version='2017-09-21',
     authenticator=authenticator
@@ -40,7 +45,7 @@ def tone_of_document(text):
     document_tone = "Document Tone\n"
     for elements in text_to_analyze(text)["document_tone"]["tones"]:
         document_tone += "Tone Name: " + str(elements["tone_name"]) + "\n"
-        if not element["tones"]:
+        if not elements:
             document_tone += "High confidence? : Not Enough Data\n"
         else:
             document_tone += "Score: " + \
@@ -81,9 +86,10 @@ def tone_of_sentences(text):
 
 
 if __name__ == '__main__':
-    text_to_analyze(tone_of_sentences(scrape.millerscrape()[0]['transcript']))
-    print(tone_of_document(scrape.millerscrape()[0]['transcript']))
-    print(tone_of_sentences(scrape.millerscrape()[0]['transcript']))
+    text = scrape.millerscrape()[0]['transcript']
+    text_to_analyze(text)
+    print(tone_of_document(text))
+    print(tone_of_sentences(text))
 
     # for speeches in scrape.millerscrape():
     #     text_to_analyze(tone_of_sentences(speeches['transcript']))
