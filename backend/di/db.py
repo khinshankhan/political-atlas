@@ -3,6 +3,7 @@ db.py
 
 Methods to interact with database for data scraper.
 """
+import json
 import pathlib
 import sqlite3
 import sys
@@ -76,6 +77,12 @@ def add_scrape(details):
     run_with_named_placeholders(add_query, details)
 
 
+def get_scrape():
+    c = connection.cursor()
+    fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
+    json_query = ', '.join("'%s', %s" % (x, x) for x in fields)
+    return json.loads(c.execute('select json_group_array(json_object(%s)) from scraped' % json_query).fetchone()[0])
+
 def cleanup():
     if connection:
         connection.close()
@@ -87,5 +94,7 @@ def cleanup():
 if __name__ == "__main__":
     try:
         ensure_scrape_tables()
+        for i in get_scrape():
+            print(i['title'])
     finally:
         cleanup()
