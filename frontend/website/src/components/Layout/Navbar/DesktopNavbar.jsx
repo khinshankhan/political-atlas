@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "gatsby";
+
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -16,7 +18,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const DesktopNavbar = () => {
+const DesktopNavbar = ({ buttons, links }) => {
   const classes = useStyles();
 
   return (
@@ -24,8 +26,11 @@ const DesktopNavbar = () => {
       <AppBar position="static">
         <Toolbar>
           <div className={classes.title} />
-          <Button color="inherit">Home</Button>
-          <Button color="inherit">About</Button>
+          {buttons.map((button, index) => (
+            <Link to={links[index]} key={index}>
+              <Button color="inherit">{button}</Button>
+            </Link>
+          ))}
         </Toolbar>
       </AppBar>
     </div>
