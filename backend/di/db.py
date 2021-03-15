@@ -94,6 +94,7 @@ def add_scrape(details):
 
 
 def get_scrape():
+    ensure_scrape_inserts()
     c = connection.cursor()
     fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
     json_query = ', '.join("'%s', %s" % (x, x) for x in fields)
@@ -109,7 +110,6 @@ def cleanup():
 
 if __name__ == "__main__":
     try:
-        ensure_scrape_inserts()
         for i in get_scrape():
             print(i['title'])
     finally:
