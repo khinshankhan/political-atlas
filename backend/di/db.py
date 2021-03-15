@@ -15,7 +15,7 @@ sys.path.insert(0, path)
 from speech_scraper import scrape
 
 BASE_DIR = pathlib.Path(__file__).parent.absolute()
-DB_PATH = BASE_DIR.joinpath('..', 'database.db')
+DB_PATH = BASE_DIR.joinpath('..', 'data', 'database.db')
 
 connection = None
 try:
