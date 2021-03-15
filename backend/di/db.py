@@ -8,6 +8,12 @@ import pathlib
 import sqlite3
 import sys
 
+# HACK: sys path shouldn't be hacked together
+# TODO: refactor whole project to use setup.py
+path = str(pathlib.Path(pathlib.Path(__file__).parent.absolute()).parent.absolute())
+sys.path.insert(0, path)
+from speech_scraper import scrape
+
 BASE_DIR = pathlib.Path(__file__).parent.absolute()
 DB_PATH = BASE_DIR.joinpath('..', 'database.db')
 
@@ -53,6 +59,16 @@ def ensure_scrape_tables():
     run(create_scraped_table)
     print("data scrape tables ensured")
 
+def ensure_scrape_inserts():
+    ensure_scrape_tables()
+    c = connection.cursor()
+    count = c.execute('select count(id) from scraped').fetchone()[0]
+    if count > 0: return
+    try:
+        for speech in scrape.millerscrape():
+            add_scrape(speech)
+    finally:
+        cleanup()
 
 def add_scrape(details):
     """
@@ -93,7 +109,7 @@ def cleanup():
 
 if __name__ == "__main__":
     try:
-        ensure_scrape_tables()
+        ensure_scrape_inserts()
         for i in get_scrape():
             print(i['title'])
     finally:
