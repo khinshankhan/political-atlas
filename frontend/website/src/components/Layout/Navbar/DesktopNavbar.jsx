@@ -10,8 +10,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+  navButton: {
+    color: "white",
   },
   title: {
     flexGrow: 1,
@@ -28,7 +28,9 @@ const DesktopNavbar = ({ buttons, links }) => {
           <div className={classes.title} />
           {buttons.map((button, index) => (
             <Link to={links[index]} key={index}>
-              <Button color="inherit">{button}</Button>
+              <Button color="default" className={classes.navButton}>
+                {button}
+              </Button>
             </Link>
           ))}
         </Toolbar>
