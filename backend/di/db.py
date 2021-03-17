@@ -3,12 +3,19 @@ db.py
 
 Methods to interact with database for data scraper.
 """
+import json
 import pathlib
 import sqlite3
 import sys
 
+# HACK: sys path shouldn't be hacked together
+# TODO: refactor whole project to use setup.py
+path = str(pathlib.Path(pathlib.Path(__file__).parent.absolute()).parent.absolute())
+sys.path.insert(0, path)
+from speech_scraper import scrape
+
 BASE_DIR = pathlib.Path(__file__).parent.absolute()
-DB_PATH = BASE_DIR.joinpath('..', 'database.db')
+DB_PATH = BASE_DIR.joinpath('..', 'data', 'database.db')
 
 connection = None
 try:
@@ -52,6 +59,16 @@ def ensure_scrape_tables():
     run(create_scraped_table)
     print("data scrape tables ensured")
 
+def ensure_scrape_inserts():
+    ensure_scrape_tables()
+    c = connection.cursor()
+    count = c.execute('select count(id) from scraped').fetchone()[0]
+    if count > 0: return
+    try:
+        for speech in scrape.millerscrape():
+            add_scrape(speech)
+    finally:
+        cleanup()
 
 def add_scrape(details):
     """
@@ -76,6 +93,13 @@ def add_scrape(details):
     run_with_named_placeholders(add_query, details)
 
 
+def get_scrape():
+    ensure_scrape_inserts()
+    c = connection.cursor()
+    fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
+    json_query = ', '.join("'%s', %s" % (x, x) for x in fields)
+    return json.loads(c.execute('select json_group_array(json_object(%s)) from scraped' % json_query).fetchone()[0])
+
 def cleanup():
     if connection:
         connection.close()
@@ -86,6 +110,7 @@ def cleanup():
 
 if __name__ == "__main__":
     try:
-        ensure_scrape_tables()
+        for i in get_scrape():
+            print(i['title'])
     finally:
         cleanup()
