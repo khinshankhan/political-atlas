@@ -34,7 +34,6 @@ def text_to_analyze(text):
         {'text': text},
         content_type='application/json'
     ).get_result()
-
     return tone_analysis
 
 # prints the tone score for the entire document
@@ -84,9 +83,25 @@ def tone_of_sentences(text):
                 else:
                     sentence_tone += "High confidence? : No\n"
         sentence_tone += "\n"
-        if(elements["sentence_id"] == 99):
+        while(elements["sentence_id"] == 99):
             text = text[text.find(elements["text"]) + len(elements["text"]):]
-            sentence_tone += tone_of_sentences(text)
+            #sentence_tone += tone_of_sentences(text)
+            for index, elements in enumerate(text_to_analyze(text)["sentences_tone"], start=index+1):
+                sentence_tone += f"Sentence Number: {index}\n"
+                sentence_tone += "Sentence: " + elements["text"] + "\n"
+                if not elements["tones"]:
+                    sentence_tone += "High confidence? : Not Enough Data\n"
+                else:
+                    for tones in elements["tones"]:
+                        sentence_tone += "Tone Name: " + tones["tone_name"] + "\n"
+                        sentence_tone += "Score: " + \
+                            str(tones["score"]) + " Percent: " + \
+                            str("{0:.0%}".format(tones["score"])) + "\n"
+                        if(tones["score"] > 0.75):
+                            sentence_tone += "High confidence? : Yes\n"
+                        else:
+                            sentence_tone += "High confidence? : No\n"
+                sentence_tone += "\n"
 
     return sentence_tone
 
@@ -96,7 +111,7 @@ if __name__ == '__main__':
         text = i['transcript']
         print(tone_of_sentences(text))
         break
-
+    
     # text = scrape.millerscrape()[0]['transcript']
     # print(tone_of_sentences(text))
     # for speeches in db.get_scrape():
