@@ -92,12 +92,13 @@ def tone_of_sentences(text):
 
 
 if __name__ == '__main__':
-    # for i in db.get_scrape():
-    #     print(i['title'])
+    for i in db.get_scrape():
+        text = i['transcript']
+        print(tone_of_sentences(text))
+        break
 
-    text = scrape.millerscrape()[0]['transcript']
-    print(tone_of_sentences(text))
-
+    # text = scrape.millerscrape()[0]['transcript']
+    # print(tone_of_sentences(text))
     # for speeches in db.get_scrape():
     #     text = speeches['transcript']
     #     print(tone_of_document(text)
