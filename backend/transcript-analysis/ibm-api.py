@@ -63,16 +63,16 @@ def tone_of_document(text):
 # scores range from 0.5-1.0
 # scores under 0.0 will result in empty array
 # scores above .75 are high accuracy
-
-
 def tone_of_sentences(text):
     sentence_tone = "Sentence Tones\n"
+    #iterate thorugh each setence dictinary and displays the sentence number and text
     for index, elements in enumerate(text_to_analyze(text)["sentences_tone"], start=1):
         sentence_tone += f"Sentence Number: {index}\n"
         sentence_tone += "Sentence: " + elements["text"] + "\n"
         if not elements["tones"]:
             sentence_tone += "High confidence? : Not Enough Data\n"
         else:
+            #if there are tones, reads through each tone dictionary and displays tone name/score
             for tones in elements["tones"]:
                 sentence_tone += "Tone Name: " + tones["tone_name"] + "\n"
                 sentence_tone += "Score: " + \
@@ -83,9 +83,9 @@ def tone_of_sentences(text):
                 else:
                     sentence_tone += "High confidence? : No\n"
         sentence_tone += "\n"
+        #if there are over 100 sentences, this will rerun the anaylsis on the next 100 sentences
         while(elements["sentence_id"] == 99):
             text = text[text.find(elements["text"]) + len(elements["text"]):]
-            #sentence_tone += tone_of_sentences(text)
             for index, elements in enumerate(text_to_analyze(text)["sentences_tone"], start=index+1):
                 sentence_tone += f"Sentence Number: {index}\n"
                 sentence_tone += "Sentence: " + elements["text"] + "\n"
