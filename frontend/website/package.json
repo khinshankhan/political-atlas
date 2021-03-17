@@ -1,0 +1,23 @@
+{
+  "name": "political-atlas",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "clean": "gatsby clean",
+    "test": "echo \"No tests available yet\""
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "gatsby": "^3.0.4",
+    "gatsby-plugin-root-import": "^2.0.6",
+    "gatsby-plugin-use-query-params": "^1.0.1",
+    "gatsby-theme-material-ui": "^1.0.13",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "use-query-params": "^1.2.0"
+  }
+}
