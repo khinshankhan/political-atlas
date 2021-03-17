@@ -6,6 +6,9 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 sys.path.append("../di")
 import db
 
+sys.path.append("../speech_scraper")
+import scrape
+
 with open('config.json') as f:
     json_string = json.load(f)
 
@@ -81,33 +84,21 @@ def tone_of_sentences(text):
                 else:
                     sentence_tone += "High confidence? : No\n"
         sentence_tone += "\n"
+        if(elements["sentence_id"] == 99):
+            text = text[text.find(elements["text"]) + len(elements["text"]):]
+            sentence_tone += tone_of_sentences(text)
+
     return sentence_tone
 
 
 if __name__ == '__main__':
-    for i in db.get_scrape():
-        print(i['title'])
-
     # for i in db.get_scrape():
-    #     text = i['transcript']
-    #     print(text)
-    #     break
-    # text2 = nltk.tokenize.sent_tokenize(text)
-    # text3 = ""
-    # count = 0
-    # for element in text2:
-    #     text3 += element + " "
-    #     count += 1
-    #     if count == 100:
-    #         text_to_analyze(text3)
-    #         print(tone_of_sentences(text3))
-    #         text3 = ""
-    #         count = 0
+    #     print(i['title'])
 
-    # text_to_analyze(text3)
-    # print(tone_of_sentences(text3))
+    text = scrape.millerscrape()[0]['transcript']
+    print(tone_of_sentences(text))
 
-    # for speeches in scrape.millerscrape():
-    #     text_to_analyze(tone_of_sentences(speeches['transcript']))
-    #     print(tone_of_document(speeches['transcript']))
-    #     print(tone_of_sentences(speeches['transcript']))
+    # for speeches in db.get_scrape():
+    #     text = speeches['transcript']
+    #     print(tone_of_document(text)
+    #     print(tone_of_sentences(text)
