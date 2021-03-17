@@ -1,11 +1,10 @@
-
 import json
 import sys
 from ibm_watson import ToneAnalyzerV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-sys.path.append("../speech-scraper")
-import scrape
+sys.path.append("../di")
+import db
 
 with open('config.json') as f:
     json_string = json.load(f)
@@ -86,10 +85,27 @@ def tone_of_sentences(text):
 
 
 if __name__ == '__main__':
-    text = scrape.millerscrape()[0]['transcript']
-    text_to_analyze(text)
-    print(tone_of_document(text))
-    print(tone_of_sentences(text))
+    for i in db.get_scrape():
+        print(i['title'])
+
+    # for i in db.get_scrape():
+    #     text = i['transcript']
+    #     print(text)
+    #     break
+    # text2 = nltk.tokenize.sent_tokenize(text)
+    # text3 = ""
+    # count = 0
+    # for element in text2:
+    #     text3 += element + " "
+    #     count += 1
+    #     if count == 100:
+    #         text_to_analyze(text3)
+    #         print(tone_of_sentences(text3))
+    #         text3 = ""
+    #         count = 0
+
+    # text_to_analyze(text3)
+    # print(tone_of_sentences(text3))
 
     # for speeches in scrape.millerscrape():
     #     text_to_analyze(tone_of_sentences(speeches['transcript']))
