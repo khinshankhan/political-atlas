@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useQueryParam, NumberParam } from "use-query-params";
 
+import Typography from "@material-ui/core/Typography";
+
 import { getSpeechMeta } from "src/api/Server";
 
 import Layout from "src/components/Layout";
@@ -37,11 +39,14 @@ const Speech = () => {
 
   return (
     <Layout>
+      <br />
+      <Typography variant="h4" gutterBottom gutterTop>
+        {speechMeta.title}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        {speechMeta.description}
+      </Typography>
       <center>
-        [title]
-        <br />
-        [description]
-        <br />
         [video]
         <br />
         [legend]
