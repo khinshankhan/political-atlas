@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { getSpeechMeta } from "src/api/Server";
 
 import Layout from "src/components/Layout";
+import Video from "src/components/Video";
 
 const Speech = () => {
   const [id] = useQueryParam("id", NumberParam);
@@ -47,7 +48,8 @@ const Speech = () => {
         {speechMeta.description}
       </Typography>
       <center>
-        [video]
+        {/* TODO: conditionally show audio when video is missing */}
+        <Video src={speechMeta.video_link} />
         <br />
         [legend]
         <br />
