@@ -67,8 +67,8 @@ def ensure_scrape_inserts():
     try:
         for speech in scrape.millerscrape():
             add_scrape(speech)
-    finally:
-        cleanup()
+    except Exception as e:
+        print(e)
 
 def add_scrape(details):
     """
