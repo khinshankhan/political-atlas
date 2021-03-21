@@ -42,8 +42,10 @@ def millerscrape():
             politician = get_text_from_class(speechsoup, 'president-name')
 
             videolink = get_href_from_class(speechsoup, 'download-trigger full-video')
+            videolink = videolink[:videolink.find('?')]
 
             audiolink = get_href_from_class(speechsoup, 'download-trigger audio')
+            audiolink = audiolink[:audiolink.find('?')]
 
             date = get_text_from_class(speechsoup, 'episode-date')
 
