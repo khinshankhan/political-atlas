@@ -3,20 +3,22 @@ import { useQueryParam, NumberParam } from "use-query-params";
 
 import Typography from "@material-ui/core/Typography";
 
-import { getSpeechMeta } from "src/api/Server";
+import { getSpeechMeta, getTranscript } from "src/api/Server";
 
 import Layout from "src/components/Layout";
 import Video from "src/components/Video";
+import EmotionCaptions from "src/components/EmotionCaptions";
 
 const Speech = () => {
   const [id] = useQueryParam("id", NumberParam);
   const [validId] = useState(id != null && !Number.isNaN(id));
   const [speechMeta, setSpeechMeta] = useState(null);
+  const [transcript, setTranscript] = useState(null);
 
   useEffect(() => {
     const setup = async () => {
       const fetchedSpeechMeta = await getSpeechMeta(id);
-      setSpeechMeta((prev) => fetchedSpeechMeta);
+      setSpeechMeta(fetchedSpeechMeta);
       // TODO: split up other api calls into use effects relying on speechMetaData change
     };
 
@@ -24,6 +26,18 @@ const Speech = () => {
       setup();
     }
   }, [validId, id]);
+
+  useEffect(() => {
+    const setup = async () => {
+      const transcript = await getTranscript();
+      setTranscript(transcript);
+    };
+
+    if (validId && speechMeta != null) {
+      // TODO: setup conditional loading for each type of data needed for visualization
+      setup();
+    }
+  }, [validId, speechMeta]);
 
   if (!validId) {
     return (
@@ -41,7 +55,7 @@ const Speech = () => {
   return (
     <Layout>
       <br />
-      <Typography variant="h4" gutterBottom gutterTop>
+      <Typography variant="h4" gutterBottom>
         {speechMeta.title}
       </Typography>
       <Typography variant="body1" gutterBottom>
@@ -54,9 +68,12 @@ const Speech = () => {
         [legend]
         <br />
         [charts]
-        <br />
-        [text with emotions]
       </center>
+      {transcript != null && (
+        <Typography variant="body1" gutterBottom>
+          <EmotionCaptions sentences={transcript.sentences_tone} />
+        </Typography>
+      )}
     </Layout>
   );
 };
