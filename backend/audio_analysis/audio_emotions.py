@@ -1,7 +1,7 @@
 import json, sys, requests, base64
 
-sys.path.append("../speech-scraper")
-import scrape
+sys.path.append("..")
+from di import db
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -61,7 +61,8 @@ if __name__ == '__main__':
     # audio_process_emotions_file("local_audio_file.mp3")
     # audio_process_emotions("www.website.com/audio_file_url.mp3")
 
-    # speech = scrape.millerscrape()[0]
+    # speech = db.get_scrape()[0]
     # print(speech['title'])
     # print(speech['audio_link'])
     # print()
+    pass

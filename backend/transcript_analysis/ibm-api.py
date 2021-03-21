@@ -3,11 +3,8 @@ import sys
 from ibm_watson import ToneAnalyzerV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-sys.path.append("../di")
-import db
-
-sys.path.append("../speech_scraper")
-import scrape
+sys.path.append("..")
+from di import db
 
 with open('config.json') as f:
     json_string = json.load(f)
@@ -36,7 +33,7 @@ def text_to_analyze(text):
         tone_analysis = tone_analyzer.tone(
             {'text': text},
             content_type='application/json'
-        ).get_result()     
+        ).get_result()
         dump.append(tone_analysis)
         last = tone_analysis['sentences_tone'][-1]
         if last['sentence_id'] == 99:
@@ -44,7 +41,7 @@ def text_to_analyze(text):
             text = text[text.find(sentence)+len(sentence):].strip()
         else:
             repeat = False
-        
+
     ret = dump[0]
     for response in dump[1:]:
         ret['sentences_tone'] += response['sentences_tone']
@@ -108,7 +105,7 @@ if __name__ == '__main__':
         text = i['transcript']
         print(tone_of_sentences(text))
         break
-    
+
     # text = scrape.millerscrape()[0]['transcript']
     # print(tone_of_sentences(text))
     # for speeches in db.get_scrape():
