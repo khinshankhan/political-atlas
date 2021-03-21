@@ -13,6 +13,7 @@ import sys
 path = str(pathlib.Path(pathlib.Path(__file__).parent.absolute()).parent.absolute())
 sys.path.insert(0, path)
 from speech_scraper import scrape
+from transcript_analysis import ibm_api
 
 BASE_DIR = pathlib.Path(__file__).parent.absolute()
 DB_PATH = BASE_DIR.joinpath('..', 'data', 'database.db')
@@ -110,6 +111,27 @@ def ensure_ibm_tables():
 def add_ibm(speech_id, json_path):
     add_query = "INSERT INTO ibm VALUES (?,?);"
     run_with_named_placeholders(add_query, (speech_id, json_path))
+
+def download_add_ibm(speech):
+    speech_id = speech['id']
+    json_path = 'data/ibm/%s.json' % speech_id
+    j = ibm_api.text_to_analyze(i['transcript'])
+    full_path = BASE_DIR.joinpath('..', json_path)
+    with open(full_path, 'w') as out:
+        out.write(json.dumps(j))
+    add_ibm(speech_id, json_path)
+
+def get_ibm_analsyis(speech_id):
+    c = connection.cursor()
+    select = 'select json_path from ibm where id=?;'
+    json_path = c.execute(select, (speech_id,)).fetchone()
+    if json_path:
+        json_path = json_path[0]
+        full_path = BASE_DIR.joinpath('..', json_path)
+        with open(full_path) as src:
+            return json.load(src)
+    else:
+        return {}
 
 def cleanup():
     if connection:
