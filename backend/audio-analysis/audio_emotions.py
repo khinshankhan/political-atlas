@@ -6,7 +6,9 @@ import scrape
 with open('config.json') as config_file:
     config = json.load(config_file)
 
-WEB_HOOK = "https://webhook.site/8e0d6163-b59e-4b3e-9180-956b68eca7a4"
+# TEST webhook
+# WEB_HOOK = "https://webhook.site/8e0d6163-b59e-4b3e-9180-956b68eca7a4"
+WEB_HOOK = "http://142.93.74.113:80/webhook"
 
 querystring: dict = {
     "apikey": config['API_KEY'], 
@@ -43,7 +45,7 @@ def audio_process_emotions_file(audio_file_name: str, response_type: str = "asyn
 # Takes a remote audio file and processes emotions
 # async response -> response sent to Webhook
 def audio_process_emotions(audio_url: str) -> None:
-    audio_type: str = audio_url[audio_url.rfind('.')::]
+    audio_type: str = audio_url[audio_url.rfind('.') + 1::]
 
     if (audio_type not in ('wav', 'mp3', 'pcm', 'aac', 'mulaw', 'mp4', 'm4a', 'mov', 'wmv')):
         print("not valid audio_url")
@@ -54,7 +56,6 @@ def audio_process_emotions(audio_url: str) -> None:
 
     url: str = "https://proxy.api.deepaffects.com/audio/generic/api/v2/async/recognise_emotion"
     response = requests.post(url, json=payload, headers=headers, params=querystring)
-
 
 if __name__ == '__main__':
     # audio_process_emotions_file("local_audio_file.mp3")
