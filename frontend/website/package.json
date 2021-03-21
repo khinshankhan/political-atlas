@@ -12,6 +12,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "axios": "^0.21.1",
     "gatsby": "^3.0.4",
     "gatsby-plugin-root-import": "^2.0.6",
     "gatsby-plugin-use-query-params": "^1.0.1",
