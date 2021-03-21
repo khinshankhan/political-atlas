@@ -1,5 +1,5 @@
-import requests
 import bs4
+import requests
 
 def get_text_from_class(soup, classname):
     soup = soup.find(attrs={'class': classname})

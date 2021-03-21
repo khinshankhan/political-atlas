@@ -1,4 +1,7 @@
-import json, sys, requests, base64
+import base64
+import json
+import requests
+import sys
 
 with open('config.json') as config_file:
     config = json.load(config_file)
