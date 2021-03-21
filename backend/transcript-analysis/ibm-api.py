@@ -29,12 +29,29 @@ tone_analyzer.set_service_url(
 
 # return jsonfile of text
 def text_to_analyze(text):
-    # json file from api
-    tone_analysis = tone_analyzer.tone(
-        {'text': text},
-        content_type='application/json'
-    ).get_result()
-    return tone_analysis
+    dump = []
+    repeat = True
+    while repeat:
+        # json file from api
+        tone_analysis = tone_analyzer.tone(
+            {'text': text},
+            content_type='application/json'
+        ).get_result()     
+        dump.append(tone_analysis)
+        last = tone_analysis['sentences_tone'][-1]
+        if last['sentence_id'] == 99:
+            sentence = last['text']
+            text = text[text.find(sentence)+len(sentence):].strip()
+        else:
+            repeat = False
+        
+    ret = dump[0]
+    for response in dump[1:]:
+        ret['sentences_tone'] += response['sentences_tone']
+
+    #print(json.dumps(ret,indent=2))
+
+    return ret
 
 # prints the tone score for the entire document
 # scores range from 0.5-1.0
@@ -83,26 +100,6 @@ def tone_of_sentences(text):
                 else:
                     sentence_tone += "High confidence? : No\n"
         sentence_tone += "\n"
-        #if there are over 100 sentences, this will rerun the anaylsis on the next 100 sentences
-        while(elements["sentence_id"] == 99):
-            text = text[text.find(elements["text"]) + len(elements["text"]):]
-            for index, elements in enumerate(text_to_analyze(text)["sentences_tone"], start=index+1):
-                sentence_tone += f"Sentence Number: {index}\n"
-                sentence_tone += "Sentence: " + elements["text"] + "\n"
-                if not elements["tones"]:
-                    sentence_tone += "High confidence? : Not Enough Data\n"
-                else:
-                    for tones in elements["tones"]:
-                        sentence_tone += "Tone Name: " + tones["tone_name"] + "\n"
-                        sentence_tone += "Score: " + \
-                            str(tones["score"]) + " Percent: " + \
-                            str("{0:.0%}".format(tones["score"])) + "\n"
-                        if(tones["score"] > 0.75):
-                            sentence_tone += "High confidence? : Yes\n"
-                        else:
-                            sentence_tone += "High confidence? : No\n"
-                sentence_tone += "\n"
-
     return sentence_tone
 
 
