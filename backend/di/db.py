@@ -59,17 +59,6 @@ def ensure_scrape_tables():
     run(create_scraped_table)
     print("data scrape tables ensured")
 
-def ensure_scrape_inserts():
-    ensure_scrape_tables()
-    c = connection.cursor()
-    count = c.execute('select count(id) from scraped').fetchone()[0]
-    if count > 0: return
-    try:
-        for speech in scrape.millerscrape():
-            add_scrape(speech)
-    except Exception as e:
-        print(e)
-
 def add_scrape(details):
     """
     Adds data as a row into scraped table.
@@ -92,6 +81,16 @@ def add_scrape(details):
                    );"""
     run_with_named_placeholders(add_query, details)
 
+def ensure_scrape_inserts():
+    ensure_scrape_tables()
+    c = connection.cursor()
+    count = c.execute('select count(id) from scraped').fetchone()[0]
+    if count > 0: return
+    try:
+        for speech in scrape.millerscrape():
+            add_scrape(speech)
+    except Exception as e:
+        print(e)
 
 def get_scrape():
     ensure_scrape_inserts()
@@ -99,6 +98,18 @@ def get_scrape():
     fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
     json_query = ', '.join("'%s', %s" % (x, x) for x in fields)
     return json.loads(c.execute('select json_group_array(json_object(%s)) from scraped' % json_query).fetchone()[0])
+
+def ensure_ibm_tables():
+    create_ibm_table = """CREATE TABLE IF NOT EXISTS ibm (
+                               id integer PRIMARY KEY,
+                               json_path text NOT NULL
+                             );"""
+    run(create_ibm_table)
+    print("ibm table ensured")
+
+def add_ibm(speech_id, json_path):
+    add_query = "INSERT INTO ibm VALUES (?,?);"
+    run_with_named_placeholders(add_query, (speech_id, json_path))
 
 def cleanup():
     if connection:
