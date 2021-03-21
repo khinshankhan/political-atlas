@@ -7,6 +7,8 @@ import { getSpeechMeta, getTranscript } from "src/api/Server";
 
 import Layout from "src/components/Layout";
 import Video from "src/components/Video";
+import Legend from "src/components/Legend";
+import DataVisualization from "src/components/DataVisualization";
 import EmotionCaptions from "src/components/EmotionCaptions";
 
 const Speech = () => {
@@ -65,9 +67,9 @@ const Speech = () => {
         {/* TODO: conditionally show audio when video is missing */}
         <Video src={speechMeta.video_link} />
         <br />
-        [legend]
+        <Legend />
         <br />
-        [charts]
+        <DataVisualization ibm={null} da={null} />
       </center>
       {transcript != null && (
         <Typography variant="body1" gutterBottom>
