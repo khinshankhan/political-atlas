@@ -1,12 +1,15 @@
 import json
+import pathlib
 import sys
 from ibm_watson import ToneAnalyzerV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-with open('config.json') as f:
-    json_string = json.load(f)
+BASE_DIR = pathlib.Path(__file__).parent.absolute()
 
-ibmkey = json_string['API_Key']
+with open(BASE_DIR.joinpath('config.json')) as f:
+    config = json.load(f)
+
+ibmkey = config['API_Key']
 
 # Api Access
 # Using latest version 2017-09-21
