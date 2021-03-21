@@ -3,9 +3,6 @@ import sys
 from ibm_watson import ToneAnalyzerV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-sys.path.append("..")
-from di import db
-
 with open('config.json') as f:
     json_string = json.load(f)
 
@@ -98,17 +95,3 @@ def tone_of_sentences(text):
                     sentence_tone += "High confidence? : No\n"
         sentence_tone += "\n"
     return sentence_tone
-
-
-if __name__ == '__main__':
-    for i in db.get_scrape():
-        text = i['transcript']
-        print(tone_of_sentences(text))
-        break
-
-    # text = scrape.millerscrape()[0]['transcript']
-    # print(tone_of_sentences(text))
-    # for speeches in db.get_scrape():
-    #     text = speeches['transcript']
-    #     print(tone_of_document(text)
-    #     print(tone_of_sentences(text)

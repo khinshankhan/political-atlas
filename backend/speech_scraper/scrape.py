@@ -68,10 +68,3 @@ def millerscrape():
             speeches.append(dump)
 
     return speeches
-
-if __name__ == '__main__':
-    dump = millerscrape()
-    for speech in dump:
-        print(speech['title'])
-        print(speech['description'])
-        print()
