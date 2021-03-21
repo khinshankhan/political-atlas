@@ -9,3 +9,6 @@
 .idea
 .vscode/
 ~*
+
+# Testing
+*test*
