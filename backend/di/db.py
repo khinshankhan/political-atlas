@@ -20,7 +20,7 @@ DB_PATH = BASE_DIR.joinpath('..', 'data', 'database.db')
 
 connection = None
 try:
-    connection = sqlite3.connect(DB_PATH)
+    connection = sqlite3.connect(DB_PATH, check_same_thread=False)
 except Exception as e:
     print("data scraper was unable to make a connection to database.db")
     print(e)

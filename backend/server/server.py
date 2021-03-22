@@ -1,5 +1,12 @@
 from flask import Flask, request, Response
 
+import pathlib
+import sys
+
+path = str(pathlib.Path(pathlib.Path(__file__).parent.absolute()).parent.absolute())
+sys.path.insert(0, path)
+from di import db
+
 app = Flask(__name__)
 
 responses = []
@@ -17,5 +24,14 @@ def postResponse():
     print(request.json)
     return Response(status=200)
 
+@app.route('/ibm')
+def get_ibm():
+    sid = request.args.get('id')
+    if sid:
+        return db.get_ibm_analsyis(sid)
+    else:
+        return {}
+
 if __name__ == '__main__':
-    app.run()
+  app.debug = True
+  app.run(host="0.0.0.0")
