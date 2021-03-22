@@ -1,5 +1,5 @@
-import requests
 import bs4
+import requests
 
 def get_text_from_class(soup, classname):
     soup = soup.find(attrs={'class': classname})
@@ -42,8 +42,10 @@ def millerscrape():
             politician = get_text_from_class(speechsoup, 'president-name')
 
             videolink = get_href_from_class(speechsoup, 'download-trigger full-video')
+            videolink = videolink[:videolink.find('?')]
 
             audiolink = get_href_from_class(speechsoup, 'download-trigger audio')
+            audiolink = audiolink[:audiolink.find('?')]
 
             date = get_text_from_class(speechsoup, 'episode-date')
 
@@ -66,10 +68,3 @@ def millerscrape():
             speeches.append(dump)
 
     return speeches
-
-if __name__ == '__main__':
-    dump = millerscrape()
-    for speech in dump:
-        print(speech['title'])
-        print(speech['description'])
-        print()

@@ -1,7 +1,7 @@
-import json, sys, requests, base64
-
-sys.path.append("../speech-scraper")
-import scrape
+import base64
+import json
+import requests
+import sys
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -56,12 +56,3 @@ def audio_process_emotions(audio_url: str) -> None:
 
     url: str = "https://proxy.api.deepaffects.com/audio/generic/api/v2/async/recognise_emotion"
     response = requests.post(url, json=payload, headers=headers, params=querystring)
-
-if __name__ == '__main__':
-    # audio_process_emotions_file("local_audio_file.mp3")
-    # audio_process_emotions("www.website.com/audio_file_url.mp3")
-
-    # speech = scrape.millerscrape()[0]
-    # print(speech['title'])
-    # print(speech['audio_link'])
-    # print()

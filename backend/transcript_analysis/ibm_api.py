@@ -1,18 +1,15 @@
 import json
+import pathlib
 import sys
 from ibm_watson import ToneAnalyzerV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-sys.path.append("../di")
-import db
+BASE_DIR = pathlib.Path(__file__).parent.absolute()
 
-sys.path.append("../speech_scraper")
-import scrape
+with open(BASE_DIR.joinpath('config.json')) as f:
+    config = json.load(f)
 
-with open('config.json') as f:
-    json_string = json.load(f)
-
-ibmkey = json_string['API_Key']
+ibmkey = config['API_Key']
 
 # Api Access
 # Using latest version 2017-09-21
@@ -36,7 +33,7 @@ def text_to_analyze(text):
         tone_analysis = tone_analyzer.tone(
             {'text': text},
             content_type='application/json'
-        ).get_result()     
+        ).get_result()
         dump.append(tone_analysis)
         last = tone_analysis['sentences_tone'][-1]
         if last['sentence_id'] == 99:
@@ -44,7 +41,7 @@ def text_to_analyze(text):
             text = text[text.find(sentence)+len(sentence):].strip()
         else:
             repeat = False
-        
+
     ret = dump[0]
     for response in dump[1:]:
         ret['sentences_tone'] += response['sentences_tone']
@@ -101,17 +98,3 @@ def tone_of_sentences(text):
                     sentence_tone += "High confidence? : No\n"
         sentence_tone += "\n"
     return sentence_tone
-
-
-if __name__ == '__main__':
-    for i in db.get_scrape():
-        text = i['transcript']
-        print(tone_of_sentences(text))
-        break
-    
-    # text = scrape.millerscrape()[0]['transcript']
-    # print(tone_of_sentences(text))
-    # for speeches in db.get_scrape():
-    #     text = speeches['transcript']
-    #     print(tone_of_document(text)
-    #     print(tone_of_sentences(text)
