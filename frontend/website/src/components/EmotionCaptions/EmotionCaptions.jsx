@@ -3,15 +3,10 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Switch from "@material-ui/core/Switch";
 
 import { emotionMap, sortedEmotions } from "src/utils/emotions";
-import { capitalize } from "src/utils/utils";
+
+import Controls from "./Controls";
 
 // TODO: figure out actual coloring per sentence
 // TODO: look into on hovers for the text
@@ -41,23 +36,10 @@ const EmotionCaptions = ({ sentences }) => {
           <Paper className={classes.paper}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">Choose Emotion</FormLabel>
-                  <FormGroup>
-                    {sortedEmotions.map((emotion, i) => (
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={emotion === selectedEmotion}
-                            onChange={updateEmotionOnChange}
-                            name={emotion}
-                          />
-                        }
-                        label={capitalize(emotion)}
-                      />
-                    ))}
-                  </FormGroup>
-                </FormControl>
+                <Controls
+                  selectedEmotion={selectedEmotion}
+                  handleOnChange={updateEmotionOnChange}
+                />
               </Grid>
             </Grid>
           </Paper>
