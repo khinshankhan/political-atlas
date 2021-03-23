@@ -4,9 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 
-import { emotionMap, sortedEmotions } from "src/utils/emotions";
+import { emotionsMap, sortedEmotions } from "src/utils/emotions";
 
-import Controls from "./Controls";
+import EmotionControls from "./EmotionControls";
+import EmotionText from "./EmotionText";
 
 // TODO: figure out actual coloring per sentence
 // TODO: look into on hovers for the text
@@ -27,7 +28,7 @@ const EmotionCaptions = ({ sentences }) => {
   const [selectedEmotion, setSelectedEmotion] = useState(sortedEmotions[0]);
   const updateEmotionOnChange = (e) => setSelectedEmotion(e.target.name);
 
-  const text = sentences.map(({ text }) => text).join(" ");
+  const selectedEmotionObj = emotionsMap[selectedEmotion];
 
   return (
     <div className={classes.root}>
@@ -36,7 +37,7 @@ const EmotionCaptions = ({ sentences }) => {
           <Paper className={classes.paper}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <Controls
+                <EmotionControls
                   selectedEmotion={selectedEmotion}
                   handleOnChange={updateEmotionOnChange}
                 />
@@ -45,7 +46,9 @@ const EmotionCaptions = ({ sentences }) => {
           </Paper>
         </Grid>
         <Grid item xs={10}>
-          <Paper className={classes.paper}>{text}</Paper>
+          <Paper className={classes.paper}>
+            <EmotionText sentences={sentences} emotion={selectedEmotionObj} />
+          </Paper>
         </Grid>
       </Grid>
     </div>

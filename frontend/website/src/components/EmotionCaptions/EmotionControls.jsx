@@ -4,13 +4,12 @@ import FormLabel from "@material-ui/core/FormLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Switch from "@material-ui/core/Switch";
 
 import { sortedEmotions } from "src/utils/emotions";
 import { capitalize } from "src/utils/utils";
 
-const Controls = ({ selectedEmotion, handleOnChange }) => {
+const EmotionControls = ({ selectedEmotion, handleOnChange }) => {
   return (
     <FormControl component="fieldset">
       <FormLabel component="legend">Choose Emotion</FormLabel>
@@ -32,4 +31,4 @@ const Controls = ({ selectedEmotion, handleOnChange }) => {
   );
 };
 
-export default Controls;
+export default EmotionControls;
