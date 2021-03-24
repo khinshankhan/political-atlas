@@ -2,6 +2,11 @@ import React from "react";
 
 import Typography from "@material-ui/core/Typography";
 
+const determineColor = (color, score) => {
+  const [r, g, b] = color;
+  return `rgb(${r}, ${g}, ${b})`;
+};
+
 const EmotionText = ({ sentences, emotionObj }) => {
   // this is for a special case
   // since the ibm emotions will be empty when the emotion is neutral
@@ -21,7 +26,7 @@ const EmotionText = ({ sentences, emotionObj }) => {
             <span
               key={i}
               style={{
-                backgroundColor: emotionObj.color,
+                backgroundColor: determineColor(emotionObj.color),
               }}
             >
               {text}

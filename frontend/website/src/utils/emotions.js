@@ -1,31 +1,31 @@
 export const emotionsMap = {
   anger: {
-    color: "#FF0000",
+    color: [255, 0, 0],
     da: ["anger"],
     ibm: ["anger"],
   },
   sad: {
-    color: "#0000FF",
+    color: [0, 0, 255],
     da: ["sad"],
     ibm: ["sadness"],
   },
   happy: {
-    color: "#FFFF00",
+    color: [255, 255, 0],
     da: ["happy"],
     ibm: ["joy"],
   },
   insecure: {
-    color: "#00FF00",
+    color: [0, 255, 0],
     da: ["frustrated"],
     ibm: ["fear", "tentative"],
   },
   secure: {
-    color: "#800080",
+    color: [128, 0, 128],
     da: ["excited"],
     ibm: ["analytical", "confident"],
   },
   neutral: {
-    color: "#808080",
+    color: [128, 128, 128],
     da: ["neutral"],
     // NOTE: ibm returns an empty array as neutral, not the keyword
     ibm: ["neutral"],
