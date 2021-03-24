@@ -44,7 +44,7 @@ def audio_process_emotions_file(audio_file_name: str, response_type: str = "asyn
     
 # Takes a remote audio file and processes emotions
 # async response -> response sent to Webhook
-def audio_process_emotions(audio_url: str) -> None:
+def audio_process_emotions(audio_url: str):
     audio_type: str = audio_url[audio_url.rfind('.') + 1::]
 
     if (audio_type not in ('wav', 'mp3', 'pcm', 'aac', 'mulaw', 'mp4', 'm4a', 'mov', 'wmv')):
@@ -56,3 +56,4 @@ def audio_process_emotions(audio_url: str) -> None:
 
     url: str = "https://proxy.api.deepaffects.com/audio/generic/api/v2/async/recognise_emotion"
     response = requests.post(url, json=payload, headers=headers, params=querystring)
+    return response.json().get('request_id')

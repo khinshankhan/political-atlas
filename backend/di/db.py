@@ -93,12 +93,27 @@ def ensure_scrape_inserts():
     except Exception as e:
         print(e)
 
-def get_scrape():
+def get_scrape(excludes = []):
     ensure_scrape_inserts()
     c = connection.cursor()
     fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
-    json_query = ', '.join("'%s', %s" % (x, x) for x in fields)
-    return json.loads(c.execute('select json_group_array(json_object(%s)) from scraped' % json_query).fetchone()[0])
+    for exclude in excludes:
+        fields.remove(exclude)
+    json_group = ', '.join("'%s', %s" % (x, x) for x in fields)
+    query = 'select json_group_array(json_object(%s)) from scraped;' % json_group
+    return json.loads(c.execute(query).fetchone()[0])
+
+def get_scrape_id(speech_id):
+    ensure_scrape_inserts()
+    c = connection.cursor()
+    fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
+    json_group = ', '.join("'%s', %s" % (x, x) for x in fields)
+    query = 'select json_group_array(json_object(%s)) from scraped where id=?;' % json_group
+    ret = json.loads(c.execute(query, (speech_id,)).fetchone()[0])
+    if len(ret) == 1:
+        return ret[0]
+    else:
+        return {}
 
 def ensure_ibm_tables():
     create_ibm_table = """CREATE TABLE IF NOT EXISTS ibm (
@@ -124,6 +139,52 @@ def download_add_ibm(speech):
 def get_ibm_analsyis(speech_id):
     c = connection.cursor()
     select = 'select json_path from ibm where id=?;'
+    json_path = c.execute(select, (speech_id,)).fetchone()
+    if json_path:
+        json_path = json_path[0]
+        full_path = BASE_DIR.joinpath('..', json_path)
+        with open(full_path) as src:
+            return json.load(src)
+    else:
+        return {}
+
+def ensure_da_tables():
+    create_da_table1 = """CREATE TABLE IF NOT EXISTS deepaffects (
+                               id integer PRIMARY KEY,
+                               json_path text NOT NULL
+                             );"""
+    create_da_table2 = """CREATE TABLE IF NOT EXISTS deepaffectsmap (
+                               speech_id integer PRIMARY KEY,
+                               request_id text NOT NULL
+                             );"""
+    run(create_da_table1)
+    run(create_da_table2)
+    print("deepaffects table ensured")
+
+def add_deepaffectsmap(speech_id, request_id):
+    add_query = "INSERT INTO deepaffectsmap VALUES (?,?);"
+    run_with_named_placeholders(add_query, (speech_id, request_id))
+
+def get_speech_id_deep(request_id):
+    c = connection.cursor()
+    select = 'select speech_id from deepaffectsmap where request_id=?;'
+    sid = c.execute(select, (request_id,)).fetchone()
+    if sid:
+        return sid[0]
+    else:
+        return None
+
+def add_deepaffects(speech_id, response_json):
+    json_path = 'data/deepaffects/%s.json' % speech_id
+    full_path = BASE_DIR.joinpath('..', json_path)
+    with open(full_path, 'w') as out:
+        out.write(json.dumps(response_json))
+    add_query = "INSERT INTO deepaffects VALUES (?,?);"
+    run_with_named_placeholders(add_query, (speech_id, json_path))
+
+def get_deepaffects_analsyis(speech_id):
+    c = connection.cursor()
+    select = 'select json_path from deepaffects where id=?;'
     json_path = c.execute(select, (speech_id,)).fetchone()
     if json_path:
         json_path = json_path[0]
