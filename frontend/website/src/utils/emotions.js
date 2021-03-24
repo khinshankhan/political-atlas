@@ -1,3 +1,5 @@
+import { shadeColor } from "./utils";
+
 export const emotionsMap = {
   anger: {
     color: [255, 0, 0],
@@ -37,3 +39,11 @@ export const sortedEmotions = (() => {
   emotions.sort();
   return emotions;
 })();
+
+export const confidenceShade = (color, score) => {
+  if (score <= 0.75) {
+    return color;
+  }
+
+  return shadeColor(color, -0.3);
+};
