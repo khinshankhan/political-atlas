@@ -47,7 +47,10 @@ const EmotionCaptions = ({ sentences }) => {
         </Grid>
         <Grid item xs={10}>
           <Paper className={classes.paper}>
-            <EmotionText sentences={sentences} emotion={selectedEmotionObj} />
+            <EmotionText
+              sentences={sentences}
+              emotionObj={selectedEmotionObj}
+            />
           </Paper>
         </Grid>
       </Grid>

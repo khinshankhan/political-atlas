@@ -16,6 +16,7 @@ const EmotionControls = ({ selectedEmotion, handleOnChange }) => {
       <FormGroup>
         {sortedEmotions.map((emotion, i) => (
           <FormControlLabel
+            key={i}
             control={
               <Switch
                 checked={emotion === selectedEmotion}
