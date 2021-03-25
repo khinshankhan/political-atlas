@@ -41,9 +41,13 @@ export const sortedEmotions = (() => {
 })();
 
 export const confidenceShade = (color, score) => {
-  if (score <= 0.75) {
-    return color;
+  if (score < 0.5) {
+    return [[255, 255, 255], "black"];
   }
 
-  return shadeColor(color, -0.3);
+  if (score <= 0.75) {
+    return [color, "white"];
+  }
+
+  return [shadeColor(color, -0.3), "white"];
 };

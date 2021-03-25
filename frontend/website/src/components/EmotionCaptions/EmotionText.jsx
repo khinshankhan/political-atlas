@@ -5,8 +5,9 @@ import Typography from "@material-ui/core/Typography";
 import { confidenceShade } from "src/utils/emotions";
 
 const determineColor = (color, score) => {
-  const [r, g, b] = confidenceShade(color, score);
-  return `rgb(${r}, ${g}, ${b})`;
+  const [backgroundColor, textColor] = confidenceShade(color, score);
+  const [r, g, b] = backgroundColor;
+  return [`rgb(${r}, ${g}, ${b})`, textColor];
 };
 
 const EmotionText = ({ sentences, emotionObj }) => {
@@ -23,24 +24,29 @@ const EmotionText = ({ sentences, emotionObj }) => {
   return (
     <Typography variant="body1" gutterBottom>
       {sentences.map(({ tones, text }, i) => {
+        let score = 0;
         if (colorEmotionP(tones)) {
-          const score = tones.find(({ tone_id }) =>
-            emotionObj.ibm.includes(tone_id)
-          ).score;
-          return (
-            <span
-              key={i}
-              style={{
-                backgroundColor: determineColor(emotionObj.color, score),
-                color: "white",
-              }}
-            >
-              {text}
-            </span>
-          );
+          score = tones.find(({ tone_id }) => emotionObj.ibm.includes(tone_id))
+            .score;
         }
 
-        return <span key={i}>{text}</span>;
+        const [backgroundColor, textColor] = determineColor(
+          emotionObj.color,
+          score
+        );
+
+        console.log(score, backgroundColor, textColor, text);
+        return (
+          <span
+            key={i}
+            style={{
+              backgroundColor: backgroundColor,
+              color: textColor,
+            }}
+          >
+            {text}
+          </span>
+        );
       })}
     </Typography>
   );
