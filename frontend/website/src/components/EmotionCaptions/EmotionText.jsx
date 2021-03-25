@@ -2,10 +2,12 @@ import React from "react";
 
 import Typography from "@material-ui/core/Typography";
 
-import { confidenceShade } from "src/utils/emotions";
+import { confidenceShade, contrastColor } from "src/utils/emotions";
 
 const determineColor = (color, score) => {
-  const [backgroundColor, textColor] = confidenceShade(color, score);
+  const backgroundColor = confidenceShade(color, score);
+  const textColor = contrastColor(backgroundColor);
+  console.log(backgroundColor, textColor);
   const [r, g, b] = backgroundColor;
   return [`rgb(${r}, ${g}, ${b})`, textColor];
 };

@@ -42,12 +42,21 @@ export const sortedEmotions = (() => {
 
 export const confidenceShade = (color, score) => {
   if (score < 0.5) {
-    return [[255, 255, 255], "black"];
+    return [255, 255, 255];
   }
 
   if (score <= 0.75) {
-    return [color, "white"];
+    return color;
   }
 
-  return [shadeColor(color, -0.3), "white"];
+  return shadeColor(color, -0.3);
+};
+
+// https://stackoverflow.com/a/36888120
+export const contrastColor = ([r, g, b]) => {
+  // calculate the perceptive luminance (aka luma) - human eye favors green color...
+  const luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+  // return black for bright colors, white for dark colors
+  return luma > 0.5 ? "black" : "white";
 };
