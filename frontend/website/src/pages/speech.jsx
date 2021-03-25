@@ -72,9 +72,7 @@ const Speech = () => {
         <DataVisualization ibm={null} da={null} />
       </center>
       {transcript != null && (
-        <Typography variant="body1" gutterBottom>
-          <EmotionCaptions sentences={transcript.sentences_tone} />
-        </Typography>
+        <EmotionCaptions sentences={transcript.sentences_tone} />
       )}
     </Layout>
   );
