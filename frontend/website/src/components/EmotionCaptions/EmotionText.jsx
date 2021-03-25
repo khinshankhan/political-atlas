@@ -7,7 +7,6 @@ import { confidenceShade, contrastColor } from "src/utils/emotions";
 const determineColor = (color, score) => {
   const backgroundColor = confidenceShade(color, score);
   const textColor = contrastColor(backgroundColor);
-  console.log(backgroundColor, textColor);
   const [r, g, b] = backgroundColor;
   return [`rgb(${r}, ${g}, ${b})`, textColor];
 };
@@ -37,7 +36,6 @@ const EmotionText = ({ sentences, emotionObj }) => {
           score
         );
 
-        console.log(score, backgroundColor, textColor, text);
         return (
           <span
             key={i}
