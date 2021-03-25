@@ -56,19 +56,19 @@
 //     });
 
 import {
-  getListStubbed,
+  getSpeechListStubbed,
   getSpeechMetaStubbed,
   getTranscriptStubbed,
   getIbmAnalysisStubbed,
-  getDaAnalysisStubbed
+  getDaAnalysisStubbed,
 } from "./StubbedServer";
 
-export const getList = async () => getListStubbed();
+export const getSpeechList = async () => getSpeechListStubbed();
 
-export const getSpeechMeta = async id => getSpeechMetaStubbed();
+export const getSpeechMeta = async (id) => getSpeechMetaStubbed();
 
-export const getTranscript = async id => getTranscriptStubbed();
+export const getTranscript = async (id) => getTranscriptStubbed();
 
-export const getIbmAnalysis = async id => getIbmAnalysisStubbed();
+export const getIbmAnalysis = async (id) => getIbmAnalysisStubbed();
 
-export const getDaAnalysis = async id => getDaAnalysisStubbed();
+export const getDaAnalysis = async (id) => getDaAnalysisStubbed();
