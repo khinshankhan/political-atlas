@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "gatsby";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,7 +8,9 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 
+import { copy } from "src/utils/utils";
 import { makeSpeechLink } from "./utils";
 
 const useStyles = makeStyles({
@@ -26,10 +28,27 @@ const useStyles = makeStyles({
   },
 });
 
+const defaultTooltipMessage = "Copy Link";
+
 const SpeechCard = ({ speech }) => {
   const classes = useStyles();
 
+  const [tooltipMessage, setTooltipMessage] = useState(defaultTooltipMessage);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTooltipMessage(defaultTooltipMessage);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [tooltipMessage]);
+
   const speechLink = makeSpeechLink(speech.id);
+
+  const copySpeechLink = async () => {
+    // TODO: added base link to beginning of route
+    const newTooltipMessage = await copy(speechLink);
+    setTooltipMessage(newTooltipMessage);
+  };
 
   return (
     <Card className={classes.root}>
@@ -46,9 +65,11 @@ const SpeechCard = ({ speech }) => {
         </CardActionArea>
       </Link>
       <CardActions className={classes.right}>
-        <Button size="small" color="primary">
-          Share
-        </Button>
+        <Tooltip title={tooltipMessage} interactive>
+          <Button size="small" color="primary" onClick={copySpeechLink}>
+            Share
+          </Button>
+        </Tooltip>
         <Link to={speechLink} className={classes.hideLink}>
           <Button size="small" color="primary">
             View Speech
