@@ -21,6 +21,9 @@ const useStyles = makeStyles({
   right: {
     float: "right",
   },
+  hideLink: {
+    textDecoration: "none",
+  },
 });
 
 const SpeechCard = ({ speech }) => {
@@ -30,21 +33,23 @@ const SpeechCard = ({ speech }) => {
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {speech.title}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {speech.description}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+      <Link to={speechLink} className={classes.hideLink}>
+        <CardActionArea>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {speech.title}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {speech.description}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Link>
       <CardActions className={classes.right}>
         <Button size="small" color="primary">
           Share
         </Button>
-        <Link to={speechLink}>
+        <Link to={speechLink} className={classes.hideLink}>
           <Button size="small" color="primary">
             View Speech
           </Button>
