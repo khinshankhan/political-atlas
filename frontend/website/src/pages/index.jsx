@@ -24,7 +24,7 @@ const Index = () => {
       <Typography variant="h4" gutterBottom>
         Speeches
       </Typography>
-      {speeches === null ? "Loading!" : <SpeechList speeches={speeches} />}
+      {speeches === null ? "Loading!" : <SpeechList speeches={speeches.data} />}
     </Layout>
   );
 };
