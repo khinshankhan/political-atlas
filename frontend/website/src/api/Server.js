@@ -1,15 +1,24 @@
 // TODO: switch to actual calls when server is up
 // TODO: add in proxy to server
-// import axios from "axios";
+import axios from "axios";
+import {
+  getSpeechMetaStubbed,
+  getTranscriptStubbed,
+  getIbmAnalysisStubbed,
+  getDaAnalysisStubbed,
+} from "./StubbedServer";
 
-// export const getList = async () =>
-//   axios
-//     .get(`/list`)
-//     .then(res => res.data)
-//     .catch(err => {
-//       console.log(err);
-//       return null;
-//     });
+const serverLink = "http://64.225.2.81:5000";
+
+export const getSpeechList = async () =>
+  axios
+    .get(`${serverLink}/list`)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.log(err);
+      // TODO: fix this
+      return [];
+    });
 
 // export const getSpeechMeta = async id =>
 //   axios
@@ -55,20 +64,12 @@
 //       return null;
 //     });
 
-import {
-  getListStubbed,
-  getSpeechMetaStubbed,
-  getTranscriptStubbed,
-  getIbmAnalysisStubbed,
-  getDaAnalysisStubbed
-} from "./StubbedServer";
+// export const getSpeechList = async () => getSpeechListStubbed();
 
-export const getList = async () => getListStubbed();
+export const getSpeechMeta = async (id) => getSpeechMetaStubbed();
 
-export const getSpeechMeta = async id => getSpeechMetaStubbed();
+export const getTranscript = async (id) => getTranscriptStubbed();
 
-export const getTranscript = async id => getTranscriptStubbed();
+export const getIbmAnalysis = async (id) => getIbmAnalysisStubbed();
 
-export const getIbmAnalysis = async id => getIbmAnalysisStubbed();
-
-export const getDaAnalysis = async id => getDaAnalysisStubbed();
+export const getDaAnalysis = async (id) => getDaAnalysisStubbed();

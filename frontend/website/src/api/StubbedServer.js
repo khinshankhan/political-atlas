@@ -1,7 +1,8 @@
-export const getListStubbed = async () =>
-  [...Array(10).keys()].map(getSpeechMetaStubbed);
+export const getSpeechListStubbed = async () =>
+  Promise.all([...Array(10).keys()].map(getSpeechMetaStubbed));
 
 export const getSpeechMetaStubbed = async (id) => ({
+  id,
   politician: "Joe Biden",
   title: "January 20, 2021: Inaugural Address",
   speech_link:
