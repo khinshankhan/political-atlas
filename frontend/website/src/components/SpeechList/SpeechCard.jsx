@@ -43,10 +43,15 @@ const SpeechCard = ({ speech }) => {
   }, [tooltipMessage]);
 
   const speechLink = makeSpeechLink(speech.id);
+  // NOTE: assume there is no weird masking of links
+  // and the current page appears as `/` after baselink
+  const baseLink = (typeof window !== "undefined"
+    ? window.location.href
+    : "/"
+  ).slice(0, -1);
 
   const copySpeechLink = async () => {
-    // TODO: added base link to beginning of route
-    const newTooltipMessage = await copy(speechLink);
+    const newTooltipMessage = await copy(baseLink + speechLink);
     setTooltipMessage(newTooltipMessage);
   };
 
