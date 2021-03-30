@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import Typography from "@material-ui/core/Typography";
+
 import Layout from "src/components/Layout";
 import SpeechList from "src/components/SpeechList";
 
@@ -18,6 +20,10 @@ const Index = () => {
 
   return (
     <Layout>
+      <br />
+      <Typography variant="h4" gutterBottom>
+        Speeches
+      </Typography>
       {speeches === null ? "Loading!" : <SpeechList speeches={speeches} />}
     </Layout>
   );

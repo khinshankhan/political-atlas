@@ -5,11 +5,13 @@ import SpeechCard from "./SpeechCard";
 const SpeechList = ({ speeches }) => {
   return (
     <>
-      {speeches.length === 0 ? (
-        "No speeches found!"
-      ) : (
-        <SpeechCard speech={speeches[0]} />
-      )}
+      {speeches.length === 0
+        ? "No speeches found!"
+        : speeches.map((speech, i) => (
+            <div key={i}>
+              <SpeechCard speech={speech} /> <br />{" "}
+            </div>
+          ))}
     </>
   );
 };
