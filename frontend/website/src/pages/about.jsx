@@ -13,9 +13,6 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-  },
   card: {
 
   },
@@ -35,7 +32,7 @@ const About = () => {
     <Grid container spacing={3}>
       <Grid item xs={6}>
         <Card className={classes.card}>
-          <CardActionArea>
+          <CardActionArea href="https://github.com/adeeburrahman" target="_blank">
             <CardMedia className={classes.media}
               component="img"
               alt="Contemplative Reptile"
@@ -62,7 +59,7 @@ const About = () => {
       </Grid>
       <Grid item xs={6}>
         <Card className={classes.card}>
-          <CardActionArea>
+          <CardActionArea href="https://github.com/BrianCheung1" target="_blank">
             <CardMedia className={classes.media}
               component="img"
               alt="Contemplative Reptile"
@@ -90,7 +87,7 @@ const About = () => {
       </Grid>
       <Grid item xs={6}>
         <Card className={classes.card}>
-          <CardActionArea>
+          <CardActionArea href="https://github.com/kkhan01" target="_blank">
             <CardMedia className={classes.media}
               component="img"
               alt="Contemplative Reptile"
@@ -118,7 +115,7 @@ const About = () => {
       </Grid>
       <Grid item xs={6}>
         <Card className={classes.card}>
-          <CardActionArea>
+          <CardActionArea href="https://github.com/TalhaR" target="_blank">
             <CardMedia className={classes.media}
               component="img"
               alt="Contemplative Reptile"
