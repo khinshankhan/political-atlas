@@ -3,7 +3,7 @@ import { useQueryParam, NumberParam } from "use-query-params";
 
 import Typography from "@material-ui/core/Typography";
 
-import { getSpeechMeta, getTranscript } from "src/api/Server";
+import { getSpeechMeta, getIbmAnalysis, getDaAnalysis } from "src/api/Server";
 
 import Layout from "src/components/Layout";
 import Video from "src/components/Video";
@@ -15,13 +15,16 @@ const Speech = () => {
   const [id] = useQueryParam("id", NumberParam);
   const [validId] = useState(id != null && !Number.isNaN(id));
   const [speechMeta, setSpeechMeta] = useState(null);
-  const [transcript, setTranscript] = useState(null);
+  const [ibm, setIBM] = useState(null);
+  const [da, setDA] = useState(null);
 
   useEffect(() => {
     const setup = async () => {
       const fetchedSpeechMeta = await getSpeechMeta(id);
       setSpeechMeta(fetchedSpeechMeta);
       // TODO: split up other api calls into use effects relying on speechMetaData change
+      const fetchedDa = await getDaAnalysis(id);
+      setDA(fetchedDa);
     };
 
     if (validId) {
@@ -31,8 +34,8 @@ const Speech = () => {
 
   useEffect(() => {
     const setup = async () => {
-      const transcript = await getTranscript();
-      setTranscript(transcript);
+      const ibm = await getIbmAnalysis(id);
+      setIBM(ibm);
     };
 
     if (validId && speechMeta != null) {
@@ -69,10 +72,10 @@ const Speech = () => {
         <br />
         <Legend />
         <br />
-        <DataVisualization ibm={null} da={null} />
+        <DataVisualization ibm={ibm} da={da} />
       </center>
-      {transcript != null && (
-        <EmotionCaptions sentences={transcript.sentences_tone} />
+      {ibm != null && (
+        <EmotionCaptions sentences={ibm.sentences_tone} />
       )}
     </Layout>
   );
