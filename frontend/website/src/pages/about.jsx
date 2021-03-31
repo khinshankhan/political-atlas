@@ -1,147 +1,79 @@
 import React from "react";
 
 import Layout from "src/components/Layout";
+import MemberCard from "../components/About/MemberCard";
+import { group } from "../components/About/constants";
 
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import { makeStyles } from "@material-ui/core/styles";
+import { Typography, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles({
-  card: {
-
-  },
-  media: {
-    height: 400
-  }
+    container: {
+        justifyContent: "center",
+    },
+    content: {
+        textAlign: "center",
+    },
 });
 
-
 const About = () => {
-  const classes = useStyles()
+    const classes = useStyles();
 
-  return <Layout>
-    <Typography gutterBottom variant="h5" component="h2" align="center">
-      Team Members
-          </Typography>
-    <Grid container spacing={3}>
-      <Grid item xs={6}>
-        <Card className={classes.card}>
-          <CardActionArea href="https://github.com/adeeburrahman" target="_blank">
-            <CardMedia className={classes.media}
-              component="img"
-              alt="Contemplative Reptile"
-              height="140"
-              image="https://tleliteracy.com/wp-content/uploads/2017/02/default-avatar.png"
-              title="Contemplative Reptile"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                Adeebur Rahman
-          </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Backend
-          </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Button size="small" color="primary" href="https://github.com/adeeburrahman" target="_blank">
-              Github
-        </Button>
-          </CardActions>
-        </Card>
+    const getMembers = (group) => {
+        return group.map((member) => {
+            return <MemberCard {...member} />;
+        });
+    };
 
-      </Grid>
-      <Grid item xs={6}>
-        <Card className={classes.card}>
-          <CardActionArea href="https://github.com/BrianCheung1" target="_blank">
-            <CardMedia className={classes.media}
-              component="img"
-              alt="Contemplative Reptile"
-              height="140"
-              image="https://tleliteracy.com/wp-content/uploads/2017/02/default-avatar.png"
-              title="Contemplative Reptile"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                Brian Cheung
-          </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Backend
-          </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Button size="small" color="primary" href="https://github.com/BrianCheung1" target="_blank">
-              Github
-        </Button>
+    return (
+        <Layout>
+            <Grid container className={classes.container}>
+                <Grid
+                    item
+                    className={classes.content}
+                    xs={12}
+                    sm={10}
+                    md={8}
+                    component="section"
+                >
+                    <Typography variant="h1">About</Typography>
+                    <br />
 
-          </CardActions>
-        </Card>
+                    <Typography variant="h3" component="h2" > Background </Typography>
+                    <Typography style={{ padding: "10px" }} variant="body1">
+                        We are a group of 4 students at Hunter College that
+                        wanted to contribute positively to political discord. We
+                        noticed that as of late that political discourse was
+                        lacking. Many people are losing trust in our instiutions
+                        and officials so we wanted to create a resource to help
+                        the American electorate.
+                    </Typography>
+                    <br />
 
-      </Grid>
-      <Grid item xs={6}>
-        <Card className={classes.card}>
-          <CardActionArea href="https://github.com/kkhan01" target="_blank">
-            <CardMedia className={classes.media}
-              component="img"
-              alt="Contemplative Reptile"
-              height="140"
-              image="https://tleliteracy.com/wp-content/uploads/2017/02/default-avatar.png"
-              title="Contemplative Reptile"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                Khinshan Khan
-          </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Frontend
-          </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Button size="small" color="primary" href="https://github.com/kkhan01" target="_blank">
-              Github
-        </Button>
+                    <Typography variant="h3" component="h2"> Goal </Typography>
+                    <Typography style={{ padding: "10px" }} variant="body1">
+                        Better the understanding of rhetoric used by politicians
+                        through a comprehensive analysis of the tones in their
+                        speeches.
+                    </Typography>
+                    <br />
+                </Grid>
+                <br />
+            </Grid>
 
-          </CardActions>
-        </Card>
-
-      </Grid>
-      <Grid item xs={6}>
-        <Card className={classes.card}>
-          <CardActionArea href="https://github.com/TalhaR" target="_blank">
-            <CardMedia className={classes.media}
-              component="img"
-              alt="Contemplative Reptile"
-              height="140"
-              image="https://tleliteracy.com/wp-content/uploads/2017/02/default-avatar.png"
-              title="Contemplative Reptile"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                Talha Rahman
-          </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Backend
-          </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Button size="small" color="primary" href="https://github.com/TalhaR" target="_blank">
-              Github
-        </Button>
-
-          </CardActions>
-        </Card>
-      </Grid>
-    </Grid>
-  </Layout>;
+            <Grid
+                container
+                className={classes.container}
+                style={{ paddingBottom: "10px" }}
+                spacing={2}
+            >
+                <Grid item className={classes.content} xs={12}>
+                    <Typography variant="h3" component="h2">Team Members</Typography>
+                </Grid>
+                {getMembers(group)}
+            </Grid>
+        </Layout>
+    );
 };
 
 export default About;
