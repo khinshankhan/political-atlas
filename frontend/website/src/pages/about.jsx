@@ -7,14 +7,25 @@ import { group } from "../components/About/constants";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Grid } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         justifyContent: "center",
+    },
+    membersContainer: {
+        justifyContent: "space-evenly",
+        paddingBottom: "15px",
     },
     content: {
         textAlign: "center",
     },
-});
+    text: {
+        padding: "10px",
+        fontSize: "1.25rem",
+        [theme.breakpoints.up("lg")]: {
+            fontSize: "1.5rem",
+        },
+    },
+}));
 
 const About = () => {
     const classes = useStyles();
@@ -36,39 +47,37 @@ const About = () => {
                     md={8}
                     component="section"
                 >
-                    <Typography variant="h1">About</Typography>
-                    <br />
-
-                    <Typography variant="h3" component="h2" > Background </Typography>
-                    <Typography style={{ padding: "10px" }} variant="body1">
+                    <Typography variant="h3" component="h2">
+                        Background
+                    </Typography>
+                    <Typography className={classes.text} variant="body1">
                         We are a group of 4 students at Hunter College that
                         wanted to contribute positively to political discord. We
-                        noticed that as of late that political discourse was
-                        lacking. Many people are losing trust in our instiutions
-                        and officials so we wanted to create a resource to help
-                        the American electorate.
+                        noticed that as of late that political discussion was
+                        struggling. Many people are losing trust in our
+                        institutions and officials so we wanted to create a
+                        resource to help the American electorate.
                     </Typography>
                     <br />
 
-                    <Typography variant="h3" component="h2"> Goal </Typography>
-                    <Typography style={{ padding: "10px" }} variant="body1">
+                    <Typography variant="h3" component="h2">
+                        Goal
+                    </Typography>
+                    <Typography className={classes.text} variant="body1">
                         Better the understanding of rhetoric used by politicians
                         through a comprehensive analysis of the tones in their
                         speeches.
                     </Typography>
                     <br />
+                    <br />
                 </Grid>
-                <br />
             </Grid>
 
-            <Grid
-                container
-                className={classes.container}
-                style={{ paddingBottom: "10px" }}
-                spacing={2}
-            >
+            <Grid container className={classes.membersContainer} spacing={3}>
                 <Grid item className={classes.content} xs={12}>
-                    <Typography variant="h3" component="h2">Team Members</Typography>
+                    <Typography variant="h3" component="h2">
+                        Team Members
+                    </Typography>
                 </Grid>
                 {getMembers(group)}
             </Grid>
