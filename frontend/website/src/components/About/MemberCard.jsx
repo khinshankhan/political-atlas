@@ -12,20 +12,18 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles({
-    media: {
-        // height: 400,
-    },
+    media: {},
     card: {},
     actions: {
         justifyContent: "center",
-    }
+    },
 });
 
-function MemberCard({ name, link, pic}) {
+function MemberCard({ name, link, pic }) {
     const classes = useStyles();
 
     return (
-        <Grid item xs={10} sm={6} md={3} >
+        <Grid item xs={10} sm={5} md={3}>
             <Card className={classes.card}>
                 <CardActionArea
                     href={`https://github.com/${link}`}
@@ -40,8 +38,8 @@ function MemberCard({ name, link, pic}) {
                         title={`Picture of ${name}`}
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2" align="center">
-                            { name }
+                        <Typography gutterBottom variant="h5" align="center">
+                            {name}
                         </Typography>
                     </CardContent>
                 </CardActionArea>
