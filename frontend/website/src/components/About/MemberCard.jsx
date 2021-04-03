@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     },
 });
 
-function MemberCard({ name, link, pic }) {
+function MemberCard({ name, link }) {
     const classes = useStyles();
 
     return (
@@ -33,8 +33,7 @@ function MemberCard({ name, link, pic }) {
                         className={classes.media}
                         component="img"
                         alt={`Picture of ${name}`}
-                        // image="https://tleliteracy.com/wp-content/uploads/2017/02/default-avatar.png"
-                        image={pic}
+                        image={`https://github.com/${link}.png`}
                         title={`Picture of ${name}`}
                     />
                     <CardContent>
