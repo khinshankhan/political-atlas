@@ -1,9 +1,88 @@
 import React from "react";
 
 import Layout from "src/components/Layout";
+import MemberCard from "../components/About/MemberCard";
+import { group } from "../components/About/constants";
+
+import { makeStyles } from "@material-ui/core/styles";
+import { Typography, Grid } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+        justifyContent: "center",
+    },
+    membersContainer: {
+        justifyContent: "space-evenly",
+        paddingBottom: "15px",
+    },
+    content: {
+        textAlign: "center",
+    },
+    text: {
+        padding: "10px",
+        fontSize: "1.25rem",
+        [theme.breakpoints.up("lg")]: {
+            fontSize: "1.5rem",
+        },
+    },
+}));
 
 const About = () => {
-  return <Layout>About Page.</Layout>;
+    const classes = useStyles();
+
+    const getMembers = (group) => {
+        return group.map((member) => {
+            return <MemberCard {...member} />;
+        });
+    };
+
+    return (
+        <Layout>
+            <Grid container className={classes.container}>
+                <Grid
+                    item
+                    className={classes.content}
+                    xs={12}
+                    sm={10}
+                    md={8}
+                    component="section"
+                >
+                    <Typography variant="h3" component="h2">
+                        Background
+                    </Typography>
+                    <Typography className={classes.text} variant="body1">
+                        We are a group of 4 students at Hunter College that
+                        wanted to contribute positively to political discord. We
+                        noticed that as of late that political discussion was
+                        struggling. Many people are losing trust in our
+                        institutions and officials so we wanted to create a
+                        resource to help the American electorate.
+                    </Typography>
+                    <br />
+
+                    <Typography variant="h3" component="h2">
+                        Goal
+                    </Typography>
+                    <Typography className={classes.text} variant="body1">
+                        Better the understanding of rhetoric used by politicians
+                        through a comprehensive analysis of the tones in their
+                        speeches.
+                    </Typography>
+                    <br />
+                    <br />
+                </Grid>
+            </Grid>
+
+            <Grid container className={classes.membersContainer} spacing={3}>
+                <Grid item className={classes.content} xs={12}>
+                    <Typography variant="h3" component="h2">
+                        Team Members
+                    </Typography>
+                </Grid>
+                {getMembers(group)}
+            </Grid>
+        </Layout>
+    );
 };
 
 export default About;
