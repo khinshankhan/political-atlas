@@ -1,9 +1,18 @@
 import React from "react";
 
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import { confidenceShade, contrastColor } from "src/utils/emotions";
+
+const useStyles = makeStyles((theme) => ({
+  hoverUnderline: {
+    "&:hover": {
+      textDecoration: "underline #000000",
+    },
+  },
+}));
 
 const determineColor = (color, score) => {
   const backgroundColor = confidenceShade(color, score);
@@ -13,6 +22,8 @@ const determineColor = (color, score) => {
 };
 
 const EmotionText = ({ sentences, emotion, emotionObj }) => {
+  const classes = useStyles();
+
   // this is for a special case
   // since the ibm emotions will be empty when the emotion is neutral
   const fallback = emotionObj.ibm.includes("neutral");
@@ -50,6 +61,7 @@ const EmotionText = ({ sentences, emotion, emotionObj }) => {
           >
             <span
               key={i}
+              className={classes.hoverUnderline}
               style={{
                 backgroundColor: backgroundColor,
                 color: textColor,
