@@ -42,7 +42,7 @@ const Speech = () => {
       // TODO: setup conditional loading for each type of data needed for visualization
       setup();
     }
-  }, [validId, speechMeta]);
+  }, [id, validId, speechMeta]);
 
   if (!validId) {
     return (
@@ -74,9 +74,7 @@ const Speech = () => {
         <br />
         <DataVisualization ibm={ibm} da={da} />
       </center>
-      {ibm != null && (
-        <EmotionCaptions sentences={ibm.sentences_tone} />
-      )}
+      {ibm != null && <EmotionCaptions sentences={ibm.sentences_tone} />}
     </Layout>
   );
 };

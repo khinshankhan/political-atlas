@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import * as d3 from "d3";
 
@@ -9,11 +9,12 @@ const BarChart = ({ data }) => {
   // HACK: makes hover work on chart, isn't really proper in react nor html
   const chartDivRef = useRef();
 
-  const margin = { top: 20, right: 20, bottom: 70, left: 40 };
-  const width = 600 - margin.left - margin.right;
-  const height = 300 - margin.top - margin.bottom;
-
   useEffect(() => {
+    // TODO: move this outside and hook it into the screen size
+    const margin = { top: 20, right: 20, bottom: 70, left: 40 };
+    const width = 600 - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
+
     // HACK: makes hover work on chart, isn't really proper in react nor html
     const div = d3.select(chartDivRef.current);
     div.attr("class", "tooltip").style("opacity", 0);
@@ -101,7 +102,7 @@ const BarChart = ({ data }) => {
       .on("mouseout", (d) => {
         div.transition().duration(500).style("opacity", 0);
       });
-  }, []);
+  }, [data]);
   return (
     <>
       <div ref={chartDivRef} />

@@ -55,12 +55,12 @@ const EmotionText = ({ sentences, emotion, emotionObj }) => {
 
         return (
           <Tooltip
+            key={i}
             title={`${emotion}: ${score * 100}%`}
             placement="top"
             interactive
           >
             <span
-              key={i}
               className={classes.hoverUnderline}
               style={{
                 backgroundColor: backgroundColor,
