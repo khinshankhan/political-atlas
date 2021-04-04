@@ -44,7 +44,7 @@ const EmotionText = ({ sentences, emotionObj }) => {
               color: textColor,
             }}
           >
-            {text}
+            {text}{" "}
           </span>
         );
       })}
