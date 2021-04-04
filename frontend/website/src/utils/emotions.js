@@ -40,6 +40,22 @@ export const sortedEmotions = (() => {
   return emotions;
 })();
 
+export const ibmMap = sortedEmotions.reduce((stored, currentEmotionKey) => {
+  const emotions = emotionsMap[currentEmotionKey].ibm
+    .map((ibmEmotion) => ({ [ibmEmotion]: currentEmotionKey }))
+    .flat();
+  emotions.forEach((emotions) => (stored = { ...stored, ...emotions }));
+  return stored;
+}, {});
+
+export const daMap = sortedEmotions.reduce((stored, currentEmotionKey) => {
+  const emotions = emotionsMap[currentEmotionKey].da
+    .map((daEmotion) => ({ [daEmotion]: currentEmotionKey }))
+    .flat();
+  emotions.forEach((emotions) => (stored = { ...stored, ...emotions }));
+  return stored;
+}, {});
+
 export const confidenceShade = (color, score) => {
   if (score < 0.5) {
     return [255, 255, 255];
