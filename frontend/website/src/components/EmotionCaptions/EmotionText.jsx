@@ -27,8 +27,13 @@ const EmotionText = ({ sentences, emotionObj }) => {
       {sentences.map(({ tones, text }, i) => {
         let score = 0;
         if (colorEmotionP(tones)) {
-          score = tones.find(({ tone_id }) => emotionObj.ibm.includes(tone_id))
-            .score;
+          if (fallback) {
+            score = 90;
+          } else {
+            score = tones.find(({ tone_id }) =>
+              emotionObj.ibm.includes(tone_id)
+            ).score;
+          }
         }
 
         const [backgroundColor, textColor] = determineColor(
