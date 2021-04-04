@@ -105,7 +105,7 @@ const BarChart = ({ data }) => {
   return (
     <>
       <div ref={chartDivRef} />
-      <svg ref={ref} />;
+      <svg ref={ref} />
     </>
   );
 };
