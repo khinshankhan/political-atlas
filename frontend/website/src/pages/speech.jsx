@@ -4,6 +4,7 @@ import { useQueryParam, NumberParam } from "use-query-params";
 import Typography from "@material-ui/core/Typography";
 
 import { getSpeechMeta, getIbmAnalysis, getDaAnalysis } from "src/api/Server";
+import { uniformDaData, uniformIbmData } from "src/utils/dataTransformations";
 
 import Layout from "src/components/Layout";
 import Video from "src/components/Video";
@@ -15,8 +16,8 @@ const Speech = () => {
   const [id] = useQueryParam("id", NumberParam);
   const [validId] = useState(id != null && !Number.isNaN(id));
   const [speechMeta, setSpeechMeta] = useState(null);
-  const [ibm, setIBM] = useState(null);
-  const [da, setDA] = useState(null);
+  const [ibm, setIbm] = useState(null);
+  const [da, setDa] = useState(null);
 
   useEffect(() => {
     const setup = async () => {
@@ -24,7 +25,7 @@ const Speech = () => {
       setSpeechMeta(fetchedSpeechMeta);
       // TODO: split up other api calls into use effects relying on speechMetaData change
       const fetchedDa = await getDaAnalysis(id);
-      setDA(fetchedDa);
+      setDa(uniformDaData(fetchedDa));
     };
 
     if (validId) {
@@ -34,8 +35,8 @@ const Speech = () => {
 
   useEffect(() => {
     const setup = async () => {
-      const ibm = await getIbmAnalysis(id);
-      setIBM(ibm);
+      const fetchedIbm = await getIbmAnalysis(id);
+      setIbm(uniformIbmData(fetchedIbm));
     };
 
     if (validId && speechMeta != null) {
