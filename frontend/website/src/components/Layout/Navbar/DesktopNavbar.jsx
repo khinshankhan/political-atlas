@@ -6,12 +6,25 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 
-const useStyles = makeStyles(theme => ({
+import logo from "src/assets/logo.png";
+
+const useStyles = makeStyles((theme) => ({
   navButton: {
     color: "white",
   },
   title: {
     flexGrow: 1,
+  },
+  logo: {
+    // based off appbar's min height
+    // https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/styles/createMixins.js
+    maxHeight: 56,
+    [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
+      maxHeight: 48,
+    },
+    [theme.breakpoints.up("sm")]: {
+      maxHeight: 64,
+    },
   },
 }));
 
@@ -21,6 +34,7 @@ const DesktopNavbar = ({ buttons, links }) => {
   return (
     <AppBar position="static">
       <Toolbar>
+        <img src={logo} alt="logo" className={classes.logo} />
         <div className={classes.title} />
         {buttons.map((button, index) => (
           <Link to={links[index]} key={index}>
