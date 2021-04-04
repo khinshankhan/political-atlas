@@ -13,7 +13,7 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
 
   useEffect(() => {
     // TODO: move this outside and hook it into the screen size
-    const margin = { top: 20, right: 20, bottom: 70, left: 40 };
+    const margin = { top: 20, right: 20, bottom: 60, left: 40 };
     const width = 600 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
@@ -26,7 +26,7 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
     // make svg element with the width and height and make it sensible
     svgElement
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom + 700)
+      .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr(
         "transform",
@@ -36,9 +36,10 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
     // add in chart title
     svgElement
       .append("g")
-      .attr("transform", `translate(${width / 3 - 120},20)`)
+      .attr("transform", `translate(${width / 2}, ${margin.top})`)
       .append("text")
       .text(title)
+      .style("text-decoration", "underline")
       .attr("class", "title");
 
     // make axes proper length with labels
@@ -61,7 +62,10 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
     svgElement
       .append("g")
       .attr("class", "x axis")
-      .attr("transform", `translate(${margin.left}, ${height})`)
+      .attr(
+        "transform",
+        `translate(${margin.left}, ${height + margin.bottom - margin.top})`
+      )
       .call(xAxis)
       .selectAll("text")
       .style("text-anchor", "center");
@@ -70,7 +74,10 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
       .append("g")
       .attr("class", "y axis")
       .call(yAxis)
-      .attr("transform", `translate(${margin.left}, 0)`)
+      .attr(
+        "transform",
+        `translate(${margin.left}, ${margin.bottom - margin.top})`
+      )
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 10)
@@ -88,7 +95,10 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
       .attr("width", x.bandwidth())
       .attr("y", ({ value }) => y(value))
       .attr("height", ({ value }) => height - y(value))
-      .attr("transform", `translate(${margin.left}, 0)`)
+      .attr(
+        "transform",
+        `translate(${margin.left}, ${margin.bottom - margin.top})`
+      )
       // HACK: this is all a bad hack, we need to refactor this later
       .on("mouseover", (event, { emotion, value }) => {
         div.transition().duration(200).style("opacity", 0.9);
