@@ -39,7 +39,7 @@ const BarChart = ({ data }) => {
       .padding(0.05);
     const y = d3
       .scaleLinear()
-      .domain([0, d3.max(data, ({ value }) => value)])
+      .domain([0, d3.max(data, ({ value }) => value) + 10])
       .range([height, 0]);
 
     // make axes into scales that can be plotted
