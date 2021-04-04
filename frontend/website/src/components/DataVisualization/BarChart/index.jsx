@@ -44,8 +44,10 @@ const Index = ({ ibm, da }) => {
 
   return (
     <>
-      {dataIBM != null && <BarChart data={dataIBM} />}
-      {dataDA != null && <BarChart data={dataDA} />}
+      {dataIBM != null && <BarChart data={dataIBM} title="Bar Chart IBM" />}
+      {dataDA != null && (
+        <BarChart data={dataDA} title="Bar Chart DeepAffects" />
+      )}
     </>
   );
 };

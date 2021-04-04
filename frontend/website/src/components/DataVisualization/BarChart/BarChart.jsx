@@ -6,7 +6,7 @@ import "./BarChart.css";
 
 import { sortedEmotions } from "src/utils/emotions";
 
-const BarChart = ({ data }) => {
+const BarChart = ({ data, title = "Bar Chart" }) => {
   const ref = useRef();
   // HACK: makes hover work on chart, isn't really proper in react nor html
   const chartDivRef = useRef();
@@ -26,9 +26,20 @@ const BarChart = ({ data }) => {
     // make svg element with the width and height and make it sensible
     svgElement
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("height", height + margin.top + margin.bottom + 700)
       .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr(
+        "transform",
+        "translate(" + margin.left + "," + margin.bottom + ")"
+      );
+
+    // add in chart title
+    svgElement
+      .append("g")
+      .attr("transform", `translate(${width / 3 - 120},20)`)
+      .append("text")
+      .text(title)
+      .attr("class", "title");
 
     // make axes proper length with labels
     const x = d3
@@ -104,7 +115,7 @@ const BarChart = ({ data }) => {
       .on("mouseout", (d) => {
         div.transition().duration(500).style("opacity", 0);
       });
-  }, [data]);
+  }, [data, title]);
   return (
     <>
       <div ref={chartDivRef} />
