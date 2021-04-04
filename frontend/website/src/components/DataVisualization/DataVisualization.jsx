@@ -6,8 +6,8 @@ const DataVisualization = ({ ibm, da }) => {
   const [dataDA, setDA] = useState(null);
 
   useEffect(() => {
-    if (ibm) {
-      const temp = ibm.sentences_tone.reduce((stored, current) =>{
+    if (ibm && Object.keys(ibm).length !== 0) {
+      const temp = ibm.sentences_tone.reduce((stored, current) => {
         const tones = current.tones;
         if (tones === []) return stored;
         const emotions = tones.reduce((innerstored, innercurrent) => {
@@ -15,9 +15,9 @@ const DataVisualization = ({ ibm, da }) => {
           return [...innerstored, emotion];
         }, []);
         return [...stored, ...emotions];
-      }, [])
+      }, []);
       const cleanedData = temp.reduce((stored, current) => {
-        return {...stored, [current]: (stored[current] + 1) || 1};
+        return { ...stored, [current]: stored[current] + 1 || 1 };
       }, {});
       const dataIBM = Object.entries(cleanedData).map(([emotion, value]) => ({
         emotion,
@@ -28,7 +28,7 @@ const DataVisualization = ({ ibm, da }) => {
   }, [ibm]);
 
   useEffect(() => {
-    if (da) {
+    if (da && Object.keys(da).length !== 0) {
       const cleanedData = da.response.reduce((stored, current) => {
         const emotion = current.emotion;
         if (emotion === "neutral") return stored;
@@ -43,10 +43,12 @@ const DataVisualization = ({ ibm, da }) => {
     }
   }, [da]);
 
-  return <>
-           {dataIBM != null && <BarChart data={dataIBM} />}
-           {dataDA != null && <BarChart data={dataDA} />}
-         </>;
+  return (
+    <>
+      {dataIBM != null && <BarChart data={dataIBM} />}
+      {dataDA != null && <BarChart data={dataDA} />}
+    </>
+  );
 };
 
 export default DataVisualization;
