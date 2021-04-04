@@ -4,6 +4,8 @@ import * as d3 from "d3";
 
 import "./BarChart.css";
 
+import { sortedEmotions } from "src/utils/emotions";
+
 const BarChart = ({ data }) => {
   const ref = useRef();
   // HACK: makes hover work on chart, isn't really proper in react nor html
@@ -31,7 +33,7 @@ const BarChart = ({ data }) => {
     // make axes proper length with labels
     const x = d3
       .scaleBand()
-      .domain(data.map(({ emotion }) => emotion))
+      .domain(sortedEmotions)
       .range([0, width])
       .round(0.05)
       .padding(0.05);
