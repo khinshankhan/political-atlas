@@ -18,7 +18,7 @@ export const emotionsMap = {
   },
   insecure: {
     color: [0, 255, 0],
-    da: ["frustrated"],
+    da: ["frustration"],
     ibm: ["fear", "tentative"],
   },
   secure: {

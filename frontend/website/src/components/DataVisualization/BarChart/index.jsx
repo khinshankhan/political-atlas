@@ -29,9 +29,8 @@ const Index = ({ ibm, da }) => {
 
   useEffect(() => {
     if (da && Object.keys(da).length !== 0) {
-      const cleanedData = da.response.reduce((stored, current) => {
+      const cleanedData = da.reduce((stored, current) => {
         const emotion = current.emotion;
-        if (emotion === "neutral") return stored;
         return { ...stored, [emotion]: stored[emotion] + 1 || 1 };
       }, {});
 
