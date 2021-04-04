@@ -1,6 +1,7 @@
 import React from "react";
 
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import { confidenceShade, contrastColor } from "src/utils/emotions";
 
@@ -11,7 +12,7 @@ const determineColor = (color, score) => {
   return [`rgb(${r}, ${g}, ${b})`, textColor];
 };
 
-const EmotionText = ({ sentences, emotionObj }) => {
+const EmotionText = ({ sentences, emotion, emotionObj }) => {
   // this is for a special case
   // since the ibm emotions will be empty when the emotion is neutral
   const fallback = emotionObj.ibm.includes("neutral");
@@ -42,15 +43,21 @@ const EmotionText = ({ sentences, emotionObj }) => {
         );
 
         return (
-          <span
-            key={i}
-            style={{
-              backgroundColor: backgroundColor,
-              color: textColor,
-            }}
+          <Tooltip
+            title={`${emotion}: ${score * 100}%`}
+            placement="top"
+            interactive
           >
-            {text}{" "}
-          </span>
+            <span
+              key={i}
+              style={{
+                backgroundColor: backgroundColor,
+                color: textColor,
+              }}
+            >
+              {text}{" "}
+            </span>
+          </Tooltip>
         );
       })}
     </Typography>

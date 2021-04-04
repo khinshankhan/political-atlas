@@ -49,6 +49,7 @@ const EmotionCaptions = ({ sentences }) => {
           <Paper className={classes.paper}>
             <EmotionText
               sentences={sentences}
+              emotion={selectedEmotion}
               emotionObj={selectedEmotionObj}
             />
           </Paper>
