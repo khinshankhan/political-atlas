@@ -64,17 +64,31 @@ const Speech = () => {
       <Typography variant="h4" gutterBottom>
         {speechMeta.title}
       </Typography>
+      <Typography variant="h5" gutterBottom>
+        Description
+      </Typography>
       <Typography variant="body1" gutterBottom>
         {speechMeta.description}
       </Typography>
+      {/* TODO: conditionally show audio when video is missing */}
+      <Typography variant="h5" gutterBottom>
+        Speech Video
+      </Typography>
       <center>
-        {/* TODO: conditionally show audio when video is missing */}
         <Video src={speechMeta.video_link} />
         <br />
         <Legend />
-        <br />
+      </center>
+      <br />
+      <Typography variant="h5" gutterBottom>
+        Data Vizualization
+      </Typography>
+      <center>
         <DataVisualization ibm={ibm} da={da} />
       </center>
+      <Typography variant="h5" gutterBottom>
+        Transcript
+      </Typography>
       {ibm != null && <EmotionCaptions sentences={ibm.sentences_tone} />}
     </Layout>
   );
