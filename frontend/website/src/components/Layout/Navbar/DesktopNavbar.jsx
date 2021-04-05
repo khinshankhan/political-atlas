@@ -34,7 +34,10 @@ const DesktopNavbar = ({ buttons, links }) => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <img src={logo} alt="logo" className={classes.logo} />
+        {/* assume home is always 0th key */}
+        <Link to={links[0]}>
+          <img src={logo} alt="logo" className={classes.logo} />
+        </Link>
         <div className={classes.title} />
         {buttons.map((button, index) => (
           <Link to={links[index]} key={index}>
