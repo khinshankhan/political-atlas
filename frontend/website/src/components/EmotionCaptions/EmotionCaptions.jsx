@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -18,8 +19,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center",
     color: theme.palette.text.secondary,
+  },
+  center: {
+    textAlign: "center",
   },
 }));
 const EmotionCaptions = ({ sentences }) => {
@@ -34,7 +37,7 @@ const EmotionCaptions = ({ sentences }) => {
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={2}>
-          <Paper className={classes.paper}>
+          <Paper className={clsx(classes.paper, classes.center)}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <EmotionControls
