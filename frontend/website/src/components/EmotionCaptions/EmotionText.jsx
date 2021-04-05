@@ -41,22 +41,23 @@ const EmotionText = ({ sentences, emotion, emotionObj }) => {
         );
 
         return (
-          <Tooltip
-            key={i}
-            title={`${emotion}: ${score * 100}%`}
-            placement="top"
-            interactive
-          >
-            <span
-              className={classes.hoverUnderline}
-              style={{
-                backgroundColor: backgroundColor,
-                color: textColor,
-              }}
+          <span key={i}>
+            <Tooltip
+              title={`${emotion}: ${score * 100}%`}
+              placement="top"
+              interactive
             >
-              {text}{" "}
-            </span>
-          </Tooltip>
+              <span
+                className={classes.hoverUnderline}
+                style={{
+                  backgroundColor: backgroundColor,
+                  color: textColor,
+                }}
+              >
+                {text}
+              </span>
+            </Tooltip>{" "}
+          </span>
         );
       })}
     </Typography>
