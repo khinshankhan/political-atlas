@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import { confidenceShade, contrastColor } from "src/utils/emotions";
+import { determineColor } from "src/utils/emotions";
 
 const useStyles = makeStyles((theme) => ({
   hoverUnderline: {
@@ -13,13 +13,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-const determineColor = (color, score) => {
-  const backgroundColor = confidenceShade(color, score);
-  const textColor = contrastColor(backgroundColor);
-  const [r, g, b] = backgroundColor;
-  return [`rgb(${r}, ${g}, ${b})`, textColor];
-};
 
 const EmotionText = ({ sentences, emotion, emotionObj }) => {
   const classes = useStyles();

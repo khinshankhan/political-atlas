@@ -60,3 +60,10 @@ export const contrastColor = ([r, g, b]) => {
   // return black for bright colors, white for dark colors
   return luma > 0.5 ? "black" : "white";
 };
+
+export const determineColor = (color, score) => {
+  const backgroundColor = confidenceShade(color, score);
+  const textColor = contrastColor(backgroundColor);
+  const [r, g, b] = backgroundColor;
+  return [`rgb(${r}, ${g}, ${b})`, textColor];
+};
