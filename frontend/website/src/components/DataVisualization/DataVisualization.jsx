@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 
 import BarChart from "./BarChart";
@@ -26,7 +23,7 @@ const DataVisualization = ({ ibm, da }) => {
   const classes = useStyles();
   const charts = ["Bar Chart"];
 
-  const [vizType, setVizType] = React.useState(charts[0]);
+  const [vizType, setVizType] = useState(charts[0]);
 
   const handleChange = (e) => {
     setVizType(e.target.value);
