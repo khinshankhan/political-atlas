@@ -83,9 +83,7 @@ const Speech = () => {
       <Typography variant="h5" gutterBottom>
         Data Vizualization
       </Typography>
-      <center>
-        <DataVisualization ibm={ibm} da={da} />
-      </center>
+      <DataVisualization ibm={ibm} da={da} />
       <Typography variant="h5" gutterBottom>
         Transcript
       </Typography>
