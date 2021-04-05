@@ -1,52 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+
+import { makeStyles } from "@material-ui/core/styles";
+import FormControl from "@material-ui/core/FormControl";
+import NativeSelect from "@material-ui/core/NativeSelect";
+
 import BarChart from "./BarChart";
 
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  center: {
+    textAlign: "center",
+  },
+}));
+
 const DataVisualization = ({ ibm, da }) => {
-  const [dataIBM, setIBM] = useState(null);
-  const [dataDA, setDA] = useState(null);
+  const classes = useStyles();
+  const charts = ["Bar Chart"];
 
-  useEffect(() => {
-    if (ibm) {
-      const temp = ibm.sentences_tone.reduce((stored, current) =>{
-        const tones = current.tones;
-        if (tones === []) return stored;
-        const emotions = tones.reduce((innerstored, innercurrent) => {
-          const emotion = innercurrent.tone_id;
-          return [...innerstored, emotion];
-        }, []);
-        return [...stored, ...emotions];
-      }, [])
-      const cleanedData = temp.reduce((stored, current) => {
-        return {...stored, [current]: (stored[current] + 1) || 1};
-      }, {});
-      const dataIBM = Object.entries(cleanedData).map(([emotion, value]) => ({
-        emotion,
-        value,
-      }));
-      setIBM(dataIBM);
-    }
-  }, [ibm]);
+  const [vizType, setVizType] = useState(charts[0]);
 
-  useEffect(() => {
-    if (da) {
-      const cleanedData = da.response.reduce((stored, current) => {
-        const emotion = current.emotion;
-        if (emotion === "neutral") return stored;
-        return { ...stored, [emotion]: stored[emotion] + 1 || 1 };
-      }, {});
+  const handleChange = (e) => {
+    setVizType(e.target.value);
+  };
 
-      const dataDA = Object.entries(cleanedData).map(([emotion, value]) => ({
-        emotion,
-        value,
-      }));
-      setDA(dataDA);
-    }
-  }, [da]);
+  return (
+    <>
+      <FormControl className={classes.formControl}>
+        <NativeSelect
+          className={classes.selectEmpty}
+          value={vizType}
+          name="Visualization Chart"
+          onChange={handleChange}
+        >
+          {charts.map((chart) => (
+            <option key={chart} value={chart}>
+              {chart}
+            </option>
+          ))}
+        </NativeSelect>
+      </FormControl>
+      <br />
 
-  return <>
-           {dataIBM != null && <BarChart data={dataIBM} />}
-           {dataDA != null && <BarChart data={dataDA} />}
-         </>;
+      <div aria-label={"Data Visualization"} className={classes.center}>
+        <BarChart ibm={ibm} da={da} />
+      </div>
+    </>
+  );
 };
 
 export default DataVisualization;

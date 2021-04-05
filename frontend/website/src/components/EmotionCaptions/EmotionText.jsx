@@ -1,35 +1,32 @@
 import React from "react";
 
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 
-import { confidenceShade, contrastColor } from "src/utils/emotions";
+import { determineColor } from "src/utils/emotions";
 
-const determineColor = (color, score) => {
-  const backgroundColor = confidenceShade(color, score);
-  const textColor = contrastColor(backgroundColor);
-  const [r, g, b] = backgroundColor;
-  return [`rgb(${r}, ${g}, ${b})`, textColor];
-};
+const useStyles = makeStyles((theme) => ({
+  hoverUnderline: {
+    "&:hover": {
+      textDecoration: "underline #000000",
+    },
+  },
+}));
 
-const EmotionText = ({ sentences, emotionObj }) => {
-  // this is for a special case
-  // since the ibm emotions will be empty when the emotion is neutral
-  const fallback = emotionObj.ibm.includes("neutral");
-  const colorEmotionP = (tones) => {
-    if (fallback) {
-      return tones.length === 0;
-    }
-    return tones.some(({ tone_id }) => emotionObj.ibm.includes(tone_id));
+const EmotionText = ({ sentences, emotion, emotionObj }) => {
+  const classes = useStyles();
+
+  const findEmotion = (tones) => {
+    return tones.find(({ tone_id }) => tone_id === emotion);
   };
 
   return (
     <Typography variant="body1" gutterBottom>
       {sentences.map(({ tones, text }, i) => {
         let score = 0;
-        if (colorEmotionP(tones)) {
-          score = tones.find(({ tone_id }) => emotionObj.ibm.includes(tone_id))
-            .score;
-        }
+        const emotionFound = findEmotion(tones);
+        if (emotionFound != null) score = emotionFound.score;
 
         const [backgroundColor, textColor] = determineColor(
           emotionObj.color,
@@ -37,14 +34,22 @@ const EmotionText = ({ sentences, emotionObj }) => {
         );
 
         return (
-          <span
-            key={i}
-            style={{
-              backgroundColor: backgroundColor,
-              color: textColor,
-            }}
-          >
-            {text}{" "}
+          <span key={i}>
+            <Tooltip
+              title={`${emotion}: ${score * 100}%`}
+              placement="top"
+              interactive
+            >
+              <span
+                className={classes.hoverUnderline}
+                style={{
+                  backgroundColor: backgroundColor,
+                  color: textColor,
+                }}
+              >
+                {text}
+              </span>
+            </Tooltip>{" "}
           </span>
         );
       })}

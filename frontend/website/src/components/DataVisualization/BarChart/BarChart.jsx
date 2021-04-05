@@ -1,19 +1,22 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import * as d3 from "d3";
 
 import "./BarChart.css";
 
-const BarChart = ({ data }) => {
+import { sortedEmotions } from "src/utils/emotions";
+
+const BarChart = ({ data, title = "Bar Chart" }) => {
   const ref = useRef();
   // HACK: makes hover work on chart, isn't really proper in react nor html
   const chartDivRef = useRef();
 
-  const margin = { top: 20, right: 20, bottom: 70, left: 40 };
-  const width = 600 - margin.left - margin.right;
-  const height = 300 - margin.top - margin.bottom;
-
   useEffect(() => {
+    // TODO: move this outside and hook it into the screen size
+    const margin = { top: 20, right: 20, bottom: 60, left: 40 };
+    const width = 600 - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
+
     // HACK: makes hover work on chart, isn't really proper in react nor html
     const div = d3.select(chartDivRef.current);
     div.attr("class", "tooltip").style("opacity", 0);
@@ -25,18 +28,38 @@ const BarChart = ({ data }) => {
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr(
+        "transform",
+        "translate(" + margin.left + "," + margin.bottom + ")"
+      );
+
+    // add in chart title
+    svgElement
+      .append("g")
+      .attr("transform", `translate(${width / 2}, ${margin.top})`)
+      .append("text")
+      .text(title)
+      .style("text-decoration", "underline")
+      .attr("class", "title");
 
     // make axes proper length with labels
     const x = d3
       .scaleBand()
-      .domain(data.map(({ emotion }) => emotion))
+      .domain(sortedEmotions)
       .range([0, width])
       .round(0.05)
       .padding(0.05);
+
+    const yPadding = (() => {
+      const ticks = d3
+        .scaleLinear()
+        .domain([0, d3.max(data, ({ value }) => value) + 10])
+        .ticks();
+      return ticks.length > 0 ? ticks[1] : 0;
+    })();
     const y = d3
       .scaleLinear()
-      .domain([0, d3.max(data, ({ value }) => value)])
+      .domain([0, d3.max(data, ({ value }) => value) + yPadding])
       .range([height, 0]);
 
     // make axes into scales that can be plotted
@@ -47,7 +70,10 @@ const BarChart = ({ data }) => {
     svgElement
       .append("g")
       .attr("class", "x axis")
-      .attr("transform", `translate(${margin.left}, ${height})`)
+      .attr(
+        "transform",
+        `translate(${margin.left}, ${height + margin.bottom - margin.top})`
+      )
       .call(xAxis)
       .selectAll("text")
       .style("text-anchor", "center");
@@ -56,7 +82,10 @@ const BarChart = ({ data }) => {
       .append("g")
       .attr("class", "y axis")
       .call(yAxis)
-      .attr("transform", `translate(${margin.left}, 0)`)
+      .attr(
+        "transform",
+        `translate(${margin.left}, ${margin.bottom - margin.top})`
+      )
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 10)
@@ -74,7 +103,10 @@ const BarChart = ({ data }) => {
       .attr("width", x.bandwidth())
       .attr("y", ({ value }) => y(value))
       .attr("height", ({ value }) => height - y(value))
-      .attr("transform", `translate(${margin.left}, 0)`)
+      .attr(
+        "transform",
+        `translate(${margin.left}, ${margin.bottom - margin.top})`
+      )
       // HACK: this is all a bad hack, we need to refactor this later
       .on("mouseover", (event, { emotion, value }) => {
         div.transition().duration(200).style("opacity", 0.9);
@@ -101,11 +133,11 @@ const BarChart = ({ data }) => {
       .on("mouseout", (d) => {
         div.transition().duration(500).style("opacity", 0);
       });
-  }, []);
+  }, [data, title]);
   return (
     <>
       <div ref={chartDivRef} />
-      <svg ref={ref} />;
+      <svg ref={ref} />
     </>
   );
 };
