@@ -1,4 +1,4 @@
-import { shadeColor } from "./utils";
+import { shadeColor, contrastColor } from "./utils";
 
 export const emotionsMap = {
   anger: {
@@ -50,15 +50,6 @@ export const confidenceShade = (color, score) => {
   }
 
   return shadeColor(color, -0.3);
-};
-
-// https://stackoverflow.com/a/36888120
-export const contrastColor = ([r, g, b]) => {
-  // calculate the perceptive luminance (aka luma) - human eye favors green color...
-  const luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-
-  // return black for bright colors, white for dark colors
-  return luma > 0.5 ? "black" : "white";
 };
 
 export const determineColor = (color, score) => {
