@@ -19,6 +19,7 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
     const height = 300 - margin.top - margin.bottom;
 
     const max = d3.max(data, ({ value }) => value);
+    const sum = d3.sum(data, ({ value }) => value);
 
     // HACK: makes hover work on chart, isn't really proper in react nor html
     const div = d3.select(chartDivRef.current);
@@ -112,15 +113,9 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
         div.transition().duration(200).style("opacity", 0.9);
         div
           .html(
-            "<b>" +
-              "Emotion: " +
-              "</b>" +
-              emotion +
-              "<br>" +
-              "<b>" +
-              "Occurences: " +
-              "</b>" +
-              value
+            `<b>Emotion:</b> ${emotion}` +
+              `<br><b>Occurences:</b> ${value}` +
+              `<br><b>Percentage:</b> ${(value / sum) * 100}%`
           )
           .style("left", event.pageX + 30 + "px")
           .style("top", event.pageY - 30 + "px");
