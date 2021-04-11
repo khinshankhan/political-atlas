@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import { determineColor } from "src/utils/emotions";
+import { roundDecimal2 } from "src/utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   hoverUnderline: {
@@ -36,7 +37,7 @@ const EmotionText = ({ sentences, emotion, emotionObj }) => {
         return (
           <span key={i}>
             <Tooltip
-              title={`${emotion}: ${score * 100}%`}
+              title={`${emotion}: ${roundDecimal2(score * 100)}%`}
               placement="top"
               interactive
             >

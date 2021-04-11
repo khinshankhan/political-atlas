@@ -5,7 +5,7 @@ import * as d3 from "d3";
 import "./BarChart.css";
 
 import { sortedEmotions } from "src/utils/emotions";
-import { roundUpX } from "src/utils/utils";
+import { roundUpX, roundDecimal2 } from "src/utils/utils";
 
 const BarChart = ({ data, title = "Bar Chart" }) => {
   const ref = useRef();
@@ -115,7 +115,7 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
           .html(
             `<b>Emotion:</b> ${emotion}` +
               `<br><b>Occurences:</b> ${value}` +
-              `<br><b>Percentage:</b> ${(value / sum) * 100}%`
+              `<br><b>Percentage:</b> ${roundDecimal2((value / sum) * 100)}%`
           )
           .style("left", event.pageX + 30 + "px")
           .style("top", event.pageY - 30 + "px");
