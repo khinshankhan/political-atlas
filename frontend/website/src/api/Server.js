@@ -2,7 +2,7 @@
 // TODO: add in proxy to server
 import axios from "axios";
 
-const serverLink = "http://104.236.45.170:5000";
+const serverLink = "https://pabe.vanillacre.me";
 
 export const getSpeechList = async () =>
   axios
