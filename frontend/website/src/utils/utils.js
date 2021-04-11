@@ -18,6 +18,7 @@ export const copy = async (item) => {
     await navigator.clipboard.writeText(item);
     return "Copied!";
   } catch (err) {
+    console.log(err);
     return "Failed to copy!";
   }
 };
