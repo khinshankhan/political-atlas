@@ -5,6 +5,7 @@ import * as d3 from "d3";
 import "./BarChart.css";
 
 import { sortedEmotions } from "src/utils/emotions";
+import { roundUpX, roundDecimal2 } from "src/utils/utils";
 
 const BarChart = ({ data, title = "Bar Chart" }) => {
   const ref = useRef();
@@ -16,6 +17,9 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
     const margin = { top: 20, right: 20, bottom: 60, left: 40 };
     const width = 600 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
+
+    const max = d3.max(data, ({ value }) => value);
+    const sum = d3.sum(data, ({ value }) => value);
 
     // HACK: makes hover work on chart, isn't really proper in react nor html
     const div = d3.select(chartDivRef.current);
@@ -51,15 +55,12 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
       .padding(0.05);
 
     const yPadding = (() => {
-      const ticks = d3
-        .scaleLinear()
-        .domain([0, d3.max(data, ({ value }) => value) + 10])
-        .ticks();
+      const ticks = d3.scaleLinear().domain([0, max]).ticks();
       return ticks.length > 0 ? ticks[1] : 0;
     })();
     const y = d3
       .scaleLinear()
-      .domain([0, d3.max(data, ({ value }) => value) + yPadding])
+      .domain([0, roundUpX(max, yPadding)])
       .range([height, 0]);
 
     // make axes into scales that can be plotted
@@ -112,15 +113,9 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
         div.transition().duration(200).style("opacity", 0.9);
         div
           .html(
-            "<b>" +
-              "Emotion: " +
-              "</b>" +
-              emotion +
-              "<br>" +
-              "<b>" +
-              "Occurences: " +
-              "</b>" +
-              value
+            `<b>Emotion:</b> ${emotion}` +
+              `<br><b>Occurences:</b> ${value}` +
+              `<br><b>Percentage:</b> ${roundDecimal2((value / sum) * 100)}%`
           )
           .style("left", event.pageX + 30 + "px")
           .style("top", event.pageY - 30 + "px");

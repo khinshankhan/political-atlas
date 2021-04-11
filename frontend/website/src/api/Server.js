@@ -2,7 +2,7 @@
 // TODO: add in proxy to server
 import axios from "axios";
 
-const serverLink = "http://localhost:5000";
+const serverLink = "https://pabe.vanillacre.me";
 
 export const getSpeechList = async () =>
   axios
@@ -14,35 +14,35 @@ export const getSpeechList = async () =>
       return [];
     });
 
-export const getSpeechMeta = async id =>
+export const getSpeechMeta = async (id) =>
   axios
     .get(`${serverLink}/speech`, {
-      params: { id }
+      params: { id },
     })
-    .then(res => res.data)
-    .catch(err => {
+    .then((res) => res.data)
+    .catch((err) => {
       console.log(err);
       return null;
     });
 
-export const getIbmAnalysis = async id =>
+export const getIbmAnalysis = async (id) =>
   axios
     .get(`${serverLink}/ibm`, {
-      params: { id }
+      params: { id },
     })
-    .then(res => res.data)
-    .catch(err => {
+    .then((res) => res.data)
+    .catch((err) => {
       console.log(err);
       return null;
     });
 
-export const getDaAnalysis = async id =>
+export const getDaAnalysis = async (id) =>
   axios
     .get(`${serverLink}/deepaffects`, {
-      params: { id }
+      params: { id },
     })
-    .then(res => res.data)
-    .catch(err => {
+    .then((res) => res.data)
+    .catch((err) => {
       console.log(err);
       return null;
     });

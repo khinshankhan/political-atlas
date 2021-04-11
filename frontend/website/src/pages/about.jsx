@@ -68,13 +68,6 @@ const About = () => {
         from each kind of API:
       </Typography>
 
-      <Typography variant="body1" gutterBottom>
-        As is, the data is really incomparable, so we decided to transform the
-        data such that uniform emotions are used. We created the keys{" "}
-        <i>{sortedEmotions.join(", ")}</i>. This is how the emotions map over
-        from each kind of API:
-      </Typography>
-
       {sortedEmotions.map((emotion, index) => (
         <Typography key={index} variant="body1" gutterBottom>
           - {capitalize(emotion)} <br />

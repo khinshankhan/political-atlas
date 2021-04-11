@@ -43,7 +43,7 @@ export const uniformIbmData = (ibm) => {
             {
               tone_id: "neutral",
               tone_name: "Neutral",
-              score: 90,
+              score: 0.9,
             },
           ],
         };
