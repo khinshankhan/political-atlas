@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import DateFnsUtils from "@date-io/date-fns";
 
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import Layout from "src/components/Layout";
 import SpeechList from "src/components/SpeechList";
@@ -34,16 +34,29 @@ const Search = () => {
   const [loading, setLoading] = useState(true);
   const [speechesToDisplay, setSpeechesToDisplay] = useState(null);
 
+  const [presidents, setPresidents] = useState([]);
   const [input, setInput] = useState({
     description: "",
     transcript: "",
-    president: "",
+    president: null,
   });
 
   useEffect(() => {
     const setup = async () => {
       const list = await getSpeechList();
-      setSpeeches((list && list.data) || []);
+      if (list) {
+        setSpeeches(list.data);
+        setPresidents((prev) => {
+          const presidents = [
+            ...new Set(list.data.map(({ politician }) => politician)),
+          ];
+          presidents.sort();
+          return presidents;
+        });
+      } else {
+        setSpeeches([]);
+      }
+
       setLoading(false);
     };
     setup();
@@ -52,6 +65,8 @@ const Search = () => {
   const handleInputChange = (e) => {
     setInput((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
+
+  console.log({ input });
 
   return (
     <Layout title="Search">
@@ -65,12 +80,31 @@ const Search = () => {
             onChange={handleInputChange}
           />
         ))}
-        <TextField
-          id="president"
-          label="President"
-          value={input.president}
-          onChange={handleInputChange}
-        />
+        <div style={{ display: "inline-flex" }}>
+          <Autocomplete
+            id="president"
+            options={presidents}
+            value={input.president}
+            onChange={(event, newValue) => {
+              const target = { id: "president", value: newValue };
+              handleInputChange({ target });
+            }}
+            autoHighlight
+            getOptionLabel={(option) => option}
+            renderOption={(option) => <>{option}</>}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Choose a President"
+                variant="outlined"
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: "new-password", // disable autocomplete and autofill
+                }}
+              />
+            )}
+          />
+        </div>
       </div>
 
       {loading && (
