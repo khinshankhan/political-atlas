@@ -26,6 +26,3 @@ export const copy = async (item) => {
 export const roundUpX = (num, place) => Math.ceil(num / place) * place;
 
 export const roundDecimal2 = (num) => (Math.round(num * 100) / 100).toFixed(2);
-
-export const validDate = (dateObj) =>
-  dateObj instanceof Date && isFinite(dateObj);
