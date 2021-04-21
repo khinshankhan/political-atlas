@@ -4,13 +4,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
+
+import DateFnsUtils from "@date-io/date-fns";
 
 import Layout from "src/components/Layout";
 import SpeechList from "src/components/SpeechList";
 
 import { getSpeechList } from "src/api/Server";
 
-import { capitalize } from "src/utils/utils";
+import { validDate } from "src/utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   load: {
@@ -35,6 +38,8 @@ const Search = () => {
   const [speechesToDisplay, setSpeechesToDisplay] = useState(null);
 
   const [presidents, setPresidents] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [input, setInput] = useState({
     description: "",
     transcript: "",
@@ -44,7 +49,7 @@ const Search = () => {
   useEffect(() => {
     const setup = async () => {
       const list = await getSpeechList();
-      if (list) {
+      if (list && list.data.length > 0) {
         setSpeeches(list.data);
         setPresidents((prev) => {
           const presidents = [
@@ -66,16 +71,17 @@ const Search = () => {
     setInput((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  console.log({ input });
-
   return (
     <Layout title="Search">
+      {/* {speeches != null && speeches.length > 0 && ( */}
+      {/* )} */}
+
       <div className={classes.searchinput}>
         {["description", "transcript"].map((field) => (
           <TextField
             key={field}
             id={field}
-            label={capitalize(field)}
+            label={field}
             value={input[field]}
             onChange={handleInputChange}
           />
@@ -105,6 +111,29 @@ const Search = () => {
             )}
           />
         </div>
+
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <DatePicker
+            id="start"
+            autoOk
+            label="Start"
+            value={startDate}
+            format="MM/dd/yyyy"
+            variant="inline"
+            maxDate={endDate}
+            onChange={(date) => setStartDate(date)}
+          />
+          <DatePicker
+            id="end"
+            autoOk
+            label="End"
+            value={endDate}
+            format="MM/dd/yyyy"
+            variant="inline"
+            minDate={startDate}
+            onChange={(date) => setEndDate(date)}
+          />
+        </MuiPickersUtilsProvider>
       </div>
 
       {loading && (
