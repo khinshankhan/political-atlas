@@ -8,7 +8,7 @@ import { sortedEmotions } from "src/utils/emotions";
 import { roundUpX, roundDecimal2 } from "src/utils/utils";
 
 const PieChart = ({ data, title = "Pie Chart" }) => {
-    const svgRef = useRef();
+    const ref = useRef(null);
     // HACK: makes hover work on chart, isn't really proper in react nor html
     const chartDivRef = useRef();
 
@@ -18,68 +18,70 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
         let height = 450;
         let margin = 40;
 
-        // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-        let radius = Math.min(width, height) / 2 - margin;
-
-        // append the svg object to the div called 'my_dataviz'
-        let svg = d3
-            .select(chartDivRef.current)
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .append("g")
-            .attr(
-                "transform",
-                "translate(" + width / 2 + "," + height / 2 + ")"
-            );
-
-        // Create dummy data
-        let data1 = { a: 9, b: 20, c: 30, d: 8, e: 12 };
+        const innerRadius = 60;
+        const outerRadius = 100;
         
-        // for(const val in data1) {
-        //     console.log(val);
-        // }
+        const createPie = d3
+            .pie()
+            .value((d) => d.value)
+            .sort(null);
+        const createArc = d3
+            .arc()
+            .innerRadius(innerRadius)
+            .outerRadius(outerRadius);
+        const colors = d3.scaleOrdinal(d3.schemeCategory10);
+        const format = d3.format(".2f");
 
-        const dataObj = {};
+        // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+        // let radius = Math.min(width, height) / 2 - margin;
 
-        for(const pair of data) {
-            // console.log(pair);
-            dataObj[pair["emotion"]] = pair["value"]
-        }
+        // const svgElement = d3.select(svgRef.current);
+        // svgElement
+        //     .attr("width", width)
+        //     .attr("height", height)
+        //     .append("g")
+        //     .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-        console.log(dataObj);
-        console.log(data1);
+        const formatted_data = createPie(data);
+        const group = d3.select(ref.current);
+        const groupWithData = group.selectAll("g.arc").data(formatted_data);
+        
+        groupWithData.exit().remove();
 
-        // // set the color scale
-        // Domain fails because it can't do a "for _ in _" 
-        let color = d3.scaleOrdinal()
-            // .domain(dataObj)
-            // .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
+        const groupWithUpdate = groupWithData
+            .enter()
+            .append("g")
+            .attr("class", "arc");
 
-        // // Compute the position of each group on the pie:
-        // let pie = d3.pie().value(function (d) {
-        //     return d.value;
-        // });
+        const path = groupWithUpdate
+            .append("path")
+            .merge(groupWithData.select("path.arc"));
 
-        // let data_ready = pie(d3.entries(data));
+        path.attr("class", "arc")
+            .attr("d", createArc)
+            .attr("fill", (d, i) => colors(i));
 
-        // // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-        // svg.selectAll("whatever")
-        //     .data(data_ready)
-        //     .enter()
-        //     .append("path")
-        //     .attr("d", d3.arc().innerRadius(0).outerRadius(radius))
-        //     .attr("fill", function (d) {
-        //         return color(d.data.key);
-        //     })
-        //     .attr("stroke", "black")
-        //     .style("stroke-width", "2px")
-        //     .style("opacity", 0.7);
+        const text = groupWithUpdate
+            .append("text")
+            .merge(groupWithData.select("text"));
+
+        text.attr("text-anchor", "middle")
+            .attr("alignment-baseline", "middle")
+            .attr("transform", (d) => `translate(${createArc.centroid(d)})`)
+            .style("fill", "white")
+            .style("font-size", 10)
+            .text((d) => format(d.value));
     }, [data, title]);
 
     return (
         <>
-            <div ref={chartDivRef} />
+            {/* <div ref={chartDivRef} /> */}
+            <svg width={450} height={450}>
+                <g
+                    ref={ref}
+                    transform={`translate(${100} ${100})`}
+                />
+            </svg>
         </>
     );
 };
