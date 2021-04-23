@@ -29,8 +29,8 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
             .arc()
             .innerRadius(innerRadius)
             .outerRadius(outerRadius);
-        //const colors = d3.scaleOrdinal(['#b30000', '#b3b300', '#00b300', '#5a5a5a', '#0000b3', '#5a005a']);
-        const colors = d3.scaleOrdinal(['#b3b300', '#5a005a', '#0000b3', '#5a5a5a', '#00b300', '#b30000']);
+        const colors = d3.scaleOrdinal(['#b30000', '#b3b300', '#00b300', '#5a5a5a', '#0000b3', '#5a005a']);
+        
         const format = d3.format(".2f");
 
         // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
