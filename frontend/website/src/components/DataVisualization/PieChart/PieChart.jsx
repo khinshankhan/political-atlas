@@ -29,6 +29,7 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
             .arc()
             .innerRadius(innerRadius)
             .outerRadius(outerRadius);
+        //colors in order - anger,happy,insecure,neutral,sad,secure
         const colors = d3.scaleOrdinal(['#b30000', '#b3b300', '#00b300', '#5a5a5a', '#0000b3', '#5a005a']);
 
         const format = d3.format(".2f");
