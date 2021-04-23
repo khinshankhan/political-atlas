@@ -18,9 +18,9 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
         let height = 450;
         let margin = 40;
 
-        const innerRadius = 60;
+        const innerRadius = 0;
         const outerRadius = 100;
-        
+
         const createPie = d3
             .pie()
             .value((d) => d.value)
@@ -29,7 +29,8 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
             .arc()
             .innerRadius(innerRadius)
             .outerRadius(outerRadius);
-        const colors = d3.scaleOrdinal(d3.schemeCategory10);
+        //const colors = d3.scaleOrdinal(['#b30000', '#b3b300', '#00b300', '#5a5a5a', '#0000b3', '#5a005a']);
+        const colors = d3.scaleOrdinal(['#b3b300', '#5a005a', '#0000b3', '#5a5a5a', '#00b300', '#b30000']);
         const format = d3.format(".2f");
 
         // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
@@ -41,11 +42,26 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
         //     .attr("height", height)
         //     .append("g")
         //     .attr("transform", `translate(${width / 2}, ${height / 2})`);
+        data.sort(function (a, b) {
+            var nameA = a.emotion.toUpperCase(); // ignore upper and lowercase
+            var nameB = b.emotion.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+
+            // names must be equal
+            return 0;
+        });
+        console.log(data)
 
         const formatted_data = createPie(data);
         const group = d3.select(ref.current);
         const groupWithData = group.selectAll("g.arc").data(formatted_data);
-        
+        //console.log(formatted_data)
+
         groupWithData.exit().remove();
 
         const groupWithUpdate = groupWithData
@@ -57,9 +73,10 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
             .append("path")
             .merge(groupWithData.select("path.arc"));
 
+
         path.attr("class", "arc")
             .attr("d", createArc)
-            .attr("fill", (d, i) => colors(i));
+            .attr("fill", (d, i) => colors(i))
 
         const text = groupWithUpdate
             .append("text")
