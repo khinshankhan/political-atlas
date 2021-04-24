@@ -11,6 +11,8 @@ import DateFnsUtils from "@date-io/date-fns";
 import { default as dateFormat } from "date-fns/format";
 import isBefore from "date-fns/isBefore";
 
+import * as JsSearch from "js-search";
+
 import Layout from "src/components/Layout";
 import SpeechList from "src/components/SpeechList";
 
@@ -92,10 +94,6 @@ const Search = () => {
   const searchList = () => {
     setLoading(true);
     setSpeechesToDisplay(null);
-    const searchTerm = input.context
-      .split(" ")
-      .filter((e) => e)
-      .join("|");
 
     const filteredSpeeches = speeches.filter((speech) => {
       if (input.politician != null && input.politician !== speech.politician) {
@@ -107,10 +105,17 @@ const Search = () => {
         return false;
       }
 
-      const regex = new RegExp(searchTerm, "gi");
-      return (speech.description + speech.transcript).match(regex);
+      return true;
     });
-    setSpeechesToDisplay(filteredSpeeches);
+
+    let search = new JsSearch.Search("id");
+    search.addIndex("title");
+    search.addIndex("description");
+    search.addDocuments(filteredSpeeches);
+
+    let relevantSpeeches = search.search(input.context);
+
+    setSpeechesToDisplay(relevantSpeeches);
     setLoading(false);
   };
 
