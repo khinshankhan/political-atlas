@@ -111,18 +111,23 @@ const Search = () => {
       return true;
     });
 
-    let search = new JsSearch.Search("id");
-    search.tokenizer = new JsSearch.StemmingTokenizer(
-      stemmer,
-      new JsSearch.SimpleTokenizer()
-    );
-    search.addIndex("title");
-    search.addIndex("description");
-    search.addDocuments(filteredSpeeches);
+    if (input.context !== "") {
+      let search = new JsSearch.Search("id");
+      search.tokenizer = new JsSearch.StemmingTokenizer(
+        stemmer,
+        new JsSearch.SimpleTokenizer()
+      );
+      search.addIndex("title");
+      search.addIndex("description");
+      search.addDocuments(filteredSpeeches);
 
-    let relevantSpeeches = search.search(input.context);
+      let relevantSpeeches = search.search(input.context);
 
-    setSpeechesToDisplay(relevantSpeeches);
+      setSpeechesToDisplay(relevantSpeeches);
+    } else {
+      setSpeechesToDisplay(filteredSpeeches);
+    }
+
     setLoading(false);
   };
 
