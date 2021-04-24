@@ -12,6 +12,7 @@ import { default as dateFormat } from "date-fns/format";
 import isBefore from "date-fns/isBefore";
 
 import * as JsSearch from "js-search";
+import * as Stemmer from "porter-stemmer";
 
 import Layout from "src/components/Layout";
 import SpeechList from "src/components/SpeechList";
@@ -36,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Search = () => {
   const classes = useStyles();
+
+  const stemmer = Stemmer.stemmer;
 
   const [speeches, setSpeeches] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -109,6 +112,10 @@ const Search = () => {
     });
 
     let search = new JsSearch.Search("id");
+    search.tokenizer = new JsSearch.StemmingTokenizer(
+      stemmer,
+      new JsSearch.SimpleTokenizer()
+    );
     search.addIndex("title");
     search.addIndex("description");
     search.addDocuments(filteredSpeeches);
