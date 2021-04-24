@@ -196,12 +196,14 @@ const Search = () => {
         <Button
           color="primary"
           variant="contained"
-          style={{ position: "absolute", bottom: "0px" }}
+          style={{ position: "absolute", bottom: "10px" }}
           onClick={searchList}
         >
           Search
         </Button>
       </div>
+
+      <br />
 
       {loading && (
         <div className={classes.load}>
