@@ -39,7 +39,7 @@ const Search = () => {
   const [loading, setLoading] = useState(true);
   const [speechesToDisplay, setSpeechesToDisplay] = useState(null);
 
-  const [presidents, setPresidents] = useState([]);
+  const [politicians, setPoliticians] = useState([]);
   const [dateConstraints, setDateContraints] = useState([
     new Date(),
     new Date(),
@@ -47,9 +47,8 @@ const Search = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [input, setInput] = useState({
-    description: "",
-    transcript: "",
-    president: null,
+    context: "",
+    politician: null,
   });
 
   useEffect(() => {
@@ -58,12 +57,12 @@ const Search = () => {
       if (list && list.data.length > 0) {
         setSpeeches(list.data);
 
-        setPresidents((prev) => {
-          const presidents = [
+        setPoliticians((prev) => {
+          const politicians = [
             ...new Set(list.data.map(({ politician }) => politician)),
           ];
-          presidents.sort();
-          return presidents;
+          politicians.sort();
+          return politicians;
         });
 
         const firstDate = new Date(list.data[0].date);
@@ -90,28 +89,51 @@ const Search = () => {
     setInput((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
+  const searchList = () => {
+    setLoading(true);
+    setSpeechesToDisplay(null);
+    const searchTerm = input.context
+      .split(" ")
+      .filter((e) => e)
+      .join("|");
+
+    const filteredSpeeches = speeches.filter((speech) => {
+      if (input.politician != null && input.politician !== speech.politician) {
+        return false;
+      }
+
+      const date = new Date(speech.date);
+      if (isBefore(date, startDate) || isBefore(endDate, date)) {
+        return false;
+      }
+
+      const regex = new RegExp(searchTerm, "gi");
+      return (speech.description + speech.transcript).match(regex);
+    });
+    setSpeechesToDisplay(filteredSpeeches);
+    setLoading(false);
+  };
+
   return (
     <Layout title="Search">
       {/* {speeches != null && speeches.length > 0 && ( */}
       {/* )} */}
 
       <div className={classes.searchinput}>
-        {["description", "transcript"].map((field) => (
-          <TextField
-            key={field}
-            id={field}
-            label={field}
-            value={input[field]}
-            onChange={handleInputChange}
-          />
-        ))}
+        <TextField
+          id="context"
+          label="Search terms"
+          value={input.context}
+          onChange={handleInputChange}
+        />
+
         <div style={{ display: "inline-flex" }}>
           <Autocomplete
-            id="president"
-            options={presidents}
-            value={input.president}
+            id="politician"
+            options={politicians}
+            value={input.politician}
             onChange={(event, newValue) => {
-              const target = { id: "president", value: newValue };
+              const target = { id: "politician", value: newValue };
               handleInputChange({ target });
             }}
             autoHighlight
@@ -120,7 +142,7 @@ const Search = () => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Choose a President"
+                label="Politician"
                 inputProps={{
                   ...params.inputProps,
                   autoComplete: "new-password", // disable autocomplete and autofill
@@ -158,6 +180,7 @@ const Search = () => {
           color="primary"
           variant="contained"
           style={{ position: "absolute", bottom: "0px" }}
+          onClick={searchList}
         >
           Search
         </Button>
@@ -170,7 +193,7 @@ const Search = () => {
         </div>
       )}
 
-      {speechesToDisplay != null && <SpeechList speeches={speeches} />}
+      {speechesToDisplay != null && <SpeechList speeches={speechesToDisplay} />}
     </Layout>
   );
 };
