@@ -47,7 +47,7 @@ const Index = ({ ibm, da }) => {
     return (
         <>
             {dataIBM != null && <PieChart data={dataIBM} title="IBM" />}
-            {dataDA != null && <PieChart data={dataDA} title="IBM" />}
+            {dataDA != null && <PieChart data={dataDA} title="DeepAffects" />}
         </>
     );
 };
