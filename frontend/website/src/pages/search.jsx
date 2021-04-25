@@ -171,104 +171,103 @@ const Search = () => {
 
   return (
     <Layout title="Search">
-      {/* {speeches != null && speeches.length > 0 && ( */}
-      {/* )} */}
+      {speeches != null && speeches.length > 0 && (
+        <div className={classes.searchinput}>
+          <TextField
+            id="context"
+            label="Search terms"
+            value={input.context}
+            onChange={handleInputChange}
+          />
 
-      <div className={classes.searchinput}>
-        <TextField
-          id="context"
-          label="Search terms"
-          value={input.context}
-          onChange={handleInputChange}
-        />
+          <div style={{ display: "inline-flex" }}>
+            <Autocomplete
+              id="politician"
+              options={politicians}
+              value={input.politician}
+              onChange={(event, newValue) => {
+                const target = { id: "politician", value: newValue };
+                handleInputChange({ target });
+              }}
+              autoHighlight
+              getOptionLabel={(option) => option}
+              renderOption={(option) => <>{option}</>}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Politician"
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: "new-password", // disable autocomplete and autofill
+                  }}
+                />
+              )}
+            />
+          </div>
 
-        <div style={{ display: "inline-flex" }}>
-          <Autocomplete
-            id="politician"
-            options={politicians}
-            value={input.politician}
-            onChange={(event, newValue) => {
-              const target = { id: "politician", value: newValue };
-              handleInputChange({ target });
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <DatePicker
+              id="start"
+              autoOk
+              label="Start"
+              value={startDate}
+              format="MM/dd/yyyy"
+              variant="inline"
+              minDate={dateConstraints[0]}
+              maxDate={endDate}
+              onChange={(date) => setStartDate(date)}
+            />
+            <DatePicker
+              id="end"
+              autoOk
+              label="End"
+              value={endDate}
+              format="MM/dd/yyyy"
+              variant="inline"
+              minDate={startDate}
+              maxDate={dateConstraints[1]}
+              onChange={(date) => setEndDate(date)}
+            />
+          </MuiPickersUtilsProvider>
+
+          <IconButton
+            style={{ position: "absolute", top: "10px" }}
+            id="filter-ordering-option"
+            onClick={handleFilterListClick}
+          >
+            <FilterIcon filterListOrder={input.filterListOrder} />
+          </IconButton>
+
+          <Menu
+            id="basic-menu"
+            anchorEl={filterListEl}
+            open={open}
+            onClose={handleFilterListClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
             }}
-            autoHighlight
-            getOptionLabel={(option) => option}
-            renderOption={(option) => <>{option}</>}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Politician"
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
-                }}
-              />
-            )}
-          />
+          >
+            {filterListOptions.map((filterListOption) => (
+              <MenuItem
+                key={filterListOption}
+                id={filterListOption}
+                onClick={handleFilterListClose}
+              >
+                {capitalize(filterListOption)}
+              </MenuItem>
+            ))}
+          </Menu>
+
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ position: "absolute", bottom: "10px", right: "48px" }}
+            onClick={searchList}
+          >
+            Search
+          </Button>
         </div>
-
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <DatePicker
-            id="start"
-            autoOk
-            label="Start"
-            value={startDate}
-            format="MM/dd/yyyy"
-            variant="inline"
-            minDate={dateConstraints[0]}
-            maxDate={endDate}
-            onChange={(date) => setStartDate(date)}
-          />
-          <DatePicker
-            id="end"
-            autoOk
-            label="End"
-            value={endDate}
-            format="MM/dd/yyyy"
-            variant="inline"
-            minDate={startDate}
-            maxDate={dateConstraints[1]}
-            onChange={(date) => setEndDate(date)}
-          />
-        </MuiPickersUtilsProvider>
-
-        <IconButton
-          style={{ position: "absolute", top: "10px" }}
-          id="filter-ordering-option"
-          onClick={handleFilterListClick}
-        >
-          <FilterIcon filterListOrder={input.filterListOrder} />
-        </IconButton>
-
-        <Menu
-          id="basic-menu"
-          anchorEl={filterListEl}
-          open={open}
-          onClose={handleFilterListClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-        >
-          {filterListOptions.map((filterListOption) => (
-            <MenuItem
-              key={filterListOption}
-              id={filterListOption}
-              onClick={handleFilterListClose}
-            >
-              {capitalize(filterListOption)}
-            </MenuItem>
-          ))}
-        </Menu>
-
-        <Button
-          color="primary"
-          variant="contained"
-          style={{ position: "absolute", bottom: "10px", right: "48px" }}
-          onClick={searchList}
-        >
-          Search
-        </Button>
-      </div>
+      )}
 
       <br />
 
