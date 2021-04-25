@@ -147,6 +147,7 @@ const Search = () => {
         stemmer,
         new JsSearch.SimpleTokenizer()
       );
+      search.indexStrategy = new JsSearch.AllSubstringsIndexStrategy();
       search.addIndex("title");
       search.addIndex("description");
       search.addDocuments(filteredSpeeches);
