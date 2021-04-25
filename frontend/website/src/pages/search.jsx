@@ -5,10 +5,15 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import TrendingDownIcon from "@material-ui/icons/TrendingDown";
+import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import Button from "@material-ui/core/Button";
 
 import DateFnsUtils from "@date-io/date-fns";
-import { default as dateFormat } from "date-fns/format";
 import isBefore from "date-fns/isBefore";
 
 import * as JsSearch from "js-search";
@@ -18,6 +23,7 @@ import Layout from "src/components/Layout";
 import SpeechList from "src/components/SpeechList";
 
 import { getSpeechList } from "src/api/Server";
+import { capitalize } from "src/utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   load: {
@@ -35,6 +41,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const FilterIcon = ({ filterListOrder }) =>
+  ({
+    relevance: <FilterListIcon />,
+    descending: <TrendingDownIcon />,
+    ascending: <TrendingUpIcon />,
+  }[filterListOrder]);
+
 const Search = () => {
   const classes = useStyles();
 
@@ -51,9 +64,15 @@ const Search = () => {
   ]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+
+  const filterListOptions = ["relevance", "descending", "ascending"];
+  const [filterListEl, setFilterListEl] = useState(null);
+  const open = Boolean(filterListEl);
+
   const [input, setInput] = useState({
     context: "",
     politician: null,
+    filterListOrder: filterListOptions[0],
   });
 
   useEffect(() => {
@@ -94,6 +113,17 @@ const Search = () => {
     setInput((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
+  const handleFilterListClick = (event) => {
+    setFilterListEl(event.currentTarget);
+  };
+
+  const handleFilterListClose = (e) => {
+    handleInputChange({
+      target: { id: "filterListOrder", value: e.target.id },
+    });
+    setFilterListEl(null);
+  };
+
   const searchList = () => {
     setLoading(true);
     setSpeechesToDisplay(null);
@@ -122,6 +152,13 @@ const Search = () => {
       search.addDocuments(filteredSpeeches);
 
       let relevantSpeeches = search.search(input.context);
+
+      if (input.filterListOrder === "descending") {
+        relevantSpeeches.sort((a, b) => (a.id > b.id ? 1 : -1));
+      }
+      if (input.filterListOrder === "ascending") {
+        relevantSpeeches.sort((a, b) => (a.id < b.id ? 1 : -1));
+      }
 
       setSpeechesToDisplay(relevantSpeeches);
     } else {
@@ -193,10 +230,39 @@ const Search = () => {
             onChange={(date) => setEndDate(date)}
           />
         </MuiPickersUtilsProvider>
+
+        <IconButton
+          style={{ position: "absolute", top: "10px" }}
+          id="filter-ordering-option"
+          onClick={handleFilterListClick}
+        >
+          <FilterIcon filterListOrder={input.filterListOrder} />
+        </IconButton>
+
+        <Menu
+          id="basic-menu"
+          anchorEl={filterListEl}
+          open={open}
+          onClose={handleFilterListClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          {filterListOptions.map((filterListOption) => (
+            <MenuItem
+              key={filterListOption}
+              id={filterListOption}
+              onClick={handleFilterListClose}
+            >
+              {capitalize(filterListOption)}
+            </MenuItem>
+          ))}
+        </Menu>
+
         <Button
           color="primary"
           variant="contained"
-          style={{ position: "absolute", bottom: "10px" }}
+          style={{ position: "absolute", bottom: "10px", right: "48px" }}
           onClick={searchList}
         >
           Search
