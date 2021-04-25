@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import Layout from "src/components/Layout";
@@ -31,11 +30,7 @@ const Index = () => {
   }, []);
 
   return (
-    <Layout>
-      <br />
-      <Typography variant="h4" gutterBottom>
-        Speeches
-      </Typography>
+    <Layout title="Speeches">
       {speeches === null ? (
         <div className={classes.load}>
           <br />

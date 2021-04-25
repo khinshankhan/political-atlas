@@ -59,11 +59,7 @@ const Speech = () => {
   }
 
   return (
-    <Layout>
-      <br />
-      <Typography variant="h4" gutterBottom>
-        {speechMeta.title}
-      </Typography>
+    <Layout title={speechMeta.title}>
       <Typography variant="h5" gutterBottom>
         Description
       </Typography>

@@ -30,11 +30,7 @@ const About = () => {
   })();
 
   return (
-    <Layout>
-      <br />
-      <Typography variant="h4" gutterBottom>
-        About
-      </Typography>
+    <Layout title="About">
       <Typography variant="h5" gutterBottom>
         Goal
       </Typography>
