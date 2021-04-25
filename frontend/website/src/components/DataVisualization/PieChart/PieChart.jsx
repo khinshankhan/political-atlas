@@ -46,22 +46,23 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
 
         //sorts emotions in data so that every speech data appears in the same order
         data.sort(function (a, b) {
-            var nameA = a.emotion.toUpperCase(); // ignore upper and lowercase
-            var nameB = b.emotion.toUpperCase(); // ignore upper and lowercase
-            if (nameA < nameB) {
+            var emotionA = a.emotion.toUpperCase(); // ignore upper and lowercase
+            var emotionB = b.emotion.toUpperCase(); // ignore upper and lowercase
+            if (emotionA < emotionB) {
                 return -1;
             }
-            if (nameA > nameB) {
+            if (emotionA > emotionB) {
                 return 1;
             }
 
             // names must be equal
             return 0;
         });
-        console.log(data)
+        //console.log(data)
 
-        const div = d3.select(chartDivRef.current).append("div")
-            .attr("class", "tooltip-donut")
+        const div = d3.select(chartDivRef.current)
+            .append("div")
+            .attr("class", "tooltip")
             .style("opacity", 0);
 
         const formatted_data = createPie(data);
@@ -79,11 +80,11 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
             .on('mouseover', function (d, i) {
                 d3.select(this).transition()
                     .duration('50')
-                    .attr('opacity', '.85');
+                    .attr('opacity', '.5');
                 div.transition()
                     .duration(50)
                     .style("opacity", 1);
-                div.html('test');
+                console.log(d)
 
             })
             .on('mouseout', function (d, i) {
@@ -92,15 +93,16 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
                     .attr('opacity', '1')
             });
 
-
         const path = groupWithUpdate
             .append("path")
             .merge(groupWithData.select("path.arc"));
 
 
+
         path.attr("class", "arc")
             .attr("d", createArc)
             .attr("fill", (d, i) => colors(i))
+
 
         const text = groupWithUpdate
             .append("text")
@@ -111,15 +113,14 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
             .attr("transform", (d) => `translate(${createArc.centroid(d)})`)
             .style("fill", "white")
             .style("font-size", 10)
-            .text((d) => format(d.value));
-
+            .text((d) => format(d.value))
 
     }, [data, title]);
 
     return (
         <>
             {/* <div ref={chartDivRef} /> */}
-            <svg width={450} height={450}>
+            <svg width={450} height={300}>
                 <g
                     ref={ref}
                     transform={`translate(${100} ${100})`}
