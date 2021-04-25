@@ -29,9 +29,25 @@ const Index = ({ ibm, da }) => {
         }
     }, [ibm]);
 
+    useEffect(() => {
+        if (da && Object.keys(da).length !== 0) {
+            const cleanedData = da.reduce((stored, current) => {
+                const emotion = current.emotion;
+                return { ...stored, [emotion]: stored[emotion] + 1 || 1 };
+            }, {});
+
+            const dataDA = Object.entries(cleanedData).map(([emotion, value]) => ({
+                emotion,
+                value,
+            }));
+            setDA(dataDA);
+        }
+    }, [da]);
+
     return (
         <>
             {dataIBM != null && <PieChart data={dataIBM} title="IBM" />}
+            {dataDA != null && <PieChart data={dataDA} title="IBM" />}
         </>
     );
 };
