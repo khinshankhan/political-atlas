@@ -30,6 +30,15 @@ const DataVisualization = ({ ibm, da }) => {
     setVizType(e.target.value);
   };
 
+  const renderChart = () => {
+    switch (vizType) {
+      case "Pie Chart":
+        return <PieChart ibm={ibm} da={da} />
+      default:
+        return <BarChart ibm={ibm} da={da} />
+    }
+  }
+
   return (
     <>
       <FormControl className={classes.formControl}>
@@ -49,8 +58,9 @@ const DataVisualization = ({ ibm, da }) => {
       <br />
 
       <div aria-label={"Data Visualization"} className={classes.center}>
-        <BarChart ibm={ibm} da={da} />
-        <PieChart ibm={ibm} da={da} />
+        {/* <BarChart ibm={ibm} da={da} />
+        <PieChart ibm={ibm} da={da} /> */}
+        {renderChart()}
       </div>
     </>
   );
