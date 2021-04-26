@@ -26,3 +26,10 @@ export const copy = async (item) => {
 export const roundUpX = (num, place) => Math.ceil(num / place) * place;
 
 export const roundDecimal2 = (num) => (Math.round(num * 100) / 100).toFixed(2);
+
+export const arrToHex = (arr) =>
+  arr.reduce((hex, code) => {
+    const hexcode = Number(code).toString(16);
+    if (hexcode.length < 2) return hex + "0" + hexcode;
+    return hex + hexcode;
+  }, "#");
