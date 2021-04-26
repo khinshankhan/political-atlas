@@ -36,7 +36,7 @@ def get_speech():
 def get_ibm():
     sid = request.args.get('id')
     if sid:
-        return db.get_ibm_analsyis(sid)
+        return db.get_ibm_analysis(sid)
     else:
         return {}
 
@@ -45,7 +45,7 @@ def get_ibm():
 def get_deepaffects():
     sid = request.args.get('id')
     if sid:
-        return db.get_deepaffects_analsyis(sid)
+        return db.get_deepaffects_analysis(sid)
     else:
         return {}
 

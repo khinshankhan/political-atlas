@@ -136,7 +136,7 @@ def download_add_ibm(speech):
         out.write(json.dumps(j))
     add_ibm(speech_id, json_path)
 
-def get_ibm_analsyis(speech_id):
+def get_ibm_analysis(speech_id):
     c = connection.cursor()
     select = 'select json_path from ibm where id=?;'
     json_path = c.execute(select, (speech_id,)).fetchone()
@@ -182,7 +182,7 @@ def add_deepaffects(speech_id, response_json):
     add_query = "INSERT INTO deepaffects VALUES (?,?);"
     run_with_named_placeholders(add_query, (speech_id, json_path))
 
-def get_deepaffects_analsyis(speech_id):
+def get_deepaffects_analysis(speech_id):
     c = connection.cursor()
     select = 'select json_path from deepaffects where id=?;'
     json_path = c.execute(select, (speech_id,)).fetchone()
