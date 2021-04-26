@@ -70,7 +70,7 @@ const SpeechCard = ({ speech }) => {
         </CardActionArea>
       </Link>
       <CardActions className={classes.right}>
-        <Tooltip title={tooltipMessage} interactive>
+        <Tooltip title={tooltipMessage}>
           <Button size="small" color="primary" onClick={copySpeechLink}>
             Share
           </Button>

@@ -139,7 +139,6 @@ const About = () => {
         Members
       </Typography>
       <MemberCards />
-      <br />
     </Layout>
   );
 };

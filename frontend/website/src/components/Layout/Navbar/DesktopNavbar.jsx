@@ -41,9 +41,7 @@ const DesktopNavbar = ({ buttons, links }) => {
         <div className={classes.title} />
         {buttons.map((button, index) => (
           <Link to={links[index]} key={index}>
-            <Button color="default" className={classes.navButton}>
-              {button}
-            </Button>
+            <Button className={classes.navButton}>{button}</Button>
           </Link>
         ))}
       </Toolbar>

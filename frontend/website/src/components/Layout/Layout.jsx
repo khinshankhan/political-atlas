@@ -1,5 +1,6 @@
 import React from "react";
 
+import StyledEngineProvider from "@material-ui/core/StyledEngineProvider";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
@@ -23,7 +24,7 @@ const Layout = ({ title, children }) => {
   const classes = useStyles();
 
   return (
-    <>
+    <StyledEngineProvider injectFirst>
       <CssBaseline />
       <div className={classes.root}>
         <Navbar />
@@ -34,9 +35,10 @@ const Layout = ({ title, children }) => {
           </Typography>
           {children}
         </Container>
+        <br />
         <Footer />
       </div>
-    </>
+    </StyledEngineProvider>
   );
 };
 
