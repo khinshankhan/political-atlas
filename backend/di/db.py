@@ -14,6 +14,7 @@ path = str(pathlib.Path(pathlib.Path(__file__).parent.absolute()).parent.absolut
 sys.path.insert(0, path)
 from speech_scraper import scrape
 from transcript_analysis import ibm_api
+from audio_analysis import audio_emotions
 
 BASE_DIR = pathlib.Path(__file__).parent.absolute()
 DB_PATH = BASE_DIR.joinpath('..', 'data', 'database.db')
@@ -204,7 +205,11 @@ def cleanup():
 
 if __name__ == "__main__":
     try:
-        for i in get_scrape():
-            print(i['title'])
+        for i in get_scrape()[20:25]:
+            print(i['id'])
+            print(i['speech_link'])
+            rid = audio_emotions.audio_process_emotions(i['video_link'])
+            add_deepaffectsmap(i['id'], rid)
+            download_add_ibm(i)
     finally:
         cleanup()
