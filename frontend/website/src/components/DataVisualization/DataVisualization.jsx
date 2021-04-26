@@ -20,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const Visualization = ({ type, ...props }) =>
+  ({
+    "Bar Chart": <BarChart {...props} />,
+    "Pie Chart": <PieChart {...props} />,
+  }[type]);
+
 const DataVisualization = ({ ibm, da }) => {
   const classes = useStyles();
   const charts = ["Bar Chart", "Pie Chart"];
@@ -29,15 +35,6 @@ const DataVisualization = ({ ibm, da }) => {
   const handleChange = (e) => {
     setVizType(e.target.value);
   };
-
-  const renderChart = () => {
-    switch (vizType) {
-      case "Pie Chart":
-        return <PieChart ibm={ibm} da={da} />
-      default:
-        return <BarChart ibm={ibm} da={da} />
-    }
-  }
 
   return (
     <>
@@ -58,9 +55,7 @@ const DataVisualization = ({ ibm, da }) => {
       <br />
 
       <div aria-label={"Data Visualization"} className={classes.center}>
-        {/* <BarChart ibm={ibm} da={da} />
-        <PieChart ibm={ibm} da={da} /> */}
-        {renderChart()}
+        <Visualization type={vizType} ibm={ibm} da={da} />
       </div>
     </>
   );
