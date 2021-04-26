@@ -12,8 +12,8 @@ from di import db
 app = Flask(__name__)
 cors = CORS(app)
 
-@app.route('/webhook', methods=['POST'])
-def postResponse():
+@app.route('/deepwebhook', methods=['POST'])
+def deepwebhook():
     data = request.json
     request_id = data.get('request_id')
     if request_id:
