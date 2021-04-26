@@ -31,10 +31,7 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
       .style("text-decoration", "underline")
       .attr("class", "title");
 
-    const createPie = d3
-      .pie()
-      .value((d) => d.value)
-      .sort((a, b) => (a.emotion > b.emotion ? 1 : -1));
+    const createPie = d3.pie().value((d) => d.value);
     const createArc = d3
       .arc()
       .innerRadius(innerRadius)
