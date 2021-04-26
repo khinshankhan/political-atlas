@@ -130,7 +130,7 @@ def add_ibm(speech_id, json_path):
 def download_add_ibm(speech):
     speech_id = speech['id']
     json_path = 'data/ibm/%s.json' % speech_id
-    j = ibm_api.text_to_analyze(i['transcript'])
+    j = ibm_api.text_to_analyze(speech['transcript'])
     full_path = BASE_DIR.joinpath('..', json_path)
     with open(full_path, 'w') as out:
         out.write(json.dumps(j))
