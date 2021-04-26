@@ -5,6 +5,7 @@ import FormControl from "@material-ui/core/FormControl";
 import NativeSelect from "@material-ui/core/NativeSelect";
 
 import BarChart from "./BarChart";
+import PieChart from "./PieChart";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -19,9 +20,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const Visualization = ({ type, ...props }) =>
+  ({
+    "Bar Chart": <BarChart {...props} />,
+    "Pie Chart": <PieChart {...props} />,
+  }[type]);
+
 const DataVisualization = ({ ibm, da }) => {
   const classes = useStyles();
-  const charts = ["Bar Chart"];
+  const charts = ["Bar Chart", "Pie Chart"];
 
   const [vizType, setVizType] = useState(charts[0]);
 
@@ -48,7 +55,7 @@ const DataVisualization = ({ ibm, da }) => {
       <br />
 
       <div aria-label={"Data Visualization"} className={classes.center}>
-        <BarChart ibm={ibm} da={da} />
+        <Visualization type={vizType} ibm={ibm} da={da} />
       </div>
     </>
   );
