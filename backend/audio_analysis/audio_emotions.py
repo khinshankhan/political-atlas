@@ -1,9 +1,11 @@
 import base64
 import json
+import pathlib
 import requests
 import sys
 
-with open('config.json') as config_file:
+BASE_DIR = pathlib.Path(__file__).parent.absolute()
+with open(BASE_DIR.joinpath('config.json')) as config_file:
     config = json.load(config_file)
 
 # TEST webhook
