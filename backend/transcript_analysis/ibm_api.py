@@ -35,7 +35,7 @@ def text_to_analyze(text):
         ).get_result()
         dump.append(tone_analysis)
         last = tone_analysis['sentences_tone'][-1]
-        if last['sentence_id'] == 99:
+        if last['sentence_id'] >= 99:
             sentence = last['text']
             text = text[text.find(sentence)+len(sentence):].strip()
         else:
