@@ -38,6 +38,8 @@ def text_to_analyze(text):
         if last['sentence_id'] >= 99:
             sentence = last['text']
             text = text[text.find(sentence)+len(sentence):].strip()
+            if len(text) == 0:
+                repeat = False
         else:
             repeat = False
 
