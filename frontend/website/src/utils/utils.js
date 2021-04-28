@@ -26,3 +26,13 @@ export const copy = async (item) => {
 export const roundUpX = (num, place) => Math.ceil(num / place) * place;
 
 export const roundDecimal2 = (num) => (Math.round(num * 100) / 100).toFixed(2);
+
+export const chunker = (chunkSize, arr) =>
+  arr.reduce((stored, current, index) => {
+    if (index % chunkSize === 0) {
+      stored.push([current]);
+    } else {
+      stored[stored.length - 1].push(current);
+    }
+    return stored;
+  }, []);
