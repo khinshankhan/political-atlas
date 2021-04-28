@@ -43,32 +43,35 @@ const SpeechList = ({ speeches }) => {
         {speeches.length}
       </Typography>
 
-      {chunks[page - 1].map((speech, i) => (
-        <div key={i}>
-          <SpeechCard speech={speech} /> <br />
-        </div>
-      ))}
+      {chunks.length > 0 &&
+        chunks[page - 1].map((speech, i) => (
+          <div key={i}>
+            <SpeechCard speech={speech} /> <br />
+          </div>
+        ))}
 
-      <Stack spacing={2} alignItems="center">
-        <Typography>
-          Page:
-          <input
-            type="text"
-            id="counter"
-            className="form-inline"
-            placeholder="#"
-            value={page}
-            size={speeches.length.toString.length}
-            onChange={handlePageChange}
+      {chunks.length > 0 && (
+        <Stack spacing={2} alignItems="center">
+          <Typography>
+            Page:
+            <input
+              type="text"
+              id="counter"
+              className="form-inline"
+              placeholder="#"
+              value={page}
+              size={speeches.length.toString.length}
+              onChange={handlePageChange}
+            />
+            / {chunks.length}
+          </Typography>
+          <Pagination
+            count={chunks.length}
+            page={page}
+            onChange={handlePaginationChange}
           />
-          / {chunks.length}
-        </Typography>
-        <Pagination
-          count={chunks.length}
-          page={page}
-          onChange={handlePaginationChange}
-        />
-      </Stack>
+        </Stack>
+      )}
     </>
   );
 };
