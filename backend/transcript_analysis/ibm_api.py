@@ -33,8 +33,12 @@ def text_to_analyze(text):
             {'text': text},
             content_type='application/json'
         ).get_result()
+        if 'sentences_tone' in tone_analysis:
+            last = tone_analysis['sentences_tone'][-1]
+        else:
+            last = { 'sentence_id': 0, 'text': text, 'tones': tone_analysis['document_tone']['tones'] }
+            tone_analysis['sentences_tone'] = [last]
         dump.append(tone_analysis)
-        last = tone_analysis['sentences_tone'][-1]
         if last['sentence_id'] >= 99:
             sentence = last['text']
             text = text[text.find(sentence)+len(sentence):].strip()
