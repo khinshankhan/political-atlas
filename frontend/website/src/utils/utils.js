@@ -36,3 +36,8 @@ export const chunker = (chunkSize, arr) =>
     }
     return stored;
   }, []);
+
+export const validNumberString = (stringifiedNumber) => {
+  const re = /^[0-9\b]+$/;
+  return re.test(stringifiedNumber);
+};

@@ -6,7 +6,7 @@ import Stack from "@material-ui/core/Stack";
 
 import SpeechCard from "./SpeechCard";
 
-import { chunker } from "src/utils/utils";
+import { chunker, validNumberString } from "src/utils/utils";
 
 const SpeechList = ({ speeches }) => {
   const chunks = chunker(10, speeches);
@@ -16,8 +16,23 @@ const SpeechList = ({ speeches }) => {
     return "No speeches found!";
   }
 
-  const handleChange = (event, value) => {
+  const handlePaginationChange = (event, value) => {
     setPage(value);
+  };
+
+  const handlePageChange = (e) => {
+    console.log(e.target.value);
+    if (e.target.value === "") {
+      setPage(1);
+    }
+
+    if (
+      validNumberString(e.target.value) &&
+      +e.target.value > 0 &&
+      +e.target.value <= chunks.length
+    ) {
+      setPage(+e.target.value);
+    }
   };
 
   return (
@@ -27,6 +42,7 @@ const SpeechList = ({ speeches }) => {
         {page * 10 < speeches.length ? page * 10 : speeches.length} of{" "}
         {speeches.length}
       </Typography>
+
       {chunks[page - 1].map((speech, i) => (
         <div key={i}>
           <SpeechCard speech={speech} /> <br />
@@ -34,8 +50,24 @@ const SpeechList = ({ speeches }) => {
       ))}
 
       <Stack spacing={2} alignItems="center">
-        <Typography>Page: {page}</Typography>
-        <Pagination count={chunks.length} page={page} onChange={handleChange} />
+        <Typography>
+          Page:
+          <input
+            type="text"
+            id="counter"
+            className="form-inline"
+            placeholder="#"
+            value={page}
+            size={speeches.length.toString.length}
+            onChange={handlePageChange}
+          />
+          / {chunks.length}
+        </Typography>
+        <Pagination
+          count={chunks.length}
+          page={page}
+          onChange={handlePaginationChange}
+        />
       </Stack>
     </>
   );
