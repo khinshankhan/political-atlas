@@ -25,6 +25,7 @@ tone_analyzer.set_service_url(
 
 # return jsonfile of text
 def text_to_analyze(text):
+    text = text.replace("Q.", "Question:")
     dump = []
     repeat = True
     while repeat:
