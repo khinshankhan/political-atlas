@@ -52,7 +52,7 @@ def get_deepaffects():
 @app.route('/list')
 @cross_origin()
 def get_list():
-    return {'data': db.get_scrape(['transcript'])}
+    return {'data': db.get_scrape(['transcript', 'speech_link', 'audio_link'])}
 
 if __name__ == '__main__':
     app.debug = True
