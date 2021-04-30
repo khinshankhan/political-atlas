@@ -1,17 +1,17 @@
 import base64
 import json
+import pathlib
 import requests
 import sys
 
-with open('config.json') as config_file:
+BASE_DIR = pathlib.Path(__file__).parent.absolute()
+with open(BASE_DIR.joinpath('config.json')) as config_file:
     config = json.load(config_file)
 
-# TEST webhook
-# WEB_HOOK = "https://webhook.site/8e0d6163-b59e-4b3e-9180-956b68eca7a4"
-WEB_HOOK = "http://142.93.74.113:80/webhook"
+WEB_HOOK = "https://pabe.vanillacre.me/deepwebhook"
 
 querystring: dict = {
-    "apikey": config['API_KEY'], 
+    "apikey": config['API_KEY'],
     "webhook": WEB_HOOK
 }
 
@@ -41,7 +41,7 @@ def audio_process_emotions_file(audio_file_name: str, response_type: str = "asyn
     response = requests.post(url, json=payload, headers=headers, params=querystring)
     if (response_type == "sync"):
         print(response.text)
-    
+
 # Takes a remote audio file and processes emotions
 # async response -> response sent to Webhook
 def audio_process_emotions(audio_url: str):
@@ -56,4 +56,5 @@ def audio_process_emotions(audio_url: str):
 
     url: str = "https://proxy.api.deepaffects.com/audio/generic/api/v2/async/recognise_emotion"
     response = requests.post(url, json=payload, headers=headers, params=querystring)
+    print(response.json())
     return response.json().get('request_id')
