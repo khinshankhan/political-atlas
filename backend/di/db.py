@@ -104,6 +104,14 @@ def get_scrape(excludes = []):
     query = 'select json_group_array(json_object(%s)) from scraped;' % json_group
     return json.loads(c.execute(query).fetchone()[0])
 
+def get_scrape_range(sid, amount=100):
+    ensure_scrape_inserts()
+    c = connection.cursor()
+    fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
+    json_group = ', '.join("'%s', %s" % (x, x) for x in fields)
+    query = 'select json_group_array(json_object(%s)) from scraped where id > %s and id <= %s;' % (json_group, sid, sid + amount)
+    return json.loads(c.execute(query).fetchone()[0])
+
 def get_scrape_id(speech_id):
     ensure_scrape_inserts()
     c = connection.cursor()

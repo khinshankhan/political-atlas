@@ -54,6 +54,12 @@ def get_deepaffects():
 def get_list():
     return {'data': db.get_scrape(['transcript', 'speech_link', 'audio_link'])}
 
+@app.route('/range')
+@cross_origin()
+def get_range():
+    sid = int(request.args.get('id', 0))
+    return {'data': db.get_scrape_range(sid)}
+
 if __name__ == '__main__':
     app.debug = True
     app.run(host="0.0.0.0")
