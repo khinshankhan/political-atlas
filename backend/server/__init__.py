@@ -60,6 +60,11 @@ def get_range():
     sid = int(request.args.get('id', 0))
     return {'data': db.get_scrape_range(sid)}
 
+@app.route('/fulllist')
+@cross_origin()
+def get_fulllist():
+    return {'data': db.get_scrape()}
+
 if __name__ == '__main__':
     app.debug = True
     app.run(host="0.0.0.0")
