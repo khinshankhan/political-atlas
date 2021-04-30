@@ -9,16 +9,27 @@ import { arrToHex, contrastColor } from "src/utils/utils";
 
 const TreeMap = ({ data, title = "Tree Map" }) => {
     const svgRef = useRef(null);
-
-    function renderTreemap() {
+    
+    useEffect(() => {
         const svg = d3.select(svgRef.current);
+
+        // conforming to D3 tree hierarchy 
+        const treeData = {
+            name: '',
+            children: [
+                {
+                    name: 'Emotions',
+                    children: data
+                }
+            ]
+        }
 
         const width = 600;
         const height = 300;
         svg.attr("width", width).attr("height", height)
 
         const root = d3
-            .hierarchy(data)
+            .hierarchy(treeData)
             .sum((d) => d.value)
             .sort((a, b) => b.value - a.value);
 
@@ -37,23 +48,16 @@ const TreeMap = ({ data, title = "Tree Map" }) => {
             .append('rect')
             .attr('width', (d) => d.x1 - d.x0)
             .attr('height', (d) => d.y1 - d.y0)
-            .attr('fill', (d) => colorScale(d.data.name));
+            .attr('fill', (d) => colorScale(d.data.emotion));
 
         const fontSize = 12;
 
         nodes
             .append('text')
-            .text((d) => `${d.data.name} ${d.data.value}`)
+            .text((d) => `${d.data.emotion} ${d.data.value}`)
             .attr('font-size', `${fontSize}px`)
             .attr('x', 3)
             .attr('y', fontSize);
-    }
-
-    
-
-
-    useEffect(() => {
-        renderTreemap();
     }, [data, title]);
 
     return (
