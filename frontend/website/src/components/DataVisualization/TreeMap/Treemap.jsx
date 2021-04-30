@@ -40,15 +40,18 @@ const TreeMap = ({ data, title = "Tree Map" }) => {
             .data(treemapRoot.leaves())
             .join('g')
             .attr('transform', (d) => `translate(${d.x0},${d.y0})`);
-        
-        const fader = (color) => d3.interpolateRgb(color, '#fff')(0.3);
-        const colorScale = d3.scaleOrdinal(d3.schemeCategory10.map(fader));
+
+        const colors = {}
+
+        for(const obj of data) {
+            colors[obj.emotion] = arrToHex(emotionsMap[obj.emotion].color)
+        }
 
         nodes
             .append('rect')
             .attr('width', (d) => d.x1 - d.x0)
             .attr('height', (d) => d.y1 - d.y0)
-            .attr('fill', (d) => colorScale(d.data.emotion));
+            .attr('fill', (d) => colors[d.data.emotion]);
 
         const fontSize = 12;
 
@@ -57,7 +60,12 @@ const TreeMap = ({ data, title = "Tree Map" }) => {
             .text((d) => `${d.data.emotion} ${d.data.value}`)
             .attr('font-size', `${fontSize}px`)
             .attr('x', 3)
-            .attr('y', fontSize);
+            .attr('y', fontSize)
+            .style(
+                "fill",
+                // TODO: use value to increase or decrease darkness
+                ({ data: d }) => contrastColor(emotionsMap[d.emotion].color)
+            );
     }, [data, title]);
 
     return (
