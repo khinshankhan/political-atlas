@@ -1,5 +1,6 @@
 import json
 import pathlib
+import re
 import sys
 from ibm_watson import ToneAnalyzerV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -26,6 +27,8 @@ tone_analyzer.set_service_url(
 # return jsonfile of text
 def text_to_analyze(text):
     text = text.replace("Q.", "Question:")
+    text = re.sub(r"\([^()]*\)", "", text)
+    text = ' '.join(text.split())
     dump = []
     repeat = True
     while repeat:
