@@ -41,17 +41,11 @@ const TreeMap = ({ data, title = "Tree Map" }) => {
             .join('g')
             .attr('transform', (d) => `translate(${d.x0},${d.y0})`);
 
-        const colors = {}
-
-        for(const obj of data) {
-            colors[obj.emotion] = arrToHex(emotionsMap[obj.emotion].color)
-        }
-
         nodes
             .append('rect')
             .attr('width', (d) => d.x1 - d.x0)
             .attr('height', (d) => d.y1 - d.y0)
-            .attr('fill', (d) => colors[d.data.emotion]);
+            .attr('fill', ({ data: d }) => arrToHex(emotionsMap[d.emotion].color));
 
         const fontSize = 12;
 
