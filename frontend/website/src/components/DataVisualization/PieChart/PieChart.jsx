@@ -98,10 +98,7 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
     text
       .attr("text-anchor", "middle")
       .attr("alignment-baseline", "middle")
-      .attr("transform", function (d) {
-        let c = createArc.centroid(d);
-        return "translate(" + c[0] * 1.85 + "," + c[1] * 1.6 + ")";
-      })
+      .attr("transform", (d) => `translate(${createArc.centroid(d)})`)
       .style(
         "fill", ({ data: d }) => contrastColor(emotionsMap[d.emotion].color))
       .style("font-size", 10)
