@@ -28,8 +28,9 @@ const TreeMap = ({ data, title = "Tree Map" }) => {
             ],
         };
 
-        const width = 600;
-        const height = 300;
+        const margin = { top: 20, right: 20, bottom: 60, left: 40 };
+        const width = 600 - margin.left - margin.right;
+        const height = 300 - margin.top - margin.bottom;
 
         const root = d3
             .hierarchy(treeData)
@@ -40,8 +41,8 @@ const TreeMap = ({ data, title = "Tree Map" }) => {
 
         const svgElement = d3
             .select(svgRef.current)
-            .attr("width", width)
-            .attr("height", height)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
             .selectAll("g")
             .data(treemapRoot.leaves())
             .join("g")
@@ -59,10 +60,10 @@ const TreeMap = ({ data, title = "Tree Map" }) => {
                 div.transition().duration(200).style("opacity", 0.9);
                 div.html(
                     `<b>Emotion:</b> ${d.emotion}` +
-                        `<br><b>Occurences:</b> ${value}` +
-                        `<br><b>Percentage:</b> ${roundDecimal2(
-                            (value / sum) * 100
-                        )}%`
+                    `<br><b>Occurences:</b> ${value}` +
+                    `<br><b>Percentage:</b> ${roundDecimal2(
+                        (value / sum) * 100
+                    )}%`
                 )
                     .style("left", event.pageX + 30 + "px")
                     .style("top", event.pageY - 30 + "px");
