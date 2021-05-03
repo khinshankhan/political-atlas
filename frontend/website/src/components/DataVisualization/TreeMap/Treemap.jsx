@@ -46,7 +46,20 @@ const TreeMap = ({ data, title = "Tree Map" }) => {
             .selectAll("g")
             .data(treemapRoot.leaves())
             .join("g")
-            .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
+            .attr(
+                "transform",
+                (d) =>
+                    `translate(${d.x0 + margin.right},${d.y0 + margin.bottom})`
+            );
+
+        // adds chart title
+        d3.select(svgRef.current)
+            .append("g")
+            .attr("transform", `translate(${width / 2}, ${margin.top})`)
+            .append("text")
+            .text(title)
+            .style("text-decoration", "underline")
+            .attr("class", "title");
 
         svgElement
             .append("rect")
@@ -60,10 +73,10 @@ const TreeMap = ({ data, title = "Tree Map" }) => {
                 div.transition().duration(200).style("opacity", 0.9);
                 div.html(
                     `<b>Emotion:</b> ${d.emotion}` +
-                    `<br><b>Occurences:</b> ${value}` +
-                    `<br><b>Percentage:</b> ${roundDecimal2(
-                        (value / sum) * 100
-                    )}%`
+                        `<br><b>Occurences:</b> ${value}` +
+                        `<br><b>Percentage:</b> ${roundDecimal2(
+                            (value / sum) * 100
+                        )}%`
                 )
                     .style("left", event.pageX + 30 + "px")
                     .style("top", event.pageY - 30 + "px");
