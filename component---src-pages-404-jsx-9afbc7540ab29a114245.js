@@ -1,0 +1,2 @@
+(self.webpackChunkpolitical_atlas=self.webpackChunkpolitical_atlas||[]).push([[256],{1657:function(t,e,l){"use strict";l.r(e);var a=l(7294),n=l(3477);e.default=function(){return a.createElement(n.Z,{title:"Not Found"},"Hello there.")}}}]);
+//# sourceMappingURL=component---src-pages-404-jsx-9afbc7540ab29a114245.js.map
