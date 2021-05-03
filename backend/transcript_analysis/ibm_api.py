@@ -1,15 +1,15 @@
 import json
 import pathlib
+import re
 import sys
 from ibm_watson import ToneAnalyzerV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 BASE_DIR = pathlib.Path(__file__).parent.absolute()
+with open(BASE_DIR.joinpath('config.json')) as config_file:
+    config = json.load(config_file)
 
-with open(BASE_DIR.joinpath('config.json')) as f:
-    config = json.load(f)
-
-ibmkey = config['API_Key']
+ibmkey = config['API_KEY']
 
 # Api Access
 # Using latest version 2017-09-21
@@ -26,6 +26,16 @@ tone_analyzer.set_service_url(
 
 # return jsonfile of text
 def text_to_analyze(text):
+    text = text.replace("Q.", "Question:")
+    text = re.sub(r"\([^()]*\)", "", text)
+    text = ' '.join(text.split())
+    text = text.split('.')
+    text = [text[i] for i in range(len(text)) if (i==0) or text[i] != text[i-1]]
+    text = '.'.join(text)
+    text = text.split('!')
+    text = [text[i] for i in range(len(text)) if (i==0) or text[i] != text[i-1]]
+    text = '!'.join(text)
+    text = ' '.join(text.split())
     dump = []
     repeat = True
     while repeat:
@@ -34,11 +44,17 @@ def text_to_analyze(text):
             {'text': text},
             content_type='application/json'
         ).get_result()
+        if 'sentences_tone' in tone_analysis:
+            last = tone_analysis['sentences_tone'][-1]
+        else:
+            last = { 'sentence_id': 0, 'text': text, 'tones': tone_analysis['document_tone']['tones'] }
+            tone_analysis['sentences_tone'] = [last]
         dump.append(tone_analysis)
-        last = tone_analysis['sentences_tone'][-1]
-        if last['sentence_id'] == 99:
+        if last['sentence_id'] >= 99:
             sentence = last['text']
             text = text[text.find(sentence)+len(sentence):].strip()
+            if len(text) == 0:
+                repeat = False
         else:
             repeat = False
 

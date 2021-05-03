@@ -12,8 +12,8 @@ from di import db
 app = Flask(__name__)
 cors = CORS(app)
 
-@app.route('/webhook', methods=['POST'])
-def postResponse():
+@app.route('/deepwebhook', methods=['POST'])
+def deepwebhook():
     data = request.json
     request_id = data.get('request_id')
     if request_id:
@@ -36,7 +36,7 @@ def get_speech():
 def get_ibm():
     sid = request.args.get('id')
     if sid:
-        return db.get_ibm_analsyis(sid)
+        return db.get_ibm_analysis(sid)
     else:
         return {}
 
@@ -45,14 +45,25 @@ def get_ibm():
 def get_deepaffects():
     sid = request.args.get('id')
     if sid:
-        return db.get_deepaffects_analsyis(sid)
+        return db.get_deepaffects_analysis(sid)
     else:
         return {}
 
 @app.route('/list')
 @cross_origin()
 def get_list():
-    return {'data': db.get_scrape(['transcript'])}
+    return {'data': db.get_scrape(['transcript', 'speech_link', 'audio_link'])}
+
+@app.route('/range')
+@cross_origin()
+def get_range():
+    sid = int(request.args.get('id', 0))
+    return {'data': db.get_scrape_range(sid)}
+
+@app.route('/fulllist')
+@cross_origin()
+def get_fulllist():
+    return {'data': db.get_scrape()}
 
 if __name__ == '__main__':
     app.debug = True

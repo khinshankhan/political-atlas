@@ -14,6 +14,7 @@ path = str(pathlib.Path(pathlib.Path(__file__).parent.absolute()).parent.absolut
 sys.path.insert(0, path)
 from speech_scraper import scrape
 from transcript_analysis import ibm_api
+from audio_analysis import audio_emotions
 
 BASE_DIR = pathlib.Path(__file__).parent.absolute()
 DB_PATH = BASE_DIR.joinpath('..', 'data', 'database.db')
@@ -103,6 +104,14 @@ def get_scrape(excludes = []):
     query = 'select json_group_array(json_object(%s)) from scraped;' % json_group
     return json.loads(c.execute(query).fetchone()[0])
 
+def get_scrape_range(sid, amount=100):
+    ensure_scrape_inserts()
+    c = connection.cursor()
+    fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
+    json_group = ', '.join("'%s', %s" % (x, x) for x in fields)
+    query = 'select json_group_array(json_object(%s)) from scraped where id > %s and id <= %s;' % (json_group, sid, sid + amount)
+    return json.loads(c.execute(query).fetchone()[0])
+
 def get_scrape_id(speech_id):
     ensure_scrape_inserts()
     c = connection.cursor()
@@ -130,13 +139,13 @@ def add_ibm(speech_id, json_path):
 def download_add_ibm(speech):
     speech_id = speech['id']
     json_path = 'data/ibm/%s.json' % speech_id
-    j = ibm_api.text_to_analyze(i['transcript'])
+    j = ibm_api.text_to_analyze(speech['transcript'])
     full_path = BASE_DIR.joinpath('..', json_path)
     with open(full_path, 'w') as out:
         out.write(json.dumps(j))
     add_ibm(speech_id, json_path)
 
-def get_ibm_analsyis(speech_id):
+def get_ibm_analysis(speech_id):
     c = connection.cursor()
     select = 'select json_path from ibm where id=?;'
     json_path = c.execute(select, (speech_id,)).fetchone()
@@ -182,7 +191,7 @@ def add_deepaffects(speech_id, response_json):
     add_query = "INSERT INTO deepaffects VALUES (?,?);"
     run_with_named_placeholders(add_query, (speech_id, json_path))
 
-def get_deepaffects_analsyis(speech_id):
+def get_deepaffects_analysis(speech_id):
     c = connection.cursor()
     select = 'select json_path from deepaffects where id=?;'
     json_path = c.execute(select, (speech_id,)).fetchone()
@@ -204,7 +213,11 @@ def cleanup():
 
 if __name__ == "__main__":
     try:
-        for i in get_scrape():
-            print(i['title'])
+        for i in get_scrape()[20:25]:
+            print(i['id'])
+            print(i['speech_link'])
+            rid = audio_emotions.audio_process_emotions(i['video_link'])
+            add_deepaffectsmap(i['id'], rid)
+            download_add_ibm(i)
     finally:
         cleanup()

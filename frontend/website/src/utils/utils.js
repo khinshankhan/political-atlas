@@ -41,3 +41,10 @@ export const validNumberString = (stringifiedNumber) => {
   const re = /^[0-9\b]+$/;
   return re.test(stringifiedNumber);
 };
+
+export const arrToHex = (arr) =>
+  arr.reduce((hex, code) => {
+    const hexcode = Number(code).toString(16);
+    if (hexcode.length < 2) return hex + "0" + hexcode;
+    return hex + hexcode;
+  }, "#");
