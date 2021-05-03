@@ -5,7 +5,7 @@ import * as d3 from "d3";
 import "./PieChart.css";
 
 import { emotionsMap } from "src/utils/emotions";
-import { arrToHex, contrastColor } from "src/utils/utils";
+import { arrToHex, contrastColor, roundDecimal2 } from "src/utils/utils";
 
 const PieChart = ({ data, title = "Pie Chart" }) => {
   // const margin = { top: 20, right: 20, bottom: 60, left: 40 };
@@ -21,6 +21,8 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
     const outerRadius = 100;
 
     const svgElement = d3.select(ref.current);
+
+    const sum = d3.sum(data, ({ value }) => value);
 
     // add in chart title
     svgElement
@@ -43,11 +45,8 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
     );
 
     // TODO: tooltip popup
-    const div = d3
-      .select(chartDivRef.current)
-      .append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
+    const div = d3.select(chartDivRef.current);
+    div.attr("class", "tooltip").style("opacity", 0);
 
     const formatted_data = createPie(data);
     const group = d3.select(ref.current);
@@ -59,12 +58,28 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
       .enter()
       .append("g")
       .attr("class", "arc")
-      .on("mouseover", function (d, i) {
-        d3.select(this).transition().duration("50").attr("opacity", ".5");
-        div.transition().duration("50").style("opacity", 1);
+      // HACK: this is all a bad hack, we need to refactor this later
+      .on("mouseover", (event, { data: d, value }) => {
+        div.transition().duration(50).style("opacity", 1);
+        div.transition().duration(200).style("opacity", 0.9);
+        div.html(
+            `<b>Emotion:</b> ${d.emotion}` +
+                `<br><b>Occurences:</b> ${value}` +
+                `<br><b>Percentage:</b> ${roundDecimal2(
+                    (value / sum) * 100
+                )}%`
+        )
+            .style("left", event.pageX + 30 + "px")
+            .style("top", event.pageY - 30 + "px");
       })
-      .on("mouseout", function (d, i) {
-        d3.select(this).transition().duration("50").attr("opacity", "1");
+      .on("mousemove", (event) => {
+        div.style("left", event.pageX + 30 + "px").style(
+            "top",
+            event.pageY - 30 + "px"
+        );
+      })
+      .on("mouseout", (d) => {
+        div.transition().duration(500).style("opacity", 0);
       });
 
     const path = groupWithUpdate
@@ -85,17 +100,14 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
       .attr("alignment-baseline", "middle")
       .attr("transform", (d) => `translate(${createArc.centroid(d)})`)
       .style(
-        "fill",
-        // TODO: use value to increase or decrease darkness
-        ({ data: d }) => contrastColor(emotionsMap[d.emotion].color)
-      )
+        "fill", ({ data: d }) => contrastColor(emotionsMap[d.emotion].color))
       .style("font-size", 10)
       .text((d) => d.value);
   }, [data, title]);
 
   return (
     <>
-      {/* <div ref={chartDivRef} /> */}
+      <div ref={chartDivRef} />
       <svg width={width} height={height}>
         <g ref={ref} transform={`translate(${width / 2} ${height / 2})`} />
       </svg>
