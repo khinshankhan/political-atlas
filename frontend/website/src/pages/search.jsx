@@ -261,7 +261,11 @@ const Search = () => {
           <Button
             color="primary"
             variant="contained"
-            style={{ position: "absolute", bottom: "10px", right: "48px" }}
+            style={{
+              position: "absolute",
+              top: "15px",
+              transform: "translateX(48px)",
+            }}
             onClick={searchList}
           >
             Search

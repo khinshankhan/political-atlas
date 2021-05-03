@@ -27,6 +27,21 @@ export const roundUpX = (num, place) => Math.ceil(num / place) * place;
 
 export const roundDecimal2 = (num) => (Math.round(num * 100) / 100).toFixed(2);
 
+export const chunker = (chunkSize, arr) =>
+  arr.reduce((stored, current, index) => {
+    if (index % chunkSize === 0) {
+      stored.push([current]);
+    } else {
+      stored[stored.length - 1].push(current);
+    }
+    return stored;
+  }, []);
+
+export const validNumberString = (stringifiedNumber) => {
+  const re = /^[0-9\b]+$/;
+  return re.test(stringifiedNumber);
+};
+
 export const arrToHex = (arr) =>
   arr.reduce((hex, code) => {
     const hexcode = Number(code).toString(16);
