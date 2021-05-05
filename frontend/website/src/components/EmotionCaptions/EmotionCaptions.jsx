@@ -5,8 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 
-import { emotionsMap, sortedEmotions } from "src/utils/emotions";
-
 import EmotionControls from "./EmotionControls";
 import EmotionText from "./EmotionText";
 
@@ -28,10 +26,15 @@ const useStyles = makeStyles((theme) => ({
 const EmotionCaptions = ({ sentences }) => {
   const classes = useStyles();
 
-  const [selectedEmotion, setSelectedEmotion] = useState(sortedEmotions[0]);
-  const updateEmotionOnChange = (e) => setSelectedEmotion(e.target.name);
+  const [selectedEmotions, setSelectedEmotions] = useState([]);
 
-  const selectedEmotionObj = emotionsMap[selectedEmotion];
+  const updateEmotionOnChange = (e) => {
+    const emotion = e.target.name;
+    const ret = selectedEmotions.includes(emotion) ?
+          selectedEmotions.filter((c) => { return c !== emotion }) :
+          [...selectedEmotions, emotion];
+    setSelectedEmotions(ret);
+  }
 
   return (
     <div className={classes.root}>
@@ -41,7 +44,6 @@ const EmotionCaptions = ({ sentences }) => {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <EmotionControls
-                  selectedEmotion={selectedEmotion}
                   handleOnChange={updateEmotionOnChange}
                 />
               </Grid>
@@ -52,8 +54,7 @@ const EmotionCaptions = ({ sentences }) => {
           <Paper className={classes.paper}>
             <EmotionText
               sentences={sentences}
-              emotion={selectedEmotion}
-              emotionObj={selectedEmotionObj}
+              emotions={selectedEmotions}
             />
           </Paper>
         </Grid>

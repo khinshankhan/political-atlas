@@ -9,7 +9,7 @@ import Switch from "@material-ui/core/Switch";
 import { sortedEmotions } from "src/utils/emotions";
 import { capitalize } from "src/utils/utils";
 
-const EmotionControls = ({ selectedEmotion, handleOnChange }) => {
+const EmotionControls = ({ handleOnChange }) => {
   return (
     <FormControl component="fieldset">
       <FormLabel component="legend">Choose Emotion</FormLabel>
@@ -19,7 +19,6 @@ const EmotionControls = ({ selectedEmotion, handleOnChange }) => {
             key={i}
             control={
               <Switch
-                checked={emotion === selectedEmotion}
                 onChange={handleOnChange}
                 name={emotion}
               />
