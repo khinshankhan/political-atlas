@@ -9,7 +9,22 @@ import Switch from "@material-ui/core/Switch";
 import { sortedEmotions } from "src/utils/emotions";
 import { capitalize } from "src/utils/utils";
 
-const EmotionControls = ({ handleOnChange }) => {
+const EmotionControls = ({ handleOnChange, downMd }) => {
+  if (downMd) {
+    return (
+      <>
+        <FormLabel component="legend">Choose Emotion</FormLabel>
+        {sortedEmotions.map((emotion, i) => (
+          <FormControlLabel
+            key={i}
+            control={<Switch onChange={handleOnChange} name={emotion} />}
+            label={capitalize(emotion)}
+          />
+        ))}
+      </>
+    );
+  }
+
   return (
     <FormControl component="fieldset">
       <FormLabel component="legend">Choose Emotion</FormLabel>
@@ -17,12 +32,7 @@ const EmotionControls = ({ handleOnChange }) => {
         {sortedEmotions.map((emotion, i) => (
           <FormControlLabel
             key={i}
-            control={
-              <Switch
-                onChange={handleOnChange}
-                name={emotion}
-              />
-            }
+            control={<Switch onChange={handleOnChange} name={emotion} />}
             label={capitalize(emotion)}
           />
         ))}

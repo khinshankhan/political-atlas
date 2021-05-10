@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -13,13 +11,13 @@ import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import Button from "@material-ui/core/Button";
 
-import DateFnsUtils from "@date-io/date-fns";
 import isBefore from "date-fns/isBefore";
 
 import * as JsSearch from "js-search";
 import * as Stemmer from "porter-stemmer";
 
 import Layout from "src/components/Layout";
+import { Autocomplete, DateRangePicker } from "src/components/SearchComponents";
 import SpeechList from "src/components/SpeechList";
 
 import { getSpeechList } from "src/api/Server";
@@ -81,7 +79,7 @@ const Search = () => {
       if (list && list.data.length > 0) {
         setSpeeches(list.data);
 
-        setPoliticians((prev) => {
+        setPoliticians(() => {
           const politicians = [
             ...new Set(list.data.map(({ politician }) => politician)),
           ];
@@ -118,9 +116,11 @@ const Search = () => {
   };
 
   const handleFilterListClose = (e) => {
-    handleInputChange({
-      target: { id: "filterListOrder", value: e.target.id },
-    });
+    if (e.target.id) {
+      handleInputChange({
+        target: { id: "filterListOrder", value: e.target.id },
+      });
+    }
     setFilterListEl(null);
   };
 
@@ -185,13 +185,10 @@ const Search = () => {
               id="politician"
               options={politicians}
               value={input.politician}
-              onChange={(event, newValue) => {
+              onChange={(_event, newValue) => {
                 const target = { id: "politician", value: newValue };
                 handleInputChange({ target });
               }}
-              autoHighlight
-              getOptionLabel={(option) => option}
-              renderOption={(option) => <>{option}</>}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -205,33 +202,16 @@ const Search = () => {
             />
           </div>
 
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <DatePicker
-              id="start"
-              autoOk
-              label="Start"
-              value={startDate}
-              format="MM/dd/yyyy"
-              variant="inline"
-              minDate={dateConstraints[0]}
-              maxDate={endDate}
-              onChange={(date) => setStartDate(date)}
-            />
-            <DatePicker
-              id="end"
-              autoOk
-              label="End"
-              value={endDate}
-              format="MM/dd/yyyy"
-              variant="inline"
-              minDate={startDate}
-              maxDate={dateConstraints[1]}
-              onChange={(date) => setEndDate(date)}
-            />
-          </MuiPickersUtilsProvider>
+          <DateRangePicker
+            startDate={startDate}
+            endDate={endDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            dateConstraints={dateConstraints}
+          />
 
+          <br />
           <IconButton
-            style={{ position: "absolute", top: "10px" }}
             id="filter-ordering-option"
             onClick={handleFilterListClick}
           >
@@ -258,16 +238,7 @@ const Search = () => {
             ))}
           </Menu>
 
-          <Button
-            color="primary"
-            variant="contained"
-            style={{
-              position: "absolute",
-              top: "15px",
-              transform: "translateX(48px)",
-            }}
-            onClick={searchList}
-          >
+          <Button color="primary" variant="contained" onClick={searchList}>
             Search
           </Button>
         </div>

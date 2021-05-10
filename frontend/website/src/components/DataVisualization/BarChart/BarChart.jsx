@@ -7,16 +7,24 @@ import "./BarChart.css";
 import { sortedEmotions } from "src/utils/emotions";
 import { roundUpX, roundDecimal2 } from "src/utils/utils";
 
-const BarChart = ({ data, title = "Bar Chart" }) => {
+const BarChart = ({ data, baseHeight, baseWidth, title = "Bar Chart" }) => {
   const ref = useRef();
   // HACK: makes hover work on chart, isn't really proper in react nor html
   const chartDivRef = useRef();
 
   useEffect(() => {
+    // NOTE: upon rerenders, since d3 is mutative, we have to reset our refs
+    if (ref.current) {
+      ref.current.innerHTML = "";
+    }
+    if (chartDivRef.current) {
+      chartDivRef.current.innerHTML = "";
+    }
+
     // TODO: move this outside and hook it into the screen size
     const margin = { top: 20, right: 20, bottom: 60, left: 40 };
-    const width = 600 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
+    const width = baseWidth - margin.left - margin.right;
+    const height = baseHeight - margin.top - margin.bottom;
 
     const max = d3.max(data, ({ value }) => value);
     const sum = d3.sum(data, ({ value }) => value);
@@ -125,10 +133,10 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
           .style("left", event.pageX + 30 + "px")
           .style("top", event.pageY - 30 + "px");
       })
-      .on("mouseout", (d) => {
+      .on("mouseout", () => {
         div.transition().duration(500).style("opacity", 0);
       });
-  }, [data, title]);
+  }, [data, title, baseHeight, baseWidth]);
   return (
     <>
       <div ref={chartDivRef} />
