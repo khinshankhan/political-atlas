@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
@@ -20,6 +19,7 @@ import * as JsSearch from "js-search";
 import * as Stemmer from "porter-stemmer";
 
 import Layout from "src/components/Layout";
+import { Autocomplete } from "src/components/SearchComponents";
 import SpeechList from "src/components/SpeechList";
 
 import { getSpeechList } from "src/api/Server";
@@ -81,7 +81,7 @@ const Search = () => {
       if (list && list.data.length > 0) {
         setSpeeches(list.data);
 
-        setPoliticians((prev) => {
+        setPoliticians(() => {
           const politicians = [
             ...new Set(list.data.map(({ politician }) => politician)),
           ];
@@ -185,13 +185,10 @@ const Search = () => {
               id="politician"
               options={politicians}
               value={input.politician}
-              onChange={(event, newValue) => {
+              onChange={(_event, newValue) => {
                 const target = { id: "politician", value: newValue };
                 handleInputChange({ target });
               }}
-              autoHighlight
-              getOptionLabel={(option) => option}
-              renderOption={(option) => <>{option}</>}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -230,8 +227,8 @@ const Search = () => {
             />
           </MuiPickersUtilsProvider>
 
+          <br />
           <IconButton
-            style={{ position: "absolute", top: "10px" }}
             id="filter-ordering-option"
             onClick={handleFilterListClick}
           >
@@ -258,16 +255,7 @@ const Search = () => {
             ))}
           </Menu>
 
-          <Button
-            color="primary"
-            variant="contained"
-            style={{
-              position: "absolute",
-              top: "15px",
-              transform: "translateX(48px)",
-            }}
-            onClick={searchList}
-          >
+          <Button color="primary" variant="contained" onClick={searchList}>
             Search
           </Button>
         </div>
