@@ -118,9 +118,11 @@ const Search = () => {
   };
 
   const handleFilterListClose = (e) => {
-    handleInputChange({
-      target: { id: "filterListOrder", value: e.target.id },
-    });
+    if (e.target.id) {
+      handleInputChange({
+        target: { id: "filterListOrder", value: e.target.id },
+      });
+    }
     setFilterListEl(null);
   };
 
