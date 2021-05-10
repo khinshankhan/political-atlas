@@ -1,8 +1,5 @@
 import React, { useEffect, useRef } from "react";
 
-import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-
 import * as d3 from "d3";
 
 import "./BarChart.css";
@@ -10,28 +7,10 @@ import "./BarChart.css";
 import { sortedEmotions } from "src/utils/emotions";
 import { roundUpX, roundDecimal2 } from "src/utils/utils";
 
-const BarChart = ({ data, title = "Bar Chart" }) => {
-  const theme = useTheme();
-  const downSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const down400 = useMediaQuery("(max-width:400px)");
-  const down300 = useMediaQuery("(max-width:300px)");
-
+const BarChart = ({ data, baseHeight, baseWidth, title = "Bar Chart" }) => {
   const ref = useRef();
   // HACK: makes hover work on chart, isn't really proper in react nor html
   const chartDivRef = useRef();
-
-  let baseWidth = 600;
-  let baseHeight = 300;
-
-  if (downSm) {
-    baseWidth = 400;
-  }
-  if (down400) {
-    baseWidth = 300;
-  }
-  if (down300) {
-    baseWidth = 200;
-  }
 
   useEffect(() => {
     // NOTE: upon rerenders, since d3 is mutative, we have to reset our refs
@@ -154,7 +133,7 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
           .style("left", event.pageX + 30 + "px")
           .style("top", event.pageY - 30 + "px");
       })
-      .on("mouseout", (d) => {
+      .on("mouseout", () => {
         div.transition().duration(500).style("opacity", 0);
       });
   }, [data, title, baseHeight, baseWidth]);

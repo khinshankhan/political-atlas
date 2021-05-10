@@ -7,16 +7,22 @@ import "./PieChart.css";
 import { emotionsMap } from "src/utils/emotions";
 import { arrToHex, contrastColor, roundDecimal2 } from "src/utils/utils";
 
-const PieChart = ({ data, title = "Pie Chart" }) => {
-  // const margin = { top: 20, right: 20, bottom: 60, left: 40 };
-  // const width = 600 - margin.left - margin.right;
-  // const height = 300 - margin.top - margin.bottom;
-  const width = 600;
-  const height = 300;
+const PieChart = ({ data, baseHeight, baseWidth, title = "Pie Chart" }) => {
   const ref = useRef(null);
   const chartDivRef = useRef();
 
+  const width = baseHeight;
+  const height = baseWidth;
+
   useEffect(() => {
+    // NOTE: upon rerenders, since d3 is mutative, we have to reset our refs
+    if (ref.current) {
+      ref.current.innerHTML = "";
+    }
+    if (chartDivRef.current) {
+      chartDivRef.current.innerHTML = "";
+    }
+
     const innerRadius = 40;
     const outerRadius = 100;
 
@@ -62,23 +68,21 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
       .on("mouseover", (event, { data: d, value }) => {
         div.transition().duration(50).style("opacity", 1);
         div.transition().duration(200).style("opacity", 0.9);
-        div.html(
+        div
+          .html(
             `<b>Emotion:</b> ${d.emotion}` +
-                `<br><b>Occurences:</b> ${value}` +
-                `<br><b>Percentage:</b> ${roundDecimal2(
-                    (value / sum) * 100
-                )}%`
-        )
-            .style("left", event.pageX + 30 + "px")
-            .style("top", event.pageY - 30 + "px");
+              `<br><b>Occurences:</b> ${value}` +
+              `<br><b>Percentage:</b> ${roundDecimal2((value / sum) * 100)}%`
+          )
+          .style("left", event.pageX + 30 + "px")
+          .style("top", event.pageY - 30 + "px");
       })
       .on("mousemove", (event) => {
-        div.style("left", event.pageX + 30 + "px").style(
-            "top",
-            event.pageY - 30 + "px"
-        );
+        div
+          .style("left", event.pageX + 30 + "px")
+          .style("top", event.pageY - 30 + "px");
       })
-      .on("mouseout", (d) => {
+      .on("mouseout", () => {
         div.transition().duration(500).style("opacity", 0);
       });
 
@@ -89,7 +93,7 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
     path
       .attr("class", "arc")
       .attr("d", createArc)
-      .attr("fill", (d, i) => colors(i));
+      .attr("fill", (_d, i) => colors(i));
 
     const text = groupWithUpdate
       .append("text")
@@ -99,11 +103,12 @@ const PieChart = ({ data, title = "Pie Chart" }) => {
       .attr("text-anchor", "middle")
       .attr("alignment-baseline", "middle")
       .attr("transform", (d) => `translate(${createArc.centroid(d)})`)
-      .style(
-        "fill", ({ data: d }) => contrastColor(emotionsMap[d.emotion].color))
+      .style("fill", ({ data: d }) =>
+        contrastColor(emotionsMap[d.emotion].color)
+      )
       .style("font-size", 10)
       .text((d) => d.value);
-  }, [data, title]);
+  }, [data, title, height]);
 
   return (
     <>

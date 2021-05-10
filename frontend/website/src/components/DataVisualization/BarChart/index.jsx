@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BarChart from "./BarChart";
 
-const Index = ({ ibm, da }) => {
+const Index = ({ ibm, da, baseHeight, baseWidth }) => {
   const [dataIBM, setIBM] = useState(null);
   const [dataDA, setDA] = useState(null);
 
@@ -44,8 +44,22 @@ const Index = ({ ibm, da }) => {
 
   return (
     <>
-      {dataIBM != null && <BarChart data={dataIBM} title="IBM" />}
-      {dataDA != null && <BarChart data={dataDA} title="DeepAffects" />}
+      {dataIBM != null && (
+        <BarChart
+          data={dataIBM}
+          title="IBM"
+          baseWidth={baseWidth}
+          baseHeight={baseHeight}
+        />
+      )}
+      {dataDA != null && (
+        <BarChart
+          data={dataDA}
+          title="DeepAffects"
+          baseWidth={baseWidth}
+          baseHeight={baseHeight}
+        />
+      )}
     </>
   );
 };

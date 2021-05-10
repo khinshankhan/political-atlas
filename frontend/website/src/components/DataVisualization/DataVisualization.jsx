@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import FormControl from "@material-ui/core/FormControl";
 import NativeSelect from "@material-ui/core/NativeSelect";
 
@@ -30,6 +31,24 @@ const Visualization = ({ type, ...props }) =>
 
 const DataVisualization = ({ ibm, da }) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const downSm = useMediaQuery(theme.breakpoints.down("sm"));
+  const down400 = useMediaQuery("(max-width:400px)");
+  const down300 = useMediaQuery("(max-width:300px)");
+
+  let baseWidth = 600;
+  let baseHeight = 300;
+
+  if (downSm) {
+    baseWidth = 400;
+  }
+  if (down400) {
+    baseWidth = 300;
+  }
+  if (down300) {
+    baseWidth = 200;
+  }
+
   const charts = ["Bar Chart", "Pie Chart", "Tree Map"];
 
   const [vizType, setVizType] = useState(charts[0]);
@@ -57,7 +76,13 @@ const DataVisualization = ({ ibm, da }) => {
       <br />
 
       <div aria-label={"Data Visualization"} className={classes.center}>
-        <Visualization type={vizType} ibm={ibm} da={da} />
+        <Visualization
+          type={vizType}
+          ibm={ibm}
+          da={da}
+          baseWidth={baseWidth}
+          baseHeight={baseHeight}
+        />
       </div>
     </>
   );
