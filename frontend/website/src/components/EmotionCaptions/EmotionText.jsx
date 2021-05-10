@@ -19,7 +19,7 @@ const EmotionText = ({ sentences, emotions }) => {
   const classes = useStyles();
 
   const filterEmotions = (tones) => {
-    const ret = tones.filter(({tone_id}) => emotions.includes(tone_id) );
+    const ret = tones.filter(({ tone_id }) => emotions.includes(tone_id));
     return ret.sort((a, b) => b.score - a.score);
   };
 
@@ -45,7 +45,7 @@ const EmotionText = ({ sentences, emotions }) => {
             <Tooltip
               title={`${emotion}: ${roundDecimal2(score * 100)}%`}
               placement="top"
-              interactive
+              interactive="true"
             >
               <span
                 className={classes.hoverUnderline}
