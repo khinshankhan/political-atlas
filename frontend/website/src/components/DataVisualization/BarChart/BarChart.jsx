@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from "react";
 
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 import * as d3 from "d3";
 
 import "./BarChart.css";
@@ -8,15 +11,41 @@ import { sortedEmotions } from "src/utils/emotions";
 import { roundUpX, roundDecimal2 } from "src/utils/utils";
 
 const BarChart = ({ data, title = "Bar Chart" }) => {
+  const theme = useTheme();
+  const downSm = useMediaQuery(theme.breakpoints.down("sm"));
+  const down400 = useMediaQuery("(max-width:400px)");
+  const down300 = useMediaQuery("(max-width:300px)");
+
   const ref = useRef();
   // HACK: makes hover work on chart, isn't really proper in react nor html
   const chartDivRef = useRef();
 
+  let baseWidth = 600;
+  let baseHeight = 300;
+
+  if (downSm) {
+    baseWidth = 400;
+  }
+  if (down400) {
+    baseWidth = 300;
+  }
+  if (down300) {
+    baseWidth = 200;
+  }
+
   useEffect(() => {
+    // NOTE: upon rerenders, since d3 is mutative, we have to reset our refs
+    if (ref.current) {
+      ref.current.innerHTML = "";
+    }
+    if (chartDivRef.current) {
+      chartDivRef.current.innerHTML = "";
+    }
+
     // TODO: move this outside and hook it into the screen size
     const margin = { top: 20, right: 20, bottom: 60, left: 40 };
-    const width = 600 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
+    const width = baseWidth - margin.left - margin.right;
+    const height = baseHeight - margin.top - margin.bottom;
 
     const max = d3.max(data, ({ value }) => value);
     const sum = d3.sum(data, ({ value }) => value);
@@ -128,7 +157,7 @@ const BarChart = ({ data, title = "Bar Chart" }) => {
       .on("mouseout", (d) => {
         div.transition().duration(500).style("opacity", 0);
       });
-  }, [data, title]);
+  }, [data, title, baseHeight, baseWidth]);
   return (
     <>
       <div ref={chartDivRef} />
