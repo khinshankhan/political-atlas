@@ -2,7 +2,6 @@ import React from "react";
 
 import { withStyles } from "@material-ui/core/styles";
 import { default as MuiAutocomplete } from "@material-ui/lab/Autocomplete";
-import TextField from "@material-ui/core/TextField";
 
 const NormalizedAutocomplete = withStyles({
   inputRoot: {
