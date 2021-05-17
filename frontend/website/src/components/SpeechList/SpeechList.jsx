@@ -17,6 +17,10 @@ const SpeechList = ({ speeches }) => {
   }
 
   const handlePaginationChange = (event, value) => {
+    if (value == null) {
+      return;
+    }
+
     setPage(value);
   };
 
