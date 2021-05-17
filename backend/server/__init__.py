@@ -22,6 +22,11 @@ def deepwebhook():
         db.add_deepaffects(speech_id, data)
     return Response(status=200)
 
+@app.route('/count')
+@cross_origin()
+def get_count():
+    return {'count': db.get_scrape_count()}
+
 @app.route('/speech')
 @cross_origin()
 def get_speech():
@@ -64,6 +69,19 @@ def get_range():
 @cross_origin()
 def get_fulllist():
     return {'data': db.get_scrape()}
+
+@app.route('/presidentspeeches')
+@cross_origin()
+def get_speeches_by_president():
+    name = request.args.get('name')
+    if name:
+        speeches = db.get_speeches_by_president(name)
+        ids = [speech['id'] for speech in speeches]
+        ibmresponses = [db.get_ibm_analysis(sid) for sid in ids]
+        daresponses = [db.get_deepaffects_analysis(sid) for sid in ids]
+        return {'speeches': speeches, 'ibm': ibmresponses, 'deepaffects': daresponses}
+    else:
+        return {}
 
 if __name__ == '__main__':
     app.debug = True

@@ -83,11 +83,13 @@ def add_scrape(details):
                    );"""
     run_with_named_placeholders(add_query, details)
 
+def get_scrape_count():
+    c = connection.cursor()
+    return c.execute('select count(id) from scraped;').fetchone()[0]
+
 def ensure_scrape_inserts():
     ensure_scrape_tables()
-    c = connection.cursor()
-    count = c.execute('select count(id) from scraped').fetchone()[0]
-    if count > 0: return
+    if get_scrape_count() > 0: return
     try:
         for speech in scrape.millerscrape():
             add_scrape(speech)
@@ -202,6 +204,14 @@ def get_deepaffects_analysis(speech_id):
             return json.load(src)
     else:
         return {}
+
+def get_speeches_by_president(name):
+    ensure_scrape_inserts()
+    c = connection.cursor()
+    fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
+    json_group = ', '.join("'%s', %s" % (x, x) for x in fields)
+    query = 'select json_group_array(json_object(%s)) from scraped where politician = \'%s\';' % (json_group, name)
+    return json.loads(c.execute(query).fetchone()[0])
 
 def cleanup():
     if connection:
