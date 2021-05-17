@@ -33,6 +33,7 @@ const PaginationBar = ({ pages, pageNum, setPage }) => {
     }
 
     setPage(value);
+    setSearchPage(value.toString());
   };
 
   const handlePageChange = (event) => {
