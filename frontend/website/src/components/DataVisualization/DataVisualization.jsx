@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
   center: {
     textAlign: "center",
   },
+  error: {
+    color: "rgb(220, 0, 78)",
+  },
 }));
 
 const Visualization = ({ type, ...props }) =>
@@ -83,6 +86,17 @@ const DataVisualization = ({ ibm, da }) => {
           baseWidth={baseWidth}
           baseHeight={baseHeight}
         />
+
+        {ibm == null && (
+          <span className={classes.error}>
+            IBM analysis is currently unavailable. <br />
+          </span>
+        )}
+        {da == null && (
+          <span className={classes.error}>
+            DeepAffects analysis is currently unavailable. <br />
+          </span>
+        )}
       </div>
     </>
   );
