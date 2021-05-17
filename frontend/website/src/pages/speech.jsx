@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "gatsby";
 import { useQueryParam, NumberParam } from "use-query-params";
 
 import Typography from "@material-ui/core/Typography";
@@ -60,6 +61,14 @@ const Speech = () => {
 
   return (
     <Layout title={speechMeta.title}>
+      <Typography variant="h5" gutterBottom>
+        Speaker
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        <Link to={`/speaker?speaker=${speechMeta.politician}`}>
+          {speechMeta.politician}
+        </Link>
+      </Typography>
       <Typography variant="h5" gutterBottom>
         Description
       </Typography>
