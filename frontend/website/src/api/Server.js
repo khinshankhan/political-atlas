@@ -46,3 +46,14 @@ export const getDaAnalysis = async (id) =>
       console.log(err);
       return null;
     });
+
+export const getSpeakerAnalytics = (speaker) =>
+  axios
+    .get(`${serverLink}/presidentspeeches`, {
+      params: { name: speaker },
+    })
+    .then((res) => res.data)
+    .catch((err) => {
+      console.log(err);
+      return null;
+    });
