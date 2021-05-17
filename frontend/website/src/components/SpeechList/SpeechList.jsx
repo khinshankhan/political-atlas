@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 
 import Typography from "@material-ui/core/Typography";
-import Pagination from "@material-ui/core/Pagination";
-import Stack from "@material-ui/core/Stack";
 
 import SpeechCard from "./SpeechCard";
+import PaginationBar from "./PaginationBar";
 
-import { chunker, validNumberString } from "src/utils/utils";
+import { chunker } from "src/utils/utils";
 
 const SpeechList = ({ speeches }) => {
   const chunks = chunker(10, speeches);
@@ -15,25 +14,6 @@ const SpeechList = ({ speeches }) => {
   if (speeches == null || speeches.length === 0) {
     return "No speeches found!";
   }
-
-  const handlePaginationChange = (event, value) => {
-    setPage(value);
-  };
-
-  const handlePageChange = (e) => {
-    console.log(e.target.value);
-    if (e.target.value === "") {
-      setPage(1);
-    }
-
-    if (
-      validNumberString(e.target.value) &&
-      +e.target.value > 0 &&
-      +e.target.value <= chunks.length
-    ) {
-      setPage(+e.target.value);
-    }
-  };
 
   return (
     <>
@@ -50,28 +30,7 @@ const SpeechList = ({ speeches }) => {
           </div>
         ))}
 
-      {chunks.length > 0 && (
-        <Stack spacing={2} alignItems="center">
-          <Typography>
-            Page:
-            <input
-              type="text"
-              id="counter"
-              className="form-inline"
-              placeholder="#"
-              value={page}
-              size={speeches.length.toString.length}
-              onChange={handlePageChange}
-            />
-            / {chunks.length}
-          </Typography>
-          <Pagination
-            count={chunks.length}
-            page={page}
-            onChange={handlePaginationChange}
-          />
-        </Stack>
-      )}
+      <PaginationBar pages={chunks} pageNum={page} setPage={setPage} />
     </>
   );
 };
