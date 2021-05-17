@@ -103,7 +103,7 @@ const Speech = () => {
       <Typography variant="h5" gutterBottom>
         Transcript
       </Typography>
-      {ibm != null && <EmotionCaptions sentences={ibm.sentences_tone} />}
+      <EmotionCaptions ibm={ibm} transcript={speechMeta.transcript} />
     </Layout>
   );
 };
