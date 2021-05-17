@@ -208,7 +208,7 @@ def get_deepaffects_analysis(speech_id):
 def get_speeches_by_president(name):
     ensure_scrape_inserts()
     c = connection.cursor()
-    fields = ['id', 'politician', 'title', 'speech_link', 'video_link', 'audio_link', 'date', 'description', 'transcript']
+    fields = ['id', 'politician', 'title', 'date', 'description']
     json_group = ', '.join("'%s', %s" % (x, x) for x in fields)
     query = 'select json_group_array(json_object(%s)) from scraped where politician = \'%s\';' % (json_group, name)
     return json.loads(c.execute(query).fetchone()[0])

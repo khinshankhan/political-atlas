@@ -77,8 +77,8 @@ def get_speeches_by_president():
     if name:
         speeches = db.get_speeches_by_president(name)
         ids = [speech['id'] for speech in speeches]
-        ibmresponses = [db.get_ibm_analysis(sid) for sid in ids]
-        daresponses = [db.get_deepaffects_analysis(sid) for sid in ids]
+        ibmresponses = [s for sid in ids if (s := db.get_ibm_analysis(sid))] or None
+        daresponses = [s for sid in ids if (s := db.get_deepaffects_analysis(sid))] or None
         return {'speeches': speeches, 'ibm': ibmresponses, 'deepaffects': daresponses}
     else:
         return {}
