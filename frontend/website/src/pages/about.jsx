@@ -6,10 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 
-import {
-  sortedEmotions,
-  emotionsMap,
-} from "src/utils/emotions";
+import { sortedEmotions, emotionsMap } from "src/utils/emotions";
 import { capitalize } from "src/utils/utils";
 
 import Layout from "src/components/Layout";
