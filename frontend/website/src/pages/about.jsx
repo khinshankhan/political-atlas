@@ -9,7 +9,6 @@ import Grid from "@material-ui/core/Grid";
 import {
   sortedEmotions,
   emotionsMap,
-  determineColor,
 } from "src/utils/emotions";
 import { capitalize } from "src/utils/utils";
 
