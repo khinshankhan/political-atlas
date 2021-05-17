@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const EmotionCaptions = ({ ibm, transcript }) => {
   const classes = useStyles();
 
-  const sentences = ibm && ibm.sentences;
+  const sentences = ibm && ibm.sentences_tones;
 
   const theme = useTheme();
   const downXm = useMediaQuery(theme.breakpoints.down("xm"));
