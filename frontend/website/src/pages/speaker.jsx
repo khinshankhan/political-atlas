@@ -4,6 +4,7 @@ import { useQueryParam, StringParam } from "use-query-params";
 import Typography from "@material-ui/core/Typography";
 
 import Layout from "src/components/Layout";
+import DataVisualization from "src/components/DataVisualization";
 import SpeechList from "src/components/SpeechList";
 
 import { getSpeakerAnalytics } from "src/api/Server";
@@ -28,10 +29,26 @@ const Speech = () => {
         ibm: fetchedIbm,
         deepaffects: fetchedDa,
       } = fetchedData;
-      setData(true);
-      setIbm(fetchedIbm.map(uniformIbmData));
-      setDa(fetchedDa.map(uniformDaData));
+
+      setIbm(
+        fetchedIbm.map(uniformIbmData).reduce(
+          (stored, current) => {
+            return {
+              ...stored,
+              sentences_tone: [
+                ...stored.sentences_tone,
+                ...current.sentences_tone,
+              ],
+            };
+          },
+          { sentences_tone: [] }
+        )
+      );
+      setDa(fetchedDa.map(uniformDaData).flat());
+
       setSpeeches(fetchedSpeeches);
+
+      setData(true);
     };
 
     if (speaker != null && speaker !== "") {
@@ -57,9 +74,9 @@ const Speech = () => {
   return (
     <Layout title={`${speaker} Analytics`}>
       <Typography variant="h5" gutterBottom>
-        Averages Across Speeches Data Visualization
+        Aggregation Across Speeches Data Visualization
       </Typography>
-      {/* <DataVisualization ibm={ibm} da={da} /> */}
+      <DataVisualization ibm={ibm} da={da} />
       <Typography variant="h5" gutterBottom>
         Speeches
       </Typography>
