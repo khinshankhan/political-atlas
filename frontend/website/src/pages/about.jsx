@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "gatsby";
 
 import Typography from "@material-ui/core/Typography";
 
@@ -43,10 +44,15 @@ const About = () => {
         What We Did
       </Typography>
       <Typography variant="body1" gutterBottom>
-        We used the IBM API to analyze the transcript of speeches to detect
-        emotions based off word choices and clustering. We also used the
-        DeepAffects API to ananalyze inflections in the audio to determine
-        emotions. We then compared the two outputs.
+        We used the{" "}
+        <Link to="https://www.ibm.com/watson/services/tone-analyzer/">
+          IBM API
+        </Link>{" "}
+        to analyze the transcript of speeches to detect emotions based off word
+        choices and clustering. We also used the{" "}
+        <Link to="https://www.deepaffects.com/">DeepAffects API</Link> to
+        ananalyze inflections in the audio to determine emotions. We then
+        compared the two outputs.
       </Typography>
       <Typography variant="h5" gutterBottom>
         Emotion Key
