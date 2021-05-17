@@ -3,12 +3,12 @@ import { useQueryParam, StringParam } from "use-query-params";
 
 import Typography from "@material-ui/core/Typography";
 
+import { getSpeakerAnalytics } from "src/api/Server";
+import { uniformDaData, uniformIbmData } from "src/utils/dataTransformations";
+
 import Layout from "src/components/Layout";
 import DataVisualization from "src/components/DataVisualization";
 import SpeechList from "src/components/SpeechList";
-
-import { getSpeakerAnalytics } from "src/api/Server";
-import { uniformDaData, uniformIbmData } from "src/utils/dataTransformations";
 
 const Speech = () => {
   const [speaker] = useQueryParam("speaker", StringParam);
@@ -24,6 +24,7 @@ const Speech = () => {
       if (fetchedData == null) {
         return;
       }
+
       const {
         speeches: fetchedSpeeches,
         ibm: fetchedIbm,

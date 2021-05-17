@@ -10,6 +10,7 @@ import {
 import { capitalize } from "src/utils/utils";
 
 import Layout from "src/components/Layout";
+import Legend from "src/components/Legend";
 import MemberCards from "src/components/About/MemberCards";
 
 const About = () => {
@@ -79,51 +80,7 @@ const About = () => {
         is as follows:
       </Typography>
 
-      {sortedEmotions.map((emotion, index) => {
-        const emotionColor = emotionsMap[emotion].color;
-        const [backgroundColor0_50, textColor0_50] = determineColor(
-          emotionColor,
-          0.25
-        );
-        const [backgroundColor50_75, textColor50_75] = determineColor(
-          emotionColor,
-          0.63
-        );
-        const [backgroundColor75_100, textColor75_100] = determineColor(
-          emotionColor,
-          0.87
-        );
-
-        return (
-          <Typography key={index} variant="body1" gutterBottom>
-            - {capitalize(emotion)} <br />
-            <span
-              style={{
-                backgroundColor: backgroundColor0_50,
-                color: textColor0_50,
-              }}
-            >
-              0 - 50
-            </span>{" "}
-            <span
-              style={{
-                backgroundColor: backgroundColor50_75,
-                color: textColor50_75,
-              }}
-            >
-              50 -75
-            </span>{" "}
-            <span
-              style={{
-                backgroundColor: backgroundColor75_100,
-                color: textColor75_100,
-              }}
-            >
-              75 - 100
-            </span>
-          </Typography>
-        );
-      })}
+      <Legend />
 
       <Typography variant="h5" gutterBottom>
         Background

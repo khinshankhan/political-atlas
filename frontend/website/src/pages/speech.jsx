@@ -81,10 +81,12 @@ const Speech = () => {
       </Typography>
       <center>
         <Video src={speechMeta.video_link} />
-        <br />
-        <Legend />
       </center>
       <br />
+      <Typography variant="h5" gutterBottom>
+        Legend
+      </Typography>
+      <Legend />
       <Typography variant="h5" gutterBottom>
         Data Visualization
       </Typography>
