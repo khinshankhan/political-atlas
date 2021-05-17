@@ -1,6 +1,10 @@
 import React from "react";
+import { Link } from "gatsby";
 
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 
 import {
   sortedEmotions,
@@ -10,9 +14,20 @@ import {
 import { capitalize } from "src/utils/utils";
 
 import Layout from "src/components/Layout";
+import Legend from "src/components/Legend";
 import MemberCards from "src/components/About/MemberCards";
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+}));
+
 const About = () => {
+  const classes = useStyles();
+
   const ibmEmotions = (() => {
     const emotions = sortedEmotions
       .map((emotion) => emotionsMap[emotion].ibm)
@@ -42,10 +57,15 @@ const About = () => {
         What We Did
       </Typography>
       <Typography variant="body1" gutterBottom>
-        We used the IBM API to analyze the transcript of speeches to detect
-        emotions based off word choices and clustering. We also used the
-        DeepAffects API to ananalyze inflections in the audio to determine
-        emotions. We then compared the two outputs.
+        We used the{" "}
+        <Link to="https://www.ibm.com/watson/services/tone-analyzer/">
+          IBM API
+        </Link>{" "}
+        to analyze the transcript of speeches to detect emotions based off word
+        choices and clustering. We also used the{" "}
+        <Link to="https://www.deepaffects.com/">DeepAffects API</Link> to
+        ananalyze inflections in the audio to determine emotions. We then
+        compared the two outputs.
       </Typography>
       <Typography variant="h5" gutterBottom>
         Emotion Key
@@ -64,14 +84,48 @@ const About = () => {
         from each kind of API:
       </Typography>
 
-      {sortedEmotions.map((emotion, index) => (
-        <Typography key={index} variant="body1" gutterBottom>
-          - {capitalize(emotion)} <br />
-          IBM API: {emotionsMap[emotion].ibm.join(", ")}
-          <br />
-          DeepAffects API: {emotionsMap[emotion].da.join(", ")}
-        </Typography>
-      ))}
+      <br />
+
+      <Grid container spacing={3}>
+        <Grid item xs={4}>
+          <Paper className={classes.paper}>
+            Our Emotions
+            <hr />
+            {sortedEmotions.map((emotion, index) => (
+              <span key={index}>
+                {capitalize(emotion)}
+                <br />
+              </span>
+            ))}
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper className={classes.paper}>
+            IBM API
+            <hr />
+            {sortedEmotions.map((emotion, index) => (
+              <span key={index}>
+                {capitalize(emotionsMap[emotion].ibm.join(", "))}
+                <br />
+              </span>
+            ))}
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper className={classes.paper}>
+            DeepAffects API
+            <hr />
+            {sortedEmotions.map((emotion, index) => (
+              <span key={index}>
+                {capitalize(emotionsMap[emotion].da.join(", "))}
+                <br />
+              </span>
+            ))}
+          </Paper>
+        </Grid>
+      </Grid>
+
+      <br />
 
       <Typography variant="body1" gutterBottom>
         We also associated colors with each emotion. We decided to associate the
@@ -79,51 +133,11 @@ const About = () => {
         is as follows:
       </Typography>
 
-      {sortedEmotions.map((emotion, index) => {
-        const emotionColor = emotionsMap[emotion].color;
-        const [backgroundColor0_50, textColor0_50] = determineColor(
-          emotionColor,
-          0.25
-        );
-        const [backgroundColor50_75, textColor50_75] = determineColor(
-          emotionColor,
-          0.63
-        );
-        const [backgroundColor75_100, textColor75_100] = determineColor(
-          emotionColor,
-          0.87
-        );
+      <br />
 
-        return (
-          <Typography key={index} variant="body1" gutterBottom>
-            - {capitalize(emotion)} <br />
-            <span
-              style={{
-                backgroundColor: backgroundColor0_50,
-                color: textColor0_50,
-              }}
-            >
-              0 - 50
-            </span>{" "}
-            <span
-              style={{
-                backgroundColor: backgroundColor50_75,
-                color: textColor50_75,
-              }}
-            >
-              50 -75
-            </span>{" "}
-            <span
-              style={{
-                backgroundColor: backgroundColor75_100,
-                color: textColor75_100,
-              }}
-            >
-              75 - 100
-            </span>
-          </Typography>
-        );
-      })}
+      <Legend />
+
+      <br />
 
       <Typography variant="h5" gutterBottom>
         Background
