@@ -69,12 +69,14 @@ const Speech = () => {
           {speechMeta.politician}
         </Link>
       </Typography>
+
       <Typography variant="h5" gutterBottom>
         Description
       </Typography>
       <Typography variant="body1" gutterBottom>
         {speechMeta.description}
       </Typography>
+
       {/* TODO: conditionally show audio when video is missing */}
       <Typography variant="h5" gutterBottom>
         Speech Video
@@ -82,15 +84,22 @@ const Speech = () => {
       <center>
         <Video src={speechMeta.video_link} />
       </center>
+
       <br />
+
       <Typography variant="h5" gutterBottom>
         Legend
       </Typography>
       <Legend />
+
+      <br />
+
       <Typography variant="h5" gutterBottom>
         Data Visualization
       </Typography>
       <DataVisualization ibm={ibm} da={da} />
+
+      {/* TODO: allow for speech meta decription when ibm analysis is missing */}
       <Typography variant="h5" gutterBottom>
         Transcript
       </Typography>

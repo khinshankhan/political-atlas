@@ -1,5 +1,8 @@
 export const capitalize = (word) =>
-  word[0].toUpperCase() + word.substring(1).toLowerCase();
+  word
+    .split(" ")
+    .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
+    .join(" ");
 
 export const shadeColor = (color, percentage) =>
   color.map((rgb) => rgb + rgb * percentage);

@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "gatsby";
 
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 
 import {
   sortedEmotions,
@@ -14,7 +17,17 @@ import Layout from "src/components/Layout";
 import Legend from "src/components/Legend";
 import MemberCards from "src/components/About/MemberCards";
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+}));
+
 const About = () => {
+  const classes = useStyles();
+
   const ibmEmotions = (() => {
     const emotions = sortedEmotions
       .map((emotion) => emotionsMap[emotion].ibm)
@@ -71,14 +84,48 @@ const About = () => {
         from each kind of API:
       </Typography>
 
-      {sortedEmotions.map((emotion, index) => (
-        <Typography key={index} variant="body1" gutterBottom>
-          - {capitalize(emotion)} <br />
-          IBM API: {emotionsMap[emotion].ibm.join(", ")}
-          <br />
-          DeepAffects API: {emotionsMap[emotion].da.join(", ")}
-        </Typography>
-      ))}
+      <br />
+
+      <Grid container spacing={3}>
+        <Grid item xs={4}>
+          <Paper className={classes.paper}>
+            Our Emotions
+            <hr />
+            {sortedEmotions.map((emotion, index) => (
+              <span key={index}>
+                {capitalize(emotion)}
+                <br />
+              </span>
+            ))}
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper className={classes.paper}>
+            IBM API
+            <hr />
+            {sortedEmotions.map((emotion, index) => (
+              <span key={index}>
+                {capitalize(emotionsMap[emotion].ibm.join(", "))}
+                <br />
+              </span>
+            ))}
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper className={classes.paper}>
+            DeepAffects API
+            <hr />
+            {sortedEmotions.map((emotion, index) => (
+              <span key={index}>
+                {capitalize(emotionsMap[emotion].da.join(", "))}
+                <br />
+              </span>
+            ))}
+          </Paper>
+        </Grid>
+      </Grid>
+
+      <br />
 
       <Typography variant="body1" gutterBottom>
         We also associated colors with each emotion. We decided to associate the
@@ -86,7 +133,11 @@ const About = () => {
         is as follows:
       </Typography>
 
+      <br />
+
       <Legend />
+
+      <br />
 
       <Typography variant="h5" gutterBottom>
         Background

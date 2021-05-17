@@ -3,7 +3,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 
 import {
   sortedEmotions,
@@ -13,9 +12,6 @@ import {
 import { capitalize } from "src/utils/utils";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   paper: {
     padding: theme.spacing(2),
     textAlign: "center",
@@ -30,7 +26,8 @@ const Legend = () => {
     <Grid container spacing={3}>
       <Grid item xs={3}>
         <Paper className={classes.paper}>
-          Emotion <hr />
+          Emotion
+          <hr />
           {sortedEmotions.map((emotion, index) => (
             <span key={index}>
               {capitalize(emotion)}
