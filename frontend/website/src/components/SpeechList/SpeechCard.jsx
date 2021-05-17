@@ -64,6 +64,12 @@ const SpeechCard = ({ speech }) => {
               {speech.title}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
+              Speaker:{" "}
+              <Link to={`/speaker?speaker=${speech.politician}`}>
+                {speech.politician}
+              </Link>
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
               {speech.description}
             </Typography>
           </CardContent>
