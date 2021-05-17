@@ -3,10 +3,11 @@ import { useQueryParam, StringParam } from "use-query-params";
 
 import Typography from "@material-ui/core/Typography";
 
+import Layout from "src/components/Layout";
+import SpeechList from "src/components/SpeechList";
+
 import { getSpeakerAnalytics } from "src/api/Server";
 import { uniformDaData, uniformIbmData } from "src/utils/dataTransformations";
-
-import Layout from "src/components/Layout";
 
 const Speech = () => {
   const [speaker] = useQueryParam("speaker", StringParam);
@@ -62,6 +63,7 @@ const Speech = () => {
       <Typography variant="h5" gutterBottom>
         Speeches
       </Typography>
+      {speeches != null && <SpeechList speeches={speeches} />}
     </Layout>
   );
 };
