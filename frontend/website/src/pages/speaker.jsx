@@ -32,20 +32,21 @@ const Speech = () => {
       } = fetchedData;
 
       setIbm(
-        fetchedIbm.map(uniformIbmData).reduce(
-          (stored, current) => {
-            return {
-              ...stored,
-              sentences_tone: [
-                ...stored.sentences_tone,
-                ...current.sentences_tone,
-              ],
-            };
-          },
-          { sentences_tone: [] }
-        )
+        fetchedIbm &&
+          fetchedIbm.map(uniformIbmData).reduce(
+            (stored, current) => {
+              return {
+                ...stored,
+                sentences_tone: [
+                  ...stored.sentences_tone,
+                  ...current.sentences_tone,
+                ],
+              };
+            },
+            { sentences_tone: [] }
+          )
       );
-      setDa(fetchedDa.map(uniformDaData).flat());
+      setDa(fetchedDa && fetchedDa.map(uniformDaData).flat());
 
       setSpeeches(fetchedSpeeches);
 
