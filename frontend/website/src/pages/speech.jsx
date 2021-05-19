@@ -88,16 +88,18 @@ const Speech = () => {
       <br />
 
       <Typography variant="h5" gutterBottom>
+        Data Visualization
+      </Typography>
+      <DataVisualization ibm={ibm} da={da} />
+
+      <br />
+
+      <Typography variant="h5" gutterBottom>
         Legend
       </Typography>
       <Legend />
 
       <br />
-
-      <Typography variant="h5" gutterBottom>
-        Data Visualization
-      </Typography>
-      <DataVisualization ibm={ibm} da={da} />
 
       {/* TODO: allow for speech meta decription when ibm analysis is missing */}
       <Typography variant="h5" gutterBottom>
