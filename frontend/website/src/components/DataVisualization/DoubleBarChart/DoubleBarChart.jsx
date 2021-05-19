@@ -39,7 +39,7 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
         "values": dataIBM
       },
       {
-        "API": "DA",
+        "API": "DeepAffects",
         "values": dataDA
       },
     ]
@@ -138,7 +138,7 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
       .attr("height", ({ value }) => height - y(100*value/ibm_sum))
       .attr(
         "transform",
-        `translate(${margin.left + 45}, ${margin.bottom - margin.top})`
+        `translate(${margin.left}, ${margin.bottom - margin.top})`
       )
       // HACK: this is all a bad hack, we need to refactor this later
       .on("mouseover", (event, { emotion, value }) => {
@@ -161,7 +161,7 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
       .on("mouseout", (d) => {
         div.transition().duration(500).style("opacity", 0);
       })
-    
+
     svgElement
       .selectAll("bar")
       .data(dataDA)
@@ -174,14 +174,14 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
       .attr("height", ({ value }) => height - y(100*value/da_sum))
       .attr(
         "transform",
-        `translate(${margin.left}, ${margin.bottom - margin.top})`
+        `translate(${margin.left + 45}, ${margin.bottom - margin.top})`
       )
       // HACK: this is all a bad hack, we need to refactor this later
       .on("mouseover", (event, { emotion, value }) => {
         div.transition().duration(200).style("opacity", 0.9);
         div
           .html(
-            `<b>API:</b> DA` +
+            `<b>API:</b> DeepAffects` +
             `<br><b>Emotion:</b> ${emotion}` +
             `<br><b>Occurences:</b> ${value}` +
             `<br><b>Percentage:</b> ${roundDecimal2((value / da_sum) * 100)}%`
