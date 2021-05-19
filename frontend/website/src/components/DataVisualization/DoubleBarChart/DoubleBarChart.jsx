@@ -18,12 +18,12 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
     const width = 600 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
-    const max = Math.max(
-      d3.max(dataDA, ({ value }) => value), 
-      d3.max(dataIBM, ({ value }) => value)
-    )
     const da_sum = d3.sum(dataDA, ({ value }) => value);
     const ibm_sum = d3.sum(dataIBM, ({ value }) => value);
+    const max = 100 * Math.max(
+      d3.max(dataDA, ({ value }) => value) / da_sum,
+      d3.max(dataIBM, ({ value }) => value) / ibm_sum
+    )
 
     const barData = [
       {
@@ -126,8 +126,8 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
       .style("fill", "steelblue")
       .attr("x", ({ emotion }) => x(emotion))
       .attr("width", xSubgroup.bandwidth())
-      .attr("y", ({ value }) => y(value))
-      .attr("height", ({ value }) => height - y(value))
+      .attr("y", ({ value }) => y(100*value/ibm_sum))
+      .attr("height", ({ value }) => height - y(100*value/ibm_sum))
       .attr(
         "transform",
         `translate(${margin.left + 45}, ${margin.bottom - margin.top})`
@@ -162,8 +162,8 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
       .style("fill", "green")
       .attr("x", ({ emotion }) => x(emotion))
       .attr("width", xSubgroup.bandwidth())
-      .attr("y", ({ value }) => y(value))
-      .attr("height", ({ value }) => height - y(value))
+      .attr("y", ({ value }) => y(100*value/da_sum))
+      .attr("height", ({ value }) => height - y(100*value/da_sum))
       .attr(
         "transform",
         `translate(${margin.left}, ${margin.bottom - margin.top})`
