@@ -7,7 +7,7 @@ import "./DoubleBarChart.css";
 import { sortedEmotions } from "src/utils/emotions";
 import { roundUpX, roundDecimal2 } from "src/utils/utils";
 
-const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
+const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Double Bar Chart" }) => {
   const ref = useRef();
   // HACK: makes hover work on chart, isn't really proper in react nor html
   const chartDivRef = useRef();
@@ -23,8 +23,8 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
 
     // TODO: move this outside and hook it into the screen size
     const margin = { top: 20, right: 20, bottom: 60, left: 40 };
-    const width = 600 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
+    const width = baseWidth - margin.left - margin.right;
+    const height = baseHeight - margin.top - margin.bottom;
 
     const da_sum = d3.sum(dataDA, ({ value }) => value);
     const ibm_sum = d3.sum(dataIBM, ({ value }) => value);
@@ -198,7 +198,7 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
         div.transition().duration(500).style("opacity", 0);
       })
 
-  }, [dataIBM, dataDA, title]);
+  }, [dataIBM, dataDA, title, baseHeight, baseWidth]);
   return (
     <>
       <div ref={chartDivRef} />

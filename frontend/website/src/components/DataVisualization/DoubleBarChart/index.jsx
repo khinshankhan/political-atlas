@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DoubleBarChart from "./DoubleBarChart";
 
-const Index = ({ ibm, da }) => {
+const Index = ({ ibm, da, baseHeight, baseWidth }) => {
   const [dataIBM, setIBM] = useState(null);
   const [dataDA, setDA] = useState(null);
 
@@ -44,7 +44,15 @@ const Index = ({ ibm, da }) => {
 
   return (
     <>
-      {dataIBM != null && <DoubleBarChart dataIBM={dataIBM} dataDA={dataDA} title="IBM & DeepAffects" />}
+      {dataIBM != null && dataDA != null && (
+        <DoubleBarChart
+          dataIBM={dataIBM}
+          dataDA={dataDA}
+          title="IBM & DeepAffects"
+          baseWidth={baseWidth}
+          baseHeight={baseHeight}
+        />
+      )}
     </>
   );
 };
