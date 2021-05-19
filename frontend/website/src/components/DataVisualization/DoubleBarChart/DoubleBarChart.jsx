@@ -92,8 +92,7 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
     // Another scale for subgroup position?
     var xSubgroup = d3.scaleBand()
       .domain(APIs)
-      .range([0, x.bandwidth()])
-      .padding([0.05])
+      .range([0, x.bandwidth()]);
 
     // make axes into scales that can be plotted
     const xAxis = d3.axisBottom().scale(x);
@@ -174,7 +173,7 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
       .attr("height", ({ value }) => height - y(100*value/da_sum))
       .attr(
         "transform",
-        `translate(${margin.left + 45}, ${margin.bottom - margin.top})`
+        `translate(${margin.left + xSubgroup.bandwidth()}, ${margin.bottom - margin.top})`
       )
       // HACK: this is all a bad hack, we need to refactor this later
       .on("mouseover", (event, { emotion, value }) => {
