@@ -13,6 +13,14 @@ const DoubleBarChart = ({ dataIBM, dataDA, title = "Double Bar Chart" }) => {
   const chartDivRef = useRef();
 
   useEffect(() => {
+    // NOTE: upon rerenders, since d3 is mutative, we have to reset our refs
+    if (ref.current) {
+      ref.current.innerHTML = "";
+    }
+    if (chartDivRef.current) {
+      chartDivRef.current.innerHTML = "";
+    }
+
     // TODO: move this outside and hook it into the screen size
     const margin = { top: 20, right: 20, bottom: 60, left: 40 };
     const width = 600 - margin.left - margin.right;
