@@ -22,7 +22,7 @@ const BarChart = ({ data, baseHeight, baseWidth, title = "Bar Chart" }) => {
     }
 
     // TODO: move this outside and hook it into the screen size
-    const margin = { top: 20, right: 20, bottom: 60, left: 40 };
+    const margin = { top: 20, right: 20, bottom: 60, left: 70 };
     const width = baseWidth - margin.left - margin.right;
     const height = baseHeight - margin.top - margin.bottom;
 
@@ -110,8 +110,6 @@ const BarChart = ({ data, baseHeight, baseWidth, title = "Bar Chart" }) => {
       .style("fill", "steelblue")
       .attr("x", ({ emotion }) => x(emotion))
       .attr("width", x.bandwidth())
-      .attr("y", ({ value }) => y(value))
-      .attr("height", ({ value }) => height - y(value))
       .attr(
         "transform",
         `translate(${margin.left}, ${margin.bottom - margin.top})`
@@ -135,7 +133,25 @@ const BarChart = ({ data, baseHeight, baseWidth, title = "Bar Chart" }) => {
       })
       .on("mouseout", () => {
         div.transition().duration(500).style("opacity", 0);
-      });
+      })
+      .attr("y", y(0))
+      .attr("height", height - y(0))
+      .transition().duration(2000)
+      .attr("y", ({ value }) => y(value))
+      .attr("height", ({ value }) => height - y(value));
+
+    svgElement.append("text")
+      .attr("transform", `translate( ${margin.left + (width-margin.left)/2}, ${height + margin.bottom + 20})`)
+      .style("text-anchor", "middle")
+      .text("Emotion");
+
+    svgElement.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("x", 0 - (margin.bottom + (height - margin.bottom) / 2))
+      .attr("y", 15)
+      .style("text-anchor", "middle")
+      .text("Occurences");
+
   }, [data, title, baseHeight, baseWidth]);
   return (
     <>
