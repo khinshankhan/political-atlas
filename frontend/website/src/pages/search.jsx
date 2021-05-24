@@ -42,8 +42,8 @@ const useStyles = makeStyles((theme) => ({
 const FilterIcon = ({ filterListOrder }) =>
   ({
     relevance: <FilterListIcon />,
-    descending: <TrendingDownIcon />,
-    ascending: <TrendingUpIcon />,
+    newest: <TrendingDownIcon />,
+    oldest: <TrendingUpIcon />,
   }[filterListOrder]);
 
 const Search = () => {
@@ -63,7 +63,7 @@ const Search = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
-  const filterListOptions = ["relevance", "descending", "ascending"];
+  const filterListOptions = ["relevance", "newest", "oldest"];
   const [filterListEl, setFilterListEl] = useState(null);
   const open = Boolean(filterListEl);
 
@@ -154,10 +154,10 @@ const Search = () => {
 
       let relevantSpeeches = search.search(input.context);
 
-      if (input.filterListOrder === "descending") {
+      if (input.filterListOrder === "newest") {
         relevantSpeeches.sort((a, b) => (a.id > b.id ? 1 : -1));
       }
-      if (input.filterListOrder === "ascending") {
+      if (input.filterListOrder === "oldest") {
         relevantSpeeches.sort((a, b) => (a.id < b.id ? 1 : -1));
       }
 
