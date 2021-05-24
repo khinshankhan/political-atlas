@@ -4,8 +4,8 @@ import * as d3 from "d3";
 
 import "./BarChart.css";
 
-import { sortedEmotions } from "src/utils/emotions";
-import { roundUpX, roundDecimal2 } from "src/utils/utils";
+import { emotionsMap, sortedEmotions } from "src/utils/emotions";
+import { arrToHex, roundUpX, roundDecimal2 } from "src/utils/utils";
 
 const BarChart = ({ data, baseHeight, baseWidth, title = "Bar Chart" }) => {
   const ref = useRef();
@@ -107,7 +107,7 @@ const BarChart = ({ data, baseHeight, baseWidth, title = "Bar Chart" }) => {
       .data(data)
       .enter()
       .append("rect")
-      .style("fill", "steelblue")
+      .style("fill", ({ emotion }) => arrToHex(emotionsMap[emotion].color))
       .attr("x", ({ emotion }) => x(emotion))
       .attr("width", x.bandwidth())
       .attr(
@@ -136,22 +136,29 @@ const BarChart = ({ data, baseHeight, baseWidth, title = "Bar Chart" }) => {
       })
       .attr("y", y(0))
       .attr("height", height - y(0))
-      .transition().duration(2000)
+      .transition()
+      .duration(2000)
       .attr("y", ({ value }) => y(value))
       .attr("height", ({ value }) => height - y(value));
 
-    svgElement.append("text")
-      .attr("transform", `translate( ${margin.left + (width-margin.left)/2}, ${height + margin.bottom + 20})`)
+    svgElement
+      .append("text")
+      .attr(
+        "transform",
+        `translate( ${margin.left + (width - margin.left) / 2}, ${
+          height + margin.bottom + 20
+        })`
+      )
       .style("text-anchor", "middle")
       .text("Emotion");
 
-    svgElement.append("text")
+    svgElement
+      .append("text")
       .attr("transform", "rotate(-90)")
       .attr("x", 0 - (margin.bottom + (height - margin.bottom) / 2))
       .attr("y", 15)
       .style("text-anchor", "middle")
       .text("Occurences");
-
   }, [data, title, baseHeight, baseWidth]);
   return (
     <>
