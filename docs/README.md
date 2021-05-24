@@ -19,8 +19,8 @@ We know if our product works when we see _continued usage or new users_ (goals).
 
 ## Backend
 
-View our [backend README](./backend/README.md)
+View our [backend README](../backend/README.md)
 
 ## Frontend
 
-View our [frontend README](./frontend/README.md)
+View our [frontend README](../frontend/README.md)
