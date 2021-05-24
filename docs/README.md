@@ -1,13 +1,26 @@
 # Political Atlas
 
+Map to Politics
 
+## The Pitch
 
-# Group
+In order to _improve political understanding of the American electorate_
+(vision)
 
-Talha Rahman: I like dinosaurs
+our product will solve _ambiguity and deceitfulness political speech_ (target
+audience)
 
-Khinshan Khan: Emoji are fun :slightly_smiling_face:
+problem of _anyone with expenses_ (user problem)
 
-Brian Cheung: I like code
+by giving them _data visualization via a web application which textual and vocal
+tone analysis_ (strategy).
 
-Adeebur Rahman: bugs are just undocumented features
+We know if our product works when we see _continued usage or new users_ (goals).
+
+## Backend
+
+View our [backend README](./backend/README.md)
+
+## Frontend
+
+View our [frontend README](./frontend/README.md)
