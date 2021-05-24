@@ -38,7 +38,7 @@ const Legend = () => {
       </Grid>
       <Grid item xs={3}>
         <Paper className={classes.paper}>
-          {"< 50%"}
+          {"<50%"}
           <hr />
           {sortedEmotions.map((emotion, index) => {
             const emotionColor = emotionsMap[emotion].color;
@@ -63,7 +63,7 @@ const Legend = () => {
       </Grid>
       <Grid item xs={3}>
         <Paper className={classes.paper}>
-          {"50% - 75%"}
+          {"50%-75%"}
           <hr />
           {sortedEmotions.map((emotion, index) => {
             const emotionColor = emotionsMap[emotion].color;
@@ -88,7 +88,7 @@ const Legend = () => {
       </Grid>
       <Grid item xs={3}>
         <Paper className={classes.paper}>
-          {"> 75%"}
+          {">75%"}
           <hr />
           {sortedEmotions.map((emotion, index) => {
             const emotionColor = emotionsMap[emotion].color;
