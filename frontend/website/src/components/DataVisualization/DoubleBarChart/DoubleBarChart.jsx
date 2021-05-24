@@ -22,7 +22,7 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
     }
 
     // TODO: move this outside and hook it into the screen size
-    const margin = { top: 20, right: 20, bottom: 60, left: 40 };
+    const margin = { top: 20, right: 20, bottom: 60, left: 50 };
     const width = baseWidth - margin.left - margin.right;
     const height = baseHeight - margin.top - margin.bottom;
 
@@ -133,8 +133,6 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
       .style("fill", "steelblue")
       .attr("x", ({ emotion }) => x(emotion))
       .attr("width", xSubgroup.bandwidth())
-      .attr("y", ({ value }) => y(100*value/ibm_sum))
-      .attr("height", ({ value }) => height - y(100*value/ibm_sum))
       .attr(
         "transform",
         `translate(${margin.left}, ${margin.bottom - margin.top})`
@@ -160,6 +158,11 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
       .on("mouseout", (d) => {
         div.transition().duration(500).style("opacity", 0);
       })
+      .attr("y", y(0))
+      .attr("height", height - y(0))
+      .transition().duration(2000)
+      .attr("y", ({ value }) => y(100*value/ibm_sum))
+      .attr("height", ({ value }) => height - y(100*value/ibm_sum));
 
     svgElement
       .selectAll("bar")
@@ -169,8 +172,6 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
       .style("fill", "green")
       .attr("x", ({ emotion }) => x(emotion))
       .attr("width", xSubgroup.bandwidth())
-      .attr("y", ({ value }) => y(100*value/da_sum))
-      .attr("height", ({ value }) => height - y(100*value/da_sum))
       .attr(
         "transform",
         `translate(${margin.left + xSubgroup.bandwidth()}, ${margin.bottom - margin.top})`
@@ -196,7 +197,23 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
       .on("mouseout", (d) => {
         div.transition().duration(500).style("opacity", 0);
       })
+      .attr("y", y(0))
+      .attr("height", height - y(0))
+      .transition().duration(3000)
+      .attr("y", ({ value }) => y(100*value/da_sum))
+      .attr("height", ({ value }) => height - y(100*value/da_sum));
 
+    svgElement.append("text")
+      .attr("transform", `translate( ${margin.left + (width-margin.left)/2}, ${height + margin.bottom + 20})`)
+      .style("text-anchor", "middle")
+      .text("Emotion");
+
+    svgElement.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("x", 0 - (margin.bottom + (height - margin.bottom) / 2))
+      .attr("y", 12)
+      .style("text-anchor", "middle")
+      .text("Percentage");
   }, [dataIBM, dataDA, title, baseHeight, baseWidth]);
   return (
     <>
