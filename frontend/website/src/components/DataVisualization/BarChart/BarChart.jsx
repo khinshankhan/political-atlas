@@ -107,6 +107,7 @@ const BarChart = ({ data, baseHeight, baseWidth, title = "Bar Chart" }) => {
       .data(data)
       .enter()
       .append("rect")
+      .style("stroke", "black")
       .style("fill", ({ emotion }) => arrToHex(emotionsMap[emotion].color))
       .attr("x", ({ emotion }) => x(emotion))
       .attr("width", x.bandwidth())
