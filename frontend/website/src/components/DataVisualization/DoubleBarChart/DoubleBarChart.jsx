@@ -4,10 +4,16 @@ import * as d3 from "d3";
 
 import "./DoubleBarChart.css";
 
-import { sortedEmotions } from "src/utils/emotions";
-import { roundUpX, roundDecimal2 } from "src/utils/utils";
+import { emotionsMap, sortedEmotions } from "src/utils/emotions";
+import { arrToHex, roundUpX, roundDecimal2 } from "src/utils/utils";
 
-const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Double Bar Chart" }) => {
+const DoubleBarChart = ({
+  dataIBM,
+  dataDA,
+  baseHeight,
+  baseWidth,
+  title = "Double Bar Chart",
+}) => {
   const ref = useRef();
   // HACK: makes hover work on chart, isn't really proper in react nor html
   const chartDivRef = useRef();
@@ -28,23 +34,27 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
 
     const da_sum = d3.sum(dataDA, ({ value }) => value);
     const ibm_sum = d3.sum(dataIBM, ({ value }) => value);
-    const max = 100 * Math.max(
-      d3.max(dataDA, ({ value }) => value) / da_sum,
-      d3.max(dataIBM, ({ value }) => value) / ibm_sum
-    )
+    const max =
+      100 *
+      Math.max(
+        d3.max(dataDA, ({ value }) => value) / da_sum,
+        d3.max(dataIBM, ({ value }) => value) / ibm_sum
+      );
 
     const barData = [
       {
-        "API": "IBM",
-        "values": dataIBM
+        API: "IBM",
+        values: dataIBM,
       },
       {
-        "API": "DeepAffects",
-        "values": dataDA
+        API: "DeepAffects",
+        values: dataDA,
       },
-    ]
+    ];
 
-    let APIs = barData.map(function (d) { return d.API; });
+    let APIs = barData.map(function (d) {
+      return d.API;
+    });
 
     // HACK: makes hover work on chart, isn't really proper in react nor html
     const div = d3.select(chartDivRef.current);
@@ -90,9 +100,7 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
       .range([height, 0]);
 
     // Another scale for subgroup position?
-    var xSubgroup = d3.scaleBand()
-      .domain(APIs)
-      .range([0, x.bandwidth()]);
+    var xSubgroup = d3.scaleBand().domain(APIs).range([0, x.bandwidth()]);
 
     // make axes into scales that can be plotted
     const xAxis = d3.axisBottom().scale(x);
@@ -130,7 +138,8 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
       .data(dataIBM)
       .enter()
       .append("rect")
-      .style("fill", "steelblue")
+      .style("stroke", "black")
+      .style("fill", ({ emotion }) => arrToHex(emotionsMap[emotion].color))
       .attr("x", ({ emotion }) => x(emotion))
       .attr("width", xSubgroup.bandwidth())
       .attr(
@@ -143,9 +152,11 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
         div
           .html(
             `<b>API:</b> IBM` +
-            `<br><b>Emotion:</b> ${emotion}` +
-            `<br><b>Occurences:</b> ${value}` +
-            `<br><b>Percentage:</b> ${roundDecimal2((value / ibm_sum) * 100)}%`
+              `<br><b>Emotion:</b> ${emotion}` +
+              `<br><b>Occurences:</b> ${value}` +
+              `<br><b>Percentage:</b> ${roundDecimal2(
+                (value / ibm_sum) * 100
+              )}%`
           )
           .style("left", event.pageX + 30 + "px")
           .style("top", event.pageY - 30 + "px");
@@ -155,26 +166,30 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
           .style("left", event.pageX + 30 + "px")
           .style("top", event.pageY - 30 + "px");
       })
-      .on("mouseout", (d) => {
+      .on("mouseout", () => {
         div.transition().duration(500).style("opacity", 0);
       })
       .attr("y", y(0))
       .attr("height", height - y(0))
-      .transition().duration(2000)
-      .attr("y", ({ value }) => y(100*value/ibm_sum))
-      .attr("height", ({ value }) => height - y(100*value/ibm_sum));
+      .transition()
+      .duration(2000)
+      .attr("y", ({ value }) => y((100 * value) / ibm_sum))
+      .attr("height", ({ value }) => height - y((100 * value) / ibm_sum));
 
     svgElement
       .selectAll("bar")
       .data(dataDA)
       .enter()
       .append("rect")
-      .style("fill", "green")
+      .style("stroke", "black")
+      .style("fill", ({ emotion }) => arrToHex(emotionsMap[emotion].color))
       .attr("x", ({ emotion }) => x(emotion))
       .attr("width", xSubgroup.bandwidth())
       .attr(
         "transform",
-        `translate(${margin.left + xSubgroup.bandwidth()}, ${margin.bottom - margin.top})`
+        `translate(${margin.left + xSubgroup.bandwidth()}, ${
+          margin.bottom - margin.top
+        })`
       )
       // HACK: this is all a bad hack, we need to refactor this later
       .on("mouseover", (event, { emotion, value }) => {
@@ -182,9 +197,9 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
         div
           .html(
             `<b>API:</b> DeepAffects` +
-            `<br><b>Emotion:</b> ${emotion}` +
-            `<br><b>Occurences:</b> ${value}` +
-            `<br><b>Percentage:</b> ${roundDecimal2((value / da_sum) * 100)}%`
+              `<br><b>Emotion:</b> ${emotion}` +
+              `<br><b>Occurences:</b> ${value}` +
+              `<br><b>Percentage:</b> ${roundDecimal2((value / da_sum) * 100)}%`
           )
           .style("left", event.pageX + 30 + "px")
           .style("top", event.pageY - 30 + "px");
@@ -199,16 +214,24 @@ const DoubleBarChart = ({ dataIBM, dataDA, baseHeight, baseWidth, title = "Doubl
       })
       .attr("y", y(0))
       .attr("height", height - y(0))
-      .transition().duration(3000)
-      .attr("y", ({ value }) => y(100*value/da_sum))
-      .attr("height", ({ value }) => height - y(100*value/da_sum));
+      .transition()
+      .duration(3000)
+      .attr("y", ({ value }) => y((100 * value) / da_sum))
+      .attr("height", ({ value }) => height - y((100 * value) / da_sum));
 
-    svgElement.append("text")
-      .attr("transform", `translate( ${margin.left + (width-margin.left)/2}, ${height + margin.bottom + 20})`)
+    svgElement
+      .append("text")
+      .attr(
+        "transform",
+        `translate( ${margin.left + (width - margin.left) / 2}, ${
+          height + margin.bottom + 20
+        })`
+      )
       .style("text-anchor", "middle")
       .text("Emotion");
 
-    svgElement.append("text")
+    svgElement
+      .append("text")
       .attr("transform", "rotate(-90)")
       .attr("x", 0 - (margin.bottom + (height - margin.bottom) / 2))
       .attr("y", 12)

@@ -42,8 +42,8 @@ const useStyles = makeStyles((theme) => ({
 const FilterIcon = ({ filterListOrder }) =>
   ({
     relevance: <FilterListIcon />,
-    descending: <TrendingDownIcon />,
-    ascending: <TrendingUpIcon />,
+    newest: <TrendingDownIcon />,
+    oldest: <TrendingUpIcon />,
   }[filterListOrder]);
 
 const Search = () => {
@@ -63,7 +63,7 @@ const Search = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
-  const filterListOptions = ["relevance", "descending", "ascending"];
+  const filterListOptions = ["relevance", "newest", "oldest"];
   const [filterListEl, setFilterListEl] = useState(null);
   const open = Boolean(filterListEl);
 
@@ -141,6 +141,8 @@ const Search = () => {
       return true;
     });
 
+    let relevantSpeeches = filteredSpeeches;
+
     if (input.context !== "") {
       let search = new JsSearch.Search("id");
       search.tokenizer = new JsSearch.StemmingTokenizer(
@@ -152,19 +154,17 @@ const Search = () => {
       search.addIndex("description");
       search.addDocuments(filteredSpeeches);
 
-      let relevantSpeeches = search.search(input.context);
-
-      if (input.filterListOrder === "descending") {
-        relevantSpeeches.sort((a, b) => (a.id > b.id ? 1 : -1));
-      }
-      if (input.filterListOrder === "ascending") {
-        relevantSpeeches.sort((a, b) => (a.id < b.id ? 1 : -1));
-      }
-
-      setSpeechesToDisplay(relevantSpeeches);
-    } else {
-      setSpeechesToDisplay(filteredSpeeches);
+      relevantSpeeches = search.search(input.context);
     }
+
+    if (input.filterListOrder === "newest") {
+      relevantSpeeches.sort((a, b) => (a.id > b.id ? 1 : -1));
+    }
+    if (input.filterListOrder === "oldest") {
+      relevantSpeeches.sort((a, b) => (a.id < b.id ? 1 : -1));
+    }
+
+    setSpeechesToDisplay(relevantSpeeches);
 
     setLoading(false);
   };
